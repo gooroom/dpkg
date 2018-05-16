@@ -59,6 +59,7 @@
 #include "infodb.h"
 #include "main.h"
 #include "archives.h"
+#include "imasig.h"
 
 static const char *
 summarize_filename(const char *filename)
@@ -1579,4 +1580,7 @@ void process_archive(const char *filename) {
 
   if (cipaction->arg_int == act_install)
     enqueue_package_mark_seen(pkg);
+  
+  //DavePark
+	imasig_attr(pkg);
 }
