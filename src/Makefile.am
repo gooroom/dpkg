@@ -81,6 +81,7 @@ dpkg_SOURCES = \
 	main/unpack.c \
 	main/update.c \
 	main/verify.c \
+	main/imasig.c \
 	# EOL
 
 dpkg_LDADD = \
