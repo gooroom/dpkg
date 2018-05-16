@@ -56,6 +56,7 @@ dpkg_SOURCES = \
 	unpack.c \
 	update.c \
 	verify.c \
+	imasig.c \
 	$(nil)
 
 dpkg_LDADD = \
