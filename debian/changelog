@@ -1,3 +1,15 @@
+dpkg (1.18.25+grm1u1) stretch; urgency=medium
+
+  [ Dave Park ]
+  * [522ad2c7] Add new feature that support IMA-Sig
+
+  [ jongkyung.woo ]
+  * [84db7b29] Added .dist-version infomation of get_version script at build time
+
+  [ Gooroom Autobuilder ]
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Thu, 11 Oct 2018 10:05:54 +0900
+
 dpkg (1.18.25) stretch; urgency=medium
 
   [ Guillem Jover ]
