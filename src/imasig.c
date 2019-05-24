@@ -28,6 +28,7 @@
 
 struct siginfo {
   int num;
+  int hashlen;
   char **filename;
   unsigned char **sigval;
 };
@@ -54,8 +55,8 @@ imasig_attr(struct pkginfo *pkg)
 
 	fd = open(sigfile, O_RDONLY);
 	if (fd < 0) {
-		printf("cannot open signature file '%s' for package '%s'",
-		        SIGFILE, pkg_name(pkg, pnaw_nonambig));
+//		ohshite("cannot open signature file '%s' for package '%s'",
+//		        SIGFILE, pkg_name(pkg, pnaw_nonambig));
 		return 0;
 	}
 	
@@ -78,15 +79,14 @@ imasig_attr(struct pkginfo *pkg)
 		if (fd_read(fd, buf, st.st_size) < 0)
 			ohshite(_("cannot read control file '%s' for package '%s'"),
 			        SIGFILE, pkg_name(pkg, pnaw_nonambig));
-
-		// SIGFILE에 저장된 파일 수를 카운트해서 파일 수만큼 malloc
-		sigdata.num = count_imasig_file(buf);
 		
+		sigdata.num = count_imasig_file(buf);
 		filename_array = (char **)m_malloc(sizeof(char *) * sigdata.num);
 		sig_array = (char **)m_malloc(sizeof(char *) * sigdata.num);
 		
-		// SIGFILE 정보를 파싱해서 sigdata에 저장
 		parse_sigdata_buff(buf, filename_array, sig_array);
+
+		sigdata.hashlen = strlen(sig_array[0]) / 2;
 		
 		copy_filename(filename_array, &sigdata);
 		decode_signature(sig_array, &sigdata);
@@ -136,8 +136,6 @@ copy_filename(char **filename, struct siginfo *sigdata)
 		sigdata->filename[i][0] = '/';
 		sigdata->filename[i][1] = '\0';
 		strcat(sigdata->filename[i], filename[i]);
-		
-//		printf("file name : %s \n", sigdata->filename[i]);
 	}
 }
 
@@ -149,7 +147,7 @@ set_imasig_attr(struct siginfo *sigdata)
 	for(i=0; i < sigdata->num; i++) {
 		int err;
 		
-		err = setxattr(sigdata->filename[i], SEC_IMA, sigdata->sigval[i], SIG_SIZE, 0);
+		err = setxattr(sigdata->filename[i], SEC_IMA, sigdata->sigval[i], sigdata->hashlen, 0);
 		
 		if(err < 0) {
 			fprintf(stderr, "IMA-sig set error: %s\n",	sigdata->filename[i]);
@@ -168,7 +166,8 @@ decode_signature(char **sig_array, struct siginfo *sigdata)
 	for(i=0; i < sigdata->num; i++) {
 		unsigned char *decoded;
 		int err;
-		
+		int j;
+
 		decoded = (unsigned char *)m_malloc(strlen(sig_array[i]) / 2);
 		
 		err = decode(sig_array[i], decoded);
@@ -177,16 +176,15 @@ decode_signature(char **sig_array, struct siginfo *sigdata)
 			
 		sigdata->sigval[i] = decoded;
 		
-/*		printf("file_name : %s\n", sigdata->filename[i]);
-		printf("sig size : %d\n", strlen(sig_array[i]) / 2);
+		printf("file_name : %s\n", sigdata->filename[i]);
+		printf("sig size : %d\n", sigdata->hashlen);
 		printf("signature : %s \n", sig_array[i]);
 		
-		int j;
-		for(j=0; j < strlen(sig_array[i]) / 2; j++)
+		for(j=0; j < sigdata->hashlen; j++)
 		{
 			printf("%02x", decoded[j]);
 		}
-		printf("\n");*/
+		printf("\n");
 	}
 }
 
@@ -204,11 +202,6 @@ count_imasig_file(char *buf)
 			file_count++;
 		}
 	}
-	
-//	printf("file size : %d \n", len);
-//	printf("last character : %d \n", (int)buf[i-1]);
-//	printf("number of file : %d\n", file_count);
-	
 	return file_count;
 }
 
@@ -236,13 +229,6 @@ parse_sigdata_buff(char *buf, char **filename_array, char **sig_array)
 		i++;
 		
 		ret_ptr = strtok_r(NULL, "\n", &next_ptr);
-
-//		char cmd[1000];
-//		int err;
-//		printf("file_name : %s, signature : %s \n", file_name, signature);	
-//		sprintf(cmd, "/home/gooroom/work/test/testsig.sh %s %s", signature, file_name);
-//		err = system(cmd);
-//		printf("err : %d \n", err);
 	}
 }
 
