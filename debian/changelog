@@ -1,3 +1,12 @@
+dpkg (1.18.25+grm1u2) stretch; urgency=medium
+
+  [ Dave Park ]
+  * [3fa4e54d] Fix to support RSA2048, sha256 and higher
+
+  [ Gooroom Autobuilder ]
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Tue, 28 May 2019 18:01:04 +0900
+
 dpkg (1.18.25+grm1u1) stretch; urgency=medium
 
   [ Dave Park ]
