@@ -6,15 +6,15 @@ Uploaders: Guillem Jover <guillem@debian.org>
 Homepage: https://wiki.debian.org/Teams/Dpkg
 Vcs-Browser: https://git.dpkg.org/cgit/dpkg/dpkg.git
 Vcs-Git: https://git.dpkg.org/git/dpkg/dpkg.git
-Standards-Version: 4.3.0
+Standards-Version: 4.5.0
 Rules-Requires-Root: no
 Build-Depends:
- debhelper (>= 11),
+ debhelper-compat (= 13),
  pkg-config,
 # Needed for ITS support.
  gettext (>= 0.19.7),
-# Needed for --porefs.
- po4a (>= 0.43),
+# Needed for --porefs defaults, conditional addenda and mode=eof.
+ po4a (>= 0.59),
  zlib1g-dev,
  libbz2-dev,
  liblzma-dev,

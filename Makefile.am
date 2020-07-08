@@ -44,6 +44,15 @@ dist_pkgdata_DATA = \
 	data/tupletable \
 	$(nil)
 
+dist_doc_DATA = \
+	doc/README.api \
+	doc/README.feature-removal-schedule \
+	doc/frontend.txt \
+	doc/protected-field.txt \
+	doc/rootless-builds.txt \
+	doc/triggers.txt \
+	$(nil)
+
 EXTRA_DIST = \
 	.gitlab-ci.yml \
 	.mailmap \
@@ -52,16 +61,11 @@ EXTRA_DIST = \
 	autogen \
 	get-version \
 	run-script \
-	doc/README.api \
-	doc/README.feature-removal-schedule \
 	doc/coding-style.txt \
-	doc/frontend.txt \
 	doc/lcov-inject.pl \
-	doc/rootless-builds.txt \
-	doc/triggers.txt \
+	debian/README.bug-usertags \
 	debian/bug-script \
 	debian/changelog \
-	debian/compat \
 	debian/control \
 	debian/copyright \
 	debian/dpkg-dev.docs \
@@ -73,7 +77,6 @@ EXTRA_DIST = \
 	debian/dpkg.docs \
 	debian/dpkg.install \
 	debian/dpkg.manpages \
-	debian/dpkg.postinst \
 	debian/dpkg.postrm \
 	debian/dpkg.logrotate \
 	debian/dpkg.lintian-overrides \
@@ -83,12 +86,9 @@ EXTRA_DIST = \
 	debian/dselect.install \
 	debian/dselect.manpages \
 	debian/dselect.postrm \
-	debian/libdpkg-dev.docs \
 	debian/libdpkg-dev.install \
-	debian/libdpkg-perl.docs \
 	debian/libdpkg-perl.install \
 	debian/source/format \
-	debian/usertags \
 	debian/rules \
 	debian/shlibs.default \
 	debian/shlibs.override \

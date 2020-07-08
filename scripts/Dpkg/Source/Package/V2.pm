@@ -438,7 +438,14 @@ sub _generate_patch {
                  $self->{fields}{'Source'}, $origtarfile);
         }
 
-        $self->check_original_tarball_signature(@origtarsigns);
+        if (@origtarsigns) {
+            $self->check_original_tarball_signature($dir, @origtarsigns);
+        } else {
+            my $key = $self->get_upstream_signing_key($dir);
+            if (-e $key) {
+                warning(g_('upstream signing key but no upstream tarball signature'));
+            }
+        }
     }
 
     # Unpack a second copy for comparison
