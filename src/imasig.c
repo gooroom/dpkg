@@ -151,7 +151,7 @@ set_imasig_attr(struct siginfo *sigdata)
 		
 		if(err < 0) {
 			fprintf(stderr, "IMA-sig set error: %s\n",	sigdata->filename[i]);
-			return;
+			//return;
 		}
 	}
 }
