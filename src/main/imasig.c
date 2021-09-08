@@ -165,7 +165,7 @@ decode_signature(char **sig_array, struct siginfo *sigdata)
 	for(i=0; i < sigdata->num; i++) {
 		unsigned char *decoded;
 		int err;
-		int j;
+//		int j;
 
 		decoded = (unsigned char *)m_malloc(strlen(sig_array[i]) / 2);
 		
@@ -175,6 +175,7 @@ decode_signature(char **sig_array, struct siginfo *sigdata)
 			
 		sigdata->sigval[i] = decoded;
 		
+/* Disabled log
 		printf("file_name : %s\n", sigdata->filename[i]);
 		printf("sig size : %d\n", sigdata->hashlen);
 		printf("signature : %s \n", sig_array[i]);
@@ -184,6 +185,7 @@ decode_signature(char **sig_array, struct siginfo *sigdata)
 			printf("%02x", decoded[j]);
 		}
 		printf("\n");
+*/
 	}
 }
 
