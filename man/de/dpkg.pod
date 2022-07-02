@@ -65,7 +65,8 @@ Das Paket ist nicht auf Ihrem System installiert.
 
 =item B<config-files> (Config-Dateien)
 
-Nur die Konfigurationsdateien des Pakets existieren auf dem System.
+Nur die Konfigurationsdateien oder das Skript B<postrm> und die von ihm für
+das Entfernen des Pakets benötigten Daten existieren auf dem System.
 
 =item B<half-installed> (halb-installiert)
 
@@ -340,8 +341,8 @@ wobei Zustand einer aus B<install>, B<hold>, B<deinstall> oder B<purge>
 ist. Leerzeilen und Kommentarzeilen (beginnend mit ‚B<#>’) sind auch
 erlaubt.
 
-Die Datei I<available> muss für diesen Befehl aktuell sein, damit dies
-Nutzen hat, andernfalls werden unbekannte Pakete mit einer Warnung
+Die Datei I<available> muss für diesen Befehl aktuell sein, damit dies von
+Nutzen ist, andernfalls werden unbekannte Pakete mit einer Warnung
 ignoriert. Siehe die Befehle B<--update-avail> und B<--merge-avail> für
 weitere Informationen.
 
@@ -442,7 +443,7 @@ Unterstützt das Feld B<Protected> (seit Dpkg 1.20.1).
 
 =back
 
-=item B<--validate->I<Sachenzeichenkette>
+=item B<--validate->I<Sache Zeichenkette>
 
 Bestätigt, dass die I<Sachenzeichenkette> eine korrekte Syntax hat (seit
 Dpkg 1.18.16). Liefert 0 zurück, falls die I<Zeichenkette> gültig ist, 1
@@ -536,11 +537,11 @@ Listet den Inhalt eines deb-Pakets auf.
 
 Entpackt die Steuer-Informationen aus einem Paket.
 
-=item B<-x>, B<--extract> I<Archiv-Verzeichnis>
+=item B<-x>, B<--extract> I<Archiv Verzeichnis>
 
 Entpackt die in einem Paket enthaltenen Dateien.
 
-=item B<-X>, B<--vextract> I<Archiv-Verzeichnis>
+=item B<-X>, B<--vextract> I<Archiv Verzeichnis>
 
 Entpackt die in einem Paket enthaltenen Dateinamen und zeigt sie an.
 
@@ -665,7 +666,7 @@ I<Warnung: Derzeit führt> B<dpkg> I<keine Abhängigkeitsüberprüfung bei der
 Installation älterer Versionen (als bereits installiert) durch
 (sog. Downgrade) und wird Sie daher nicht warnen, falls dadurch die
 Abhängigkeit eines anderen Pakets nicht mehr erfüllt ist. Dies kann
-ernsthafte Seiteneffekte haben, ein Downgrade einer essenziellen
+ernsthafte Nebeneffekte haben, ein Downgrade einer essenziellen
 Systemkomponente kann Ihr gesamtes System unbrauchbar machen. Verwenden Sie
 diese Option mit Vorsicht.>
 
@@ -864,7 +865,7 @@ B<dpkg>-Aufruf der B<dpkg>-Aktionen I<unpack>, I<configure>, I<install>,
 I<triggers-only>, I<remove>, I<purge>, I<add-architecture> und
 I<remove-architecture> ausgeführt wird (seit Dpkg 1.15.4; Aktionen
 I<add-architecture> und I<remove-architecture> seit Dpkg 1.17.19). Diese
-Option kann mehrfach angegeben werden. Die Reihenfolge der Optionen wird
+Option kann mehrfach angegeben werden. Die Reihenfolge der Optionen bleibt
 erhalten, wobei Einträge aus den Konfigurationsdateien Vorrang haben. Die
 Umgebungsvariable B<DPKG_HOOK_ACTION> wird für die Hooks auf die aktuelle
 B<dpkg>-Aktion gesetzt.
@@ -896,8 +897,8 @@ als benötigt wieder einschließen. Um auf der sicheren Seite zu sein und in
 der Zukunft mögliche Entpackfehler zu vermeiden, könnte dies durch
 zukünftige Arbeiten behoben werden.
 
-Dies kann dazu verwandt werden, alle Pfade außer bestimmten zu entferen, ein
-typischer Fall lautet:
+Dies kann dazu verwandt werden, alle Pfade außer bestimmten zu entfernen,
+ein typischer Fall lautet:
 
  --path-exclude=/usr/share/doc/*
  --path-include=/usr/share/doc/*/copyright
@@ -912,7 +913,7 @@ letzte Regel, die auf eine Datei passt, die Entscheidung fällt.
 Die Filter werden beim Entpacken des Binärpakets angewandt und haben daher
 nur Wissen über den Typ des derzeit gefilterten Objekts (d.h. eine normale
 Datei oder ein Verzeichnis) und sehen daher nicht, welche Objekte als
-nächstes kommen. Da diese Filter Seiteneffekte haben (im Gegensatz zu
+nächstes kommen. Da diese Filter Nebeneffekte haben (im Gegensatz zu
 B<find>(1)-Filtern) wird das Ausschließen eines genauen Pfadnamens, der ein
 Verzeichnisobjekt wie I</usr/share/doc> ist, nicht den gewünschten Effekt
 haben und nur der Pfadname wird ausgeschlossen (der automatisch wieder
@@ -964,9 +965,9 @@ Dem Benutzer wird eine Conffile-Frage gestellt.
 
 =item B<processing:> I<Stufe>B<:> I<Paket>
 
-Versendet genau bevor eine Verarbeitungsstufe beginnt. I<Stufe> ist eine der
-folgenden: B<upgrade>, B<install> (beide werden vor dem Entpacken versandt),
-B<configure>, B<trigproc>, B<disappear>, B<remove>, B<purge>.
+Wird genau bevor eine Verarbeitungsstufe beginnt versandt. I<Stufe> ist eine
+der folgenden: B<upgrade>, B<install> (beide werden vor dem Entpacken
+versandt), B<configure>, B<trigproc>, B<disappear>, B<remove>, B<purge>.
 
 =back
 
@@ -1259,10 +1260,10 @@ Liste der verfügbaren Pakete.
 
 =item I<%ADMINDIR%/status>
 
-Statusse der verfügbaren Pakete. Diese Datei enthält Informationen darüber,
-ob ein Paket zur Entfernung markiert ist oder nicht, ob es installiert ist
-oder nicht usw. Lesen Sie den Abschnitt B<INFORMATIONEN ÜBER PAKETE> für
-weitere Informationen.
+Status der verfügbaren Pakete. Diese Datei enthält Informationen darüber, ob
+ein Paket zur Entfernung markiert ist oder nicht, ob es installiert ist oder
+nicht usw. Lesen Sie den Abschnitt B<INFORMATIONEN ÜBER PAKETE> für weitere
+Informationen.
 
 Die Statusdatei wird täglich nach I</var/backups> gesichert. Dies kann
 hilfreich sein, falls sie aufgrund von Problemen mit dem Dateisystem
@@ -1335,8 +1336,8 @@ Um eine lokale Kopie der Paketauswahl-Zustände zu erstellen:
 
 Sie könnten diese Datei auf einen anderen Rechner übertragen und dann die
 Datei I<available> dort mit dem Paketverwalter Ihrer Wahl (siehe
-https://wiki.debian.org/Teams/Dpkg/FAQ für weitere Details) aktualisieren,
-zum Beispiel:
+L<https://wiki.debian.org/Teams/Dpkg/FAQ> für weitere Details)
+aktualisieren, zum Beispiel:
 
 =over 
 

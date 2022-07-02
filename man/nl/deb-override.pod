@@ -48,8 +48,8 @@ archief van elke distributie.
 
 [I<onderhouder-info>], als het vermeld wordt, kan ofwel de naam van een
 onderhouder zijn voor een onvoorwaardelijke vervanging, of anders
-I<oude-onderhouder> B<=E<gt>> I<nieuwe-onderhouder> om een plaatsvervanging
-uit te voeren.
+I<oude-onderhouder> B<=E<gt>> I<nieuwe-onderhouder> om een aflossing door te
+voeren.
 
 De override-bestanden die gebruikt worden om de officiële Packages-lijsten
 te maken kunnen op elke Debian spiegelserver gevonden worden in de map

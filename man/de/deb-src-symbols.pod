@@ -24,7 +24,8 @@ B<debian/>I<Paket>B<.symbols>, B<debian/symbols>
 =head1 BESCHREIBUNG
 
 Die Symboldateivorlagen werden in Debian-Quellpaketen ausgeliefert. Deren
-Format ist eine Obermenge der in Binärpaketen ausgelieferten Symboldateien.
+Format ist eine Obermenge der in Binärpaketen ausgelieferten Symboldateien,
+siehe L<deb-symbols(5)>.
 
 =head2 Kommentare
 
@@ -169,7 +170,7 @@ Mehrere Einschränkungen können aneinandergehängt werden.
 =item B<allow-internal>
 
 dpkg-gensymbols verfügt über eine interne Liste von Symbolen, die nicht in
-Symboldateien auftauchen sollten, da sie normalerweise nur Seiteneffekte von
+Symboldateien auftauchen sollten, da sie normalerweise nur Nebeneffekte von
 Implementierungsdetails in der Werkzeugkette darstellen (seit Dpkg
 1.20.1). Falls Sie aus irgendeinem Grund wollen, dass diese Symbole in der
 Symboldatei aufgenommen werden, sollten Sie das Symbol mit B<allow-internal>

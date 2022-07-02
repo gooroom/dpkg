@@ -38,8 +38,8 @@ aktuella katalogen när B<dpkg-distaddfile> körs.
 
 =item B<-f>I<fillistfil>
 
-Läs eller skriv listan över filer som skall sändas in här, istället för att
-använda B<debian/file>.
+Läs eller skriv listan över filer som ska sändas in här, istället för att
+använda B<debian/files>.
 
 =item B<-?>, B<--help>
 
@@ -57,14 +57,14 @@ Visar version och avslutar.
 
 =item B<DPKG_COLORS>
 
-Sets the color mode (since dpkg 1.18.5).  The currently accepted values are:
-B<auto> (default), B<always> and B<never>.
+Väljer färgläge (sedan dpkg 1.18.5). För närvarande godtas följande värden:
+B<auto> (förval), B<always> och B<never>.
 
 =item B<DPKG_NLS>
 
-If set, it will be used to decide whether to activate Native Language
-Support, also known as internationalization (or i18n) support (since dpkg
-1.19.0).  The accepted values are: B<0> and B<1> (default).
+Om satt, används för att bestämma om lokalt språkstöd ska aktiveras, även
+känt som internationaliseringsstöd (eller i18n) (sedan dpkg
+1.19.0). Tillåtna värden är: B<0> och B<1> (förval).
 
 =back
 

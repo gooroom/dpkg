@@ -6,7 +6,7 @@ Uploaders: Guillem Jover <guillem@debian.org>
 Homepage: https://wiki.debian.org/Teams/Dpkg
 Vcs-Browser: https://git.dpkg.org/cgit/dpkg/dpkg.git
 Vcs-Git: https://git.dpkg.org/git/dpkg/dpkg.git
-Standards-Version: 4.5.0
+Standards-Version: 4.5.1
 Rules-Requires-Root: no
 Build-Depends:
  debhelper-compat (= 13),
@@ -109,7 +109,7 @@ Architecture: all
 Multi-Arch: foreign
 Depends:
  ${misc:Depends},
- perl:any,
+ ${perl:Depends},
 # Needed for arch tuples.
  dpkg (>= 1.18.11),
 Recommends:

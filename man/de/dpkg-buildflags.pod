@@ -267,6 +267,10 @@ Optionen für den Objective-C++-Compiler. Identisch zu B<CXXFLAGS>.
 
 Optionen für den GNU-Java-Compiler (gcj). Eine Untermenge von B<CFLAGS>.
 
+=item B<DFLAGS>
+
+Optionen für den D-Compiler (ldc oder gdc). Seit Dpkg 1.20.6.
+
 =item B<FFLAGS>
 
 Optionen für den Fortran-77-Compiler. Eine Untermenge von B<CFLAGS>.
@@ -410,8 +414,8 @@ Sicherheitsproblem werden könnte. Derzeit warnt dies bei Aufrufen von
 B<printf>- und B<scanf>-Funktionen, bei denen die Formatzeichenkette nicht
 eine reine Zeichenkette ist und es keine Formatargumente gibt, wie in
 B<printf(foo);> statt B<printf("%s", foo);>. Dies könnte ein
-Sicherheitsproblem sein, falls die Formatzeichenkette aus einer
-unvertrauenswürdigen Eingabe stammt und ‚%n’ enthält.
+Sicherheitsproblem sein, falls die Formatzeichenkette aus einer nicht
+vertrauenswürdigen Eingabe stammt und „%n“ enthält.
 
 =item B<fortify>
 
@@ -579,7 +583,7 @@ B<__DATE__> und B<__TIMESTAMP__> verwandt werden.
 
 =item B<fixfilepath>
 
-Diese Einstellung (standardmäßig deaktiviert) fügt
+Diese Einstellung (standardmäßig aktiviert) fügt
 B<-ffile-prefix-map=>I<BUILDPATH>B<=.> zu B<CFLAGS>, B<CXXFLAGS>,
 B<OBJCFLAGS>, B<OBJCXXFLAGS>, B<GCJFLAGS>, B<FFLAGS> und B<FCFLAGS> hinzu,
 wobei B<BUILDPATH> auf das oberste Verzeichnis des bauenden Pakets gesetzt
@@ -752,7 +756,7 @@ ermöglicht.
 Für Pakete mit Autoconf-artigen Bausystemen können Sie die relevanten
 Optionen direkt wie oben gezeigt an Configure oder B<make>(1) übergeben.
 
-Für andere Bausysteme oder wenn Sie feingranularere Steuerung benötigen
+Für andere Bausysteme oder wenn Sie feiner granulierte Steuerung benötigen
 (welcher Schalter wo weitergegeben wird), können Sie B<--get>
 verwenden. Oder Sie können stattdessen B<buildflags.mk> einbinden, das sich
 um den Aufruf von B<dpkg-buildflags> kümmert und die Bauschalter in

@@ -57,7 +57,7 @@ Der Hauptzweck dieser Dateien besteht darin, die minimale Version
 bereitzustellen, die mit jedem von der Bibliothek bereitgestellten Symbol
 verknüpft ist. Normalerweise entspricht dies der ersten Version des Pakets,
 die dieses Symbol bereitgestellt hat, kann aber vom Betreuer erhöht werden,
-falls die ABI des Symbols ohne Brechen der Rückwärtskompatibilität erweitert
+falls die ABI des Symbols ohne brechen der Rückwärtskompatibilität erweitert
 wurde. Es liegt in der Verantwortung des Betreuers, diese Dateien aktuell zu
 halten, aber B<dpkg-gensymbols> hilft dabei.
 
@@ -289,13 +289,10 @@ B<0> und B<1> (Vorgabe).
 
 =head1 SIEHE AUCH
 
-B<https://people.redhat.com/drepper/symbol-versioning>
-
-B<https://people.redhat.com/drepper/goodpractice.pdf>
-
-B<https://people.redhat.com/drepper/dsohowto.pdf>
-
-B<deb-src-symbol>(5), B<deb-symbols>(5), B<dpkg-shlibdeps>(1).
+L<https://people.redhat.com/drepper/symbol-versioning>,
+L<https://people.redhat.com/drepper/goodpractice.pdf>,
+L<https://people.redhat.com/drepper/dsohowto.pdf>, B<deb-src-symbol>(5),
+B<deb-symbols>(5), B<dpkg-shlibdeps>(1).
 
 
 =head1 ÜBERSETZUNG

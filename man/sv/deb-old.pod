@@ -28,8 +28,8 @@ detaljerad information om det nya formatet.
 
 =head1 FORMAT
 
-Filen innehåller två rader av formatinformation som ASCII-text, följt av två
-sammaslagna gzip-packade ustar-filer.
+Filen innehåller två rader med formatinformation som ASCII-text, följt av
+två sammaslagna gzip-packade ustar-filer.
 
 Den första raden i filen är formatversionsnumret utfyllt till åtta siffror,
 och är B<0.939000> för alla arkiv i det gamla formatet.
@@ -39,18 +39,18 @@ den första gzip-packade tar-filen.
 
 Båda dessa rader avslutas med ett ensamt radbrytningstecken.
 
-Den första tar-filen innehåller kontrollinformationen, lagrade som ett antal
+Den första tar-filen innehåller styrinformationen, lagrade som ett antal
 vanliga filer. Filen B<control> måste finnas, eftersom den innehåller
-grundläggande kontrollinformation.
+grundläggande styrinformation.
 
-In some very old archives, the files in the control tarfile may optionally
-be in a B<DEBIAN> subdirectory. In that case, the B<DEBIAN> subdirectory
-will be in the control tarfile too, and the control tarfile will have only
-files in that directory. Optionally the control tarfile may contain an entry
-for ‘B<.>’, that is, the current directory.
+I vissa väldigt gamla arkiv kan filerna i styr-tarfilen eventuellt ligga i
+en underkatalog vid namn B<DEBIAN>. Om så är fallet kommer underkatalogen
+B<DEBIAN> också att finnas i styr-tarfilen, och styr-tarfilen kommer endast
+innehålla filer i den katalogen. Eventuellt kan styr-tarfilen innehålla en
+post för ”B<.>”, det vill säga den aktuella katalogen.
 
 Den andra gzip-packade tar-filen är filsystemsarkivet, vilken innehåller
-sökvägar relativt rotkatalogen för systemet det skall installeras
+sökvägar relativt rotkatalogen för systemet det ska installeras
 på. Sökvägarna innehåller inte inledande snedstreck.
 
 =head1 SE ÄVEN

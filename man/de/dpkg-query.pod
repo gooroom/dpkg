@@ -38,7 +38,7 @@ B<Breaks>, B<Enhances> usw.) referenziert sind. Falls kein
 I<Paketname-Muster> angegeben ist, werden alle Pakete in
 I<%ADMINDIR%/status> aufgelistet. Dabei werden alle Pakete ausgeschlossen,
 die als „nicht-installiert“ markiert sind (d.h. früher endgültig entfernt
-wurden). Normale Shell-Jokerzeichen sind im I<Paketname-Muster>
+wurden). Normale Shell-Platzhalter sind im I<Paketname-Muster>
 erlaubt. Beachten Sie, dass Sie wahrscheinlich I<Paketname-Muster> durch
 Anführungszeichen schützen müssen, um die Shell an der Dateinamen-Expansion
 zu hindern. Folgender Befehl listet beispielsweise alle Paketnamen, die mit
@@ -166,8 +166,8 @@ Lösung dafür gibt, wird dieser Befehl nicht entfernt.
 
 =item B<-S>, B<--search> I<Dateiname-Suchmuster> …
 
-Sucht nach Paketen, denen Dateien, die auf ein bestimmtes Muster passen,
-gehören. Die normalen Jokerzeichen („wildcards“) der Shell können in diesem
+Sucht nach Paketen, denen Dateien, die auf das bestimmte Muster passen,
+gehören. Die normalen Platzhalter („wildcards“) der Shell können in diesem
 Muster verwandt werden, wobei der Stern (B<*>) und das Fragezeichen (B<?>)
 auf einen Schrägstrich passen und der Rückwärtsschrägstrich (B<\>) als
 Maskierzeichen verwandt wird.
@@ -231,7 +231,7 @@ Diese Option wird dazu verwendet, das Format der Ausgabe anzugeben, das
 B<--show> verwenden wird (kurze Option seit Dpkg 1.13.1). Das Format ist
 eine Zeichenkette, die für jedes aufgeführte Paket ausgegeben wird.
 
-In der Formatzeichenkette leitet „B<\>“ Escape-Sequenzen ein:
+In der Formatzeichenkette leitet „B<\>“ Maskiersequenzen ein:
 
 =over 
 

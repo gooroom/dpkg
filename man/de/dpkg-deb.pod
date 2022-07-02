@@ -107,7 +107,7 @@ Listet den Inhalt des Dateisystem-Archivanteils des Paketarchivs auf. Die
 Ausgabe erfolgt derzeit in dem Format, das von B<tar> in der ausführlichen
 Auflistung erstellt wird.
 
-=item B<-x>, B<--extract> I<Archiv-Verzeichnis>
+=item B<-x>, B<--extract> I<Archiv Verzeichnis>
 
 Entpackt den Dateisystembaum aus einem Paketarchiv in das angegebene
 Verzeichnis.
@@ -120,12 +120,12 @@ I<Verzeichnis> (aber nicht die übergeordneten) wird, falls notwendig,
 angelegt. Seine Rechte werden angepasst, um mit dem Inhalt des Pakets
 übereinzustimmen.
 
-=item B<-X>, B<--vextract> I<Archiv-Verzeichnis>
+=item B<-X>, B<--vextract> I<Archiv Verzeichnis>
 
 Ist wie B<--extract> (B<-x>) mit B<--verbose> (B<-v>), das beim Arbeiten
 eine Liste von entpackten Dateien ausgibt.
 
-=item B<-R>, B<--raw-extract> I<Archiv-Verzeichnis>
+=item B<-R>, B<--raw-extract> I<Archiv Verzeichnis>
 
 Entpackt den Dateisystembaum aus einem Paketarchiv in ein angegebenes
 Verzeichnis und die Steuerinformationsdateien in das
@@ -187,7 +187,7 @@ aufgeführte Paket ausgegeben wird.
 Die Zeichenkette darf jedes Statusfeld in der Form „${I<Feldname>}“
 referenzieren, eine Liste der möglichen Felder kann leicht mittels B<-I> für
 das gleiche Paket ermittelt werden. Eine komplette Erläuterung der
-Formatieroptionen (darunter die Escape-Sequenzen und Feld-Tabulatoren) kann
+Formatieroptionen (darunter die Maskiersequenzen und Feld-Tabulatoren) kann
 in der Erklärung der Option B<--showformat> von B<dpkg-query>(1) gefunden
 werden.
 

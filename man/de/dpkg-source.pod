@@ -57,7 +57,7 @@ werden die Gruppeneigentümerschaft erben.
 
 Falls das Quellpaket ein nicht-Standard-Format verwendet (derzeit bedeutet
 dies alle Formate außer „1.0“)) wird sein Name in B<debian/source/format>
-gespeichert, so dass alle folgenden Bauversuchen des Quellpakets
+gespeichert, so dass alle folgenden Bauversuche des Quellpakets
 standardmäßig das gleiche Format verwenden.
 
 =item B<-b>, B<--build> I<Verzeichnis> [I<Format-abhängige-Parameter>]
@@ -247,11 +247,11 @@ B<Hinweis>: Obwohl sie ähnlichen Zwecken dienen, haben B<-i> und B<-I> eine
 sehr verschiedene Syntax und Semantik. B<-i> kann nur einmal angegeben
 werden und nimmt einen regulären Perl-Ausdruck an, der gegen den vollen
 relativen Pfad jeder Datei geprüft wird. B<-I> kann mehrfach angegeben
-werden und nimmt ein Dateinamen-Muster mit Shell-Jokerzeichen an. Das Muster
+werden und nimmt ein Dateinamen-Muster mit Shell-Platzhalter an. Das Muster
 wird gegen den vollen relativen Pfad, aber auch individuell auf jeden Teil
 des Pfades angewendet. Die exakte Semantik der Option B<--exclude> ist etwas
 kompliziert, lesen Sie
-https://www.gnu.org/software/tar/manual/tar.html#wildcards für eine
+L<https://www.gnu.org/software/tar/manual/tar.html#wildcards> für eine
 komplette Dokumentation.
 
 Der voreingestellte reguläre Ausdruck und Muster für beide Optionen können
@@ -304,7 +304,7 @@ Rückwärtskompatibilität.
 
 Falls Sie nicht wissen, welches Quellformat Sie verwenden sollen, verwenden
 Sie wahrscheinlich am besten entweder „3.0 (quilt)“ oder „3.0
-(native)“. Lesen Sie https://wiki.debian.org/Projects/DebSrc3.0 für
+(native)“. Lesen Sie L<https://wiki.debian.org/Projects/DebSrc3.0> für
 Informationen über den Einsatz dieser Formate innerhalb von Debian.
 
 =head2 Format: 1.0
@@ -402,12 +402,12 @@ Erstellung eines Diffs entpackt und danach entfernt (dies ist äquivalent zu
 B<-sp>); falls ein Verzeichnis gefunden wird, wird dieses gepackt, um die
 Originalquellen zu erstellen und danach entfernt (dies ist äquivalent zu
 B<-sr>); falls keines von beiden gefunden wird, wird angenommen, dass das
-Paket keinen Debianisierungs-Diff, sondern nur ein direktes Quellarchiv hat
-(dies ist äquivalent zu B<-sn>). Falls sowohl ein Verzeichnis als auch eine
-Tar-Datei gefunden werden, dann ignoriert B<dpkg-source> das Verzeichnis,
-und überschreibt es, falls B<-sA> angegeben wurde (dies ist äquivalent zu
-B<-sP>) oder löst einen Fehler aus, falls B<-sa> angegeben wurde. B<-sa> ist
-die Voreinstellung.
+Paket keine Debianisierungs-Diff hat, sondern nur ein direktes Quellarchiv
+ist (dies ist äquivalent zu B<-sn>). Falls sowohl ein Verzeichnis als auch
+eine Tar-Datei gefunden werden, dann ignoriert B<dpkg-source> das
+Verzeichnis, und überschreibt es, falls B<-sA> angegeben wurde (dies ist
+äquivalent zu B<-sP>) oder löst einen Fehler aus, falls B<-sa> angegeben
+wurde. B<-sa> ist die Voreinstellung.
 
 =item B<--abort-on-upstream-changes>
 

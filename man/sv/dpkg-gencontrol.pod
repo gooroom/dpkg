@@ -14,7 +14,7 @@ If the PO get lost, keeping this translation up-to-date will be harder.
 
 =head1 NAMN
 
-dpkg-gencontrol - skapa Debians kontrollfiler
+dpkg-gencontrol - skapa Debians styrfiler
 
 =head1 SYNOPS
 
@@ -49,7 +49,7 @@ B<debian/files>.
 
 =item B<-v>I<version>
 
-Sätter versionsnumret på binärpaketet som skall skapas.
+Sätter versionsnumret på binärpaketet som ska skapas.
 
 =item B<-V>I<namn>B<=>I<värde>
 
@@ -58,9 +58,9 @@ beskrivning av utdatasubstituering.
 
 =item B<-T>I<substvars-fil>
 
-Read substitution variables in I<substvars-file>; the default is
-B<debian/substvars>.  This option can be used multiple times to read
-substitution variables from multiple files (since dpkg 1.15.6).
+Läs substitutionsvariabler från I<substvars-fil>; standard är
+B<debian/substvars>. Flaggan kan användas flera gånger för att läsa
+substitutionsvariabler från flera filer (sedan dpkg 1.15.6).
 
 =item B<-D>I<fält>B<=>I<värde>
 
@@ -72,18 +72,18 @@ Ta bort ett fält ur den genererade control-filen.
 
 =item B<-c>I<control-fil>
 
-Anger huvudkällkodskontrollfilen som information skall läsas
-från. Standardvärdet är B<debian/control>.
+Anger huvudkällkodsstyrfilen som information ska läsas från. Standardvärdet
+är B<debian/control>.
 
 =item B<-l>I<ändringsloggfil>
 
-Anger ändringsloggfilen som information skall läsas från. Standardvärdet är
+Anger ändringsloggfilen som information ska läsas från. Standardvärdet är
 B<debian/changelog>.
 
 =item B<-f>I<fillistfil>
 
-Läs eller skriv listan över filer som skall sändas in här, istället för att
-använda B<debian/file>.
+Läs eller skriv listan över filer som ska sändas in här, istället för att
+använda B<debian/files>.
 
 =item B<-F>I<ändringsloggformat>
 
@@ -94,12 +94,12 @@ om alternativa format.
 
 Skapa information för det binära paketet I<paket>. Om källkodens control-fil
 bara innehåller ett binärpaket behöver inte flaggan anges. I alla andra fall
-är det nödvändigt att välja vilket binärpakets information som skall skapas.
+är det nödvändigt att välja vilket binärpakets information som ska skapas.
 
 =item B<-n>I<filnamn>
 
-Anta att filnamnet för paketet skalla vara I<filnamn> istället för det
-normala paket_version_ark.deb-filnamnet.
+Anta att filnamnet för paketet skaa vara I<filnamn> istället för det normala
+paket_version_ark.deb-filnamnet.
 
 =item B<-is>, B<-ip>, B<-isp>
 
@@ -112,15 +112,15 @@ control-filen.
 
 =item B<-P>I<paketbyggkatalog>
 
-Scan I<package-build-dir> instead of B<debian/tmp>.  This value is used to
-find the default value of the B<Installed-Size> substitution variable and
-control file field, and for the default location of the output file.
+Sök I<paketbyggkatalog> istället för B<debian/tmp>, Värdet används för att
+bestämma standardvärdet för substitueringsvariabeln och control-filsfältet
+B<Installed-Size>, samt för att välja standardplacering av utdatafilen.
 
 =item B<-O>[I<filnamn>]
 
-Print the control file to standard output (or I<filename> if specified,
-since dpkg 1.17.2), rather than to B<debian/tmp/DEBIAN/control> (or
-I<package-build-dir>B</DEBIAN/control> if B<-P> was used).
+Skriv control-filen på standard ut (eller I<filnamn>, om angivet, sedan dpkg
+1.17.2), i stället för till B<debian/tmp/DEBIAN/control> (eller
+I<paketbyggkatalog>B</DEBIAN/control> om B<-P> användes).
 
 =item B<-?>, B<--help>
 
@@ -138,14 +138,14 @@ Visar version och avslutar.
 
 =item B<DPKG_COLORS>
 
-Sets the color mode (since dpkg 1.18.5).  The currently accepted values are:
-B<auto> (default), B<always> and B<never>.
+Väljer färgläge (sedan dpkg 1.18.5). För närvarande godtas följande värden:
+B<auto> (förval), B<always> och B<never>.
 
 =item B<DPKG_NLS>
 
-If set, it will be used to decide whether to activate Native Language
-Support, also known as internationalization (or i18n) support (since dpkg
-1.19.0).  The accepted values are: B<0> and B<1> (default).
+Om satt, används för att bestämma om lokalt språkstöd ska aktiveras, även
+känt som internationaliseringsstöd (eller i18n) (sedan dpkg
+1.19.0). Tillåtna värden är: B<0> och B<1> (förval).
 
 =back
 
@@ -155,7 +155,7 @@ Support, also known as internationalization (or i18n) support (since dpkg
 
 =item B<debian/control>
 
-Huvudkällkodskontrollinformationsfil, vilken innehåller versionsoberoende
+Huvudkällkodsstyrinformationsfil, vilken innehåller versionsoberoende
 information om källkodspaketet och de binärpaket som kan skapas från det.
 
 =item B<debian/files>

@@ -127,8 +127,8 @@ Architekturinformation umbenannt.
 
 =item B<find -name '*.deb' | xargs -n 1 dpkg-name -a -o -s -c>
 
-B<Machen Sie dies nicht.> Ihr Archiv wird eine komplette Schweinerei werden,
-da viele Pakete nicht mit Sektionsinformationen kommen. B<Machen Sie dies
+B<Machen Sie das nicht.> Ihr Archiv wird eine kompletter Saustall werden, da
+viele Pakete nicht mit Sektionsinformationen kommen. B<Machen Sie dies
 nicht.>
 
 =item B<dpkg-deb --build debian-tmp && dpkg-name -o -s .. debian-tmp.deb>

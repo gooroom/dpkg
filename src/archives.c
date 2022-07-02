@@ -235,7 +235,7 @@ md5hash_prev_conffile(struct pkginfo *pkg, char *oldhash, const char *oldname,
                              &otherpkg->configversion) != 0)
       continue;
     for (conff = otherpkg->installed.conffiles; conff; conff = conff->next) {
-      if (conff->obsolete)
+      if (conff->obsolete || conff->remove_on_upgrade)
         continue;
       if (strcmp(conff->name, namenode->name) == 0)
         break;
@@ -667,7 +667,7 @@ tarobject(struct tar_archive *tar, struct tar_entry *ti)
 {
   static struct varbuf conffderefn, symlinkfn;
   const char *usename;
-  struct fsys_namenode *usenode;
+  struct fsys_namenode *namenode, *usenode;
 
   struct conffile *conff;
   struct tarcontext *tc = tar->ctx;
@@ -688,12 +688,17 @@ tarobject(struct tar_archive *tar, struct tar_entry *ti)
   if (strchr(ti->name, '\n'))
     ohshit(_("newline not allowed in archive object name '%.255s'"), ti->name);
 
+  namenode = fsys_hash_find_node(ti->name, 0);
+
+  if (namenode->flags & FNNF_RM_CONFF_ON_UPGRADE)
+    ohshit(_("conffile '%s' marked for removal on upgrade, shipped in package"),
+           ti->name);
+
   /* Append to list of files.
    * The trailing ‘/’ put on the end of names in tarfiles has already
    * been stripped by tar_extractor(). */
   oldnifd = tc->newfiles_queue->tail;
-  nifd = tar_fsys_namenode_queue_push(tc->newfiles_queue,
-                                     fsys_hash_find_node(ti->name, 0));
+  nifd = tar_fsys_namenode_queue_push(tc->newfiles_queue, namenode);
   nifd->namenode->flags |= FNNF_NEW_INARCHIVE;
 
   debug(dbg_eachfile,
@@ -1234,7 +1239,7 @@ try_deconfigure_can(bool (*force_p)(struct deppossi *), struct pkginfo *pkg,
     warning(_("ignoring dependency problem with %s:\n%s"), action, why);
     return 2;
   } else if (f_autodeconf) {
-    if (pkg->installed.essential) {
+    if (removal && pkg->installed.essential) {
       if (in_force(FORCE_REMOVE_ESSENTIAL)) {
         warning(_("considering deconfiguration of essential\n"
                   " package %s, to enable %s"),
@@ -1246,7 +1251,7 @@ try_deconfigure_can(bool (*force_p)(struct deppossi *), struct pkginfo *pkg,
         return 0;
       }
     }
-    if (pkg->installed.is_protected) {
+    if (removal && pkg->installed.is_protected) {
       if (in_force(FORCE_REMOVE_PROTECTED)) {
         warning(_("considering deconfiguration of protected\n"
                   " package %s, to enable %s"),
@@ -1458,6 +1463,7 @@ void cu_cidir(int argc, void **argv) {
   char *cidirrest= (char*)argv[1];
   cidirrest[-1] = '\0';
   path_remove_tree(cidir);
+  free(cidir);
 }
 
 void cu_fileslist(int argc, void **argv) {

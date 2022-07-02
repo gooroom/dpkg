@@ -154,7 +154,7 @@ felaktiga meddelanden.
 
 =item B<--msdos>
 
-Tvingar utdatafilnamn skapade av B<--split> att vara msdos-kompatibla.
+Tvingar utdatafilnamn skapade av B<--split> att vara MSDOS-kompatibla.
 
 Misshandlar prefixet - antingen förvalet taget från indatafilnamnet, eller
 det som angetts som argument: alfanumeriska tecken görs till gemener,
@@ -182,9 +182,9 @@ ett binärpaket.
 
 =item B<2>
 
-Fatal or unrecoverable error due to invalid command-line usage, a file that
-looked like a package part file but was corrupted, or interactions with the
-system, such as accesses to the database, memory allocations, etc.
+Ödesdigert eller irreparabelt fel på grund av felaktig användning på
+kommandoraden, en fil som såg ut som en paket-delfil men var trasig, eller
+interaktioner med systemet, såsom databasåtkomst, minnesallokeringer, osv.
 
 =back
 
@@ -194,13 +194,13 @@ system, such as accesses to the database, memory allocations, etc.
 
 =item B<DPKG_COLORS>
 
-Sets the color mode (since dpkg 1.18.5).  The currently accepted values are:
-B<auto> (default), B<always> and B<never>.
+Väljer färgläge (sedan dpkg 1.18.5). För närvarande godtas följande värden:
+B<auto> (förval), B<always> och B<never>.
 
 =item B<SOURCE_DATE_EPOCH>
 
-If set, it will be used as the timestamp (as seconds since the epoch) in the
-B<deb-split>(5)'s B<ar>(5) container.
+Om satt kommer det användas som tidsstämpel (som sekunder sedan epoken) i
+B<deb-split>(5):s B<ar>(5)-behållare.
 
 =back
 

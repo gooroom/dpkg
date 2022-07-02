@@ -277,7 +277,7 @@ angegeben ist, äquivalent zu der Option von B<make>(1) mit dem gleichen
 Namen (seit Dpkg 1.14.7, lange Option seit Dpkg 1.18.8). Fügt sich selbst zu
 der Umgebungsvariablen B<MAKEFLAGS> hinzu, was dazu führen sollte, dass alle
 folgenden Aufrufe von Make diese Option erben werden. Damit wird dem Paket
-die Parallel-Einstellung aufgezwungen (und möglicherweise dem Bausystem der
+die Parallele-Einstellung aufgezwungen (und möglicherweise dem Bausystem der
 Originalautoren, falls dieses Make verwendet), unabhängig von deren
 Unterstützung für paralleles Bauen. Dies kann zu Fehlern beim Bauen
 führen. Fügt auch B<parallel=>I<Aufträge> oder B<parallel> zu der

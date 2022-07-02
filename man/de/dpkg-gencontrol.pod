@@ -97,13 +97,13 @@ für Informationen über alternative Formate.
 =item B<-p>I<Paket>
 
 Erstellt Informationen für das Binärpaket I<Paket>. Falls die Steuerdatei
-der Quellen nur ein Binärpaket aufführt, kann diese Option weggelassen
+der Quellen nur ein Binärpaket auflistet, kann diese Option weggelassen
 werden; andernfalls ist sie notwendig, um festzulegen, von welchen
 Binärpaketen die Informationen erstellt werden sollen.
 
 =item B<-n>I<Dateiname>
 
-Geht davon aus, das der Dateiname des Pakets I<Dateiname> sein wird, statt
+Geht davon aus, dass der Dateiname des Pakets I<Dateiname> sein wird, statt
 des normalen Dateinamens Paket_Version_Architektur.deb.
 
 =item B<-is>, B<-ip>, B<-isp>
