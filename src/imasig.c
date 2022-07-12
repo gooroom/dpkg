@@ -19,8 +19,7 @@
 
 #include "imasig.h"
 #include "main.h"
-#include "filesdb.h"
-#include "infodb.h"
+#include <dpkg/db-ctrl.h>
 
 // attr
 #include <sys/xattr.h>
