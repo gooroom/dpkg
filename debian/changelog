@@ -1,3 +1,16 @@
+dpkg (1.20.11+grm3u1) bullseye; urgency=medium
+
+  [ Dave Park ]
+  * [755354d2] Add new feature that support IMA-Sig
+  * [13848748] Fix to support RSA2048, sha256 and higher
+
+  [ jongkyung.woo ]
+  * [5cec93e0] Fixed signature write error of dnsmasq-base
+  * [a55dc5ef] Added <dpkg/db-crtl.h>
+  * [00b26afa] Disabled printf log
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Tue, 12 Jul 2022 10:31:10 +0900
+
 dpkg (1.20.11) bullseye; urgency=medium
 
   [ Guillem Jover ]
