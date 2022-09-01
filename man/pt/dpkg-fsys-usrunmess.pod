@@ -76,10 +76,6 @@ necessário.
 
 =item *
 
-Reconfigura todos os pacotes.
-
-=item *
-
 Remove links simbólicos de salvaguarda.
 
 =item *
@@ -94,12 +90,29 @@ Remove directórios adiados antigos que não estão referidos pelo dpkg-query.
 
 Remove o directório raiz sombra.
 
+=item *
+
+Register a B<policy-rc.d> to disallow service actions, which means that
+services might need to be restarted afterwards, ideally via a reboot.
+
+=item *
+
+Reconfigura todos os pacotes.
+
+=item *
+
+Unregister the B<policy-rc.d> and restore the alternatives state.
+
 =back
 
 B<Nota>: Quando se corre o programa a partir de alguma shells tais como
 L<bash(1)> ou L<zsh(1)>, após o executar, você pode precisar de requisitar à
 shell para esquecer todas as localizações de executáveis lembradas com por
 exemplo C<hash -r>.
+
+B<Note>: Some directories might linger after the migration in case they
+contain untracked files. A list is printed once the script has finished for
+further investigation.
 
 B<Aviso>: Note que esta operação tem o potencial de tornar o sistema não
 utilizável ou quebrado em caso de uma pagarem súbita ou reinicio do

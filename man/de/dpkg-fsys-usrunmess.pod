@@ -78,10 +78,6 @@ Bringt MAC-Informationen für Verzeichnisse und Symlinks wo notwendig neu an.
 
 =item *
 
-Rekonfiguriert alle Pakete.
-
-=item *
-
 Entfernt alle Sicherungskopie-Symlinks.
 
 =item *
@@ -98,12 +94,29 @@ referenziert werden.
 
 Entfernt das Schatten-Wurzelverzeichnis.
 
+=item *
+
+Register a B<policy-rc.d> to disallow service actions, which means that
+services might need to be restarted afterwards, ideally via a reboot.
+
+=item *
+
+Rekonfiguriert alle Pakete.
+
+=item *
+
+Unregister the B<policy-rc.d> and restore the alternatives state.
+
 =back
 
 B<Hinweis:>: Wird das Programm aus einigen Shells wie L<bash(1)> oder
 L<zsh(1)> ausgeführt, dann müssen Sie nach der Ausführung die Shell
 anweisen, alle gespeicherten Orte von Programmen zu vergessen,
 beispielsweise mit C<hash -r>.
+
+B<Note>: Some directories might linger after the migration in case they
+contain untracked files. A list is printed once the script has finished for
+further investigation.
 
 B<Warnung>: Beachten Sie, dass diese Aktion die Möglichkeit eröffnet, dass
 Ihr System unbrauchbar oder defekt wird, falls das System unerwartet
