@@ -392,6 +392,7 @@ architectuurspecifieke symboolbestanden opgenomen worden:
  (arch=amd64 ia64 alpha)#include "pakket.symbols.64bit"
  (arch=!amd64 !ia64 !alpha)#include "pakket.symbols.32bit"
   gemeenschappelijk_symbool2@Base 1.0
+
 =back
 
 De symboolbestanden worden regel per regel gelezen en include-opdrachten

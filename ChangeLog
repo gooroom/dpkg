@@ -1,3 +1,378 @@
+commit 1fd89b43d1e21a68c3ed6368f88c70908b1fd15f
+Author: Guillem Jover <guillem@debian.org>
+Date:   Thu Sep 1 05:38:36 2022 +0200
+
+    Release 1.20.12
+
+ debian/changelog | 31 ++++++++++++++++++++++++++++---
+ 1 file changed, 28 insertions(+), 3 deletions(-)
+
+commit b64e601efdb372a50e61da97c59a2c59e388b8b1
+Author: Guillem Jover <guillem@debian.org>
+Date:   Thu Sep 1 05:38:12 2022 +0200
+
+    po: Regenerate .pot files and merge .po files with them
+
+ dselect/po/bs.po        |  2 +-
+ dselect/po/ca.po        |  2 +-
+ dselect/po/cs.po        |  2 +-
+ dselect/po/da.po        |  2 +-
+ dselect/po/de.po        |  2 +-
+ dselect/po/dselect.pot  |  4 ++--
+ dselect/po/el.po        |  2 +-
+ dselect/po/es.po        |  2 +-
+ dselect/po/et.po        |  2 +-
+ dselect/po/eu.po        |  2 +-
+ dselect/po/fr.po        |  2 +-
+ dselect/po/gl.po        |  2 +-
+ dselect/po/hu.po        |  2 +-
+ dselect/po/id.po        |  2 +-
+ dselect/po/it.po        |  2 +-
+ dselect/po/ja.po        |  2 +-
+ dselect/po/ko.po        |  2 +-
+ dselect/po/nb.po        |  2 +-
+ dselect/po/nl.po        |  2 +-
+ dselect/po/nn.po        |  2 +-
+ dselect/po/pl.po        |  2 +-
+ dselect/po/pt.po        |  2 +-
+ dselect/po/pt_BR.po     |  2 +-
+ dselect/po/ro.po        |  2 +-
+ dselect/po/ru.po        |  2 +-
+ dselect/po/sk.po        |  2 +-
+ dselect/po/sv.po        |  2 +-
+ dselect/po/tl.po        |  2 +-
+ dselect/po/vi.po        |  2 +-
+ dselect/po/zh_CN.po     |  2 +-
+ dselect/po/zh_TW.po     |  2 +-
+ man/po/de.po            | 36 ++++++++++++++++++++++------
+ man/po/dpkg-man.pot     | 34 +++++++++++++++++++++------
+ man/po/es.po            | 36 +++++++++++++++++++++-------
+ man/po/fr.po            | 36 +++++++++++++++++++++-------
+ man/po/hu.po            | 32 ++++++++++++++++++++-----
+ man/po/it.po            | 36 +++++++++++++++++++++-------
+ man/po/ja.po            | 36 +++++++++++++++++++++-------
+ man/po/nl.po            | 32 ++++++++++++++++++++-----
+ man/po/pl.po            | 36 +++++++++++++++++++++-------
+ man/po/pt.po            | 32 ++++++++++++++++++++-----
+ man/po/pt_BR.po         | 36 +++++++++++++++++++++-------
+ man/po/ru.po            | 36 +++++++++++++++++++++-------
+ man/po/sv.po            | 32 ++++++++++++++++++++-----
+ man/po/zh_CN.po         | 32 ++++++++++++++++++++-----
+ po/ast.po               | 58 ++++++++++++++++++++++-----------------------
+ po/bs.po                | 62 ++++++++++++++++++++++++-------------------------
+ po/ca.po                | 58 ++++++++++++++++++++++-----------------------
+ po/cs.po                | 58 ++++++++++++++++++++++-----------------------
+ po/da.po                | 58 ++++++++++++++++++++++-----------------------
+ po/de.po                | 52 ++++++++++++++++++++---------------------
+ po/dpkg.pot             | 54 +++++++++++++++++++++---------------------
+ po/dz.po                | 58 ++++++++++++++++++++++-----------------------
+ po/el.po                | 58 ++++++++++++++++++++++-----------------------
+ po/eo.po                | 58 ++++++++++++++++++++++-----------------------
+ po/es.po                | 58 ++++++++++++++++++++++-----------------------
+ po/et.po                | 58 ++++++++++++++++++++++-----------------------
+ po/eu.po                | 58 ++++++++++++++++++++++-----------------------
+ po/fr.po                | 58 ++++++++++++++++++++++-----------------------
+ po/gl.po                | 58 ++++++++++++++++++++++-----------------------
+ po/hu.po                | 58 ++++++++++++++++++++++-----------------------
+ po/id.po                | 58 ++++++++++++++++++++++-----------------------
+ po/it.po                | 58 ++++++++++++++++++++++-----------------------
+ po/ja.po                | 58 ++++++++++++++++++++++-----------------------
+ po/km.po                | 58 ++++++++++++++++++++++-----------------------
+ po/ko.po                | 58 ++++++++++++++++++++++-----------------------
+ po/ku.po                | 56 ++++++++++++++++++++++----------------------
+ po/lt.po                | 58 ++++++++++++++++++++++-----------------------
+ po/mr.po                | 58 ++++++++++++++++++++++-----------------------
+ po/nb.po                | 58 ++++++++++++++++++++++-----------------------
+ po/ne.po                | 58 ++++++++++++++++++++++-----------------------
+ po/nl.po                | 54 +++++++++++++++++++++---------------------
+ po/nn.po                | 56 ++++++++++++++++++++++----------------------
+ po/pa.po                | 58 ++++++++++++++++++++++-----------------------
+ po/pl.po                | 58 ++++++++++++++++++++++-----------------------
+ po/pt.po                | 58 ++++++++++++++++++++++-----------------------
+ po/pt_BR.po             | 58 ++++++++++++++++++++++-----------------------
+ po/ro.po                | 58 ++++++++++++++++++++++-----------------------
+ po/ru.po                | 58 ++++++++++++++++++++++-----------------------
+ po/sk.po                | 58 ++++++++++++++++++++++-----------------------
+ po/sv.po                | 54 +++++++++++++++++++++---------------------
+ po/th.po                | 58 ++++++++++++++++++++++-----------------------
+ po/tl.po                | 56 ++++++++++++++++++++++----------------------
+ po/tr.po                | 58 ++++++++++++++++++++++-----------------------
+ po/vi.po                | 58 ++++++++++++++++++++++-----------------------
+ po/zh_CN.po             | 58 ++++++++++++++++++++++-----------------------
+ po/zh_TW.po             | 58 ++++++++++++++++++++++-----------------------
+ scripts/po/ca.po        |  2 +-
+ scripts/po/de.po        |  2 +-
+ scripts/po/dpkg-dev.pot |  4 ++--
+ scripts/po/es.po        |  2 +-
+ scripts/po/fr.po        |  2 +-
+ scripts/po/pl.po        |  2 +-
+ scripts/po/ru.po        |  2 +-
+ scripts/po/sv.po        |  2 +-
+ 95 files changed, 1631 insertions(+), 1349 deletions(-)
+
+commit b3ab830ba0e0497d60c11d387ef45d623f19618c
+Author: Guillem Jover <guillem@debian.org>
+Date:   Thu Sep 1 05:05:50 2022 +0200
+
+    po: Fix missing newline in Dutch man pages translation
+    
+    This was causing the po4a to concatenate a «=back» after the text, which
+    pod2man was unable to parse correctly with the following error:
+    
+      IO::File=IO(0x55d0015a00d0) around line 203: You forgot a '=back' before '=head1'
+      POD document had syntax errors at /usr/bin/pod2man line 69.
+
+ man/po/nl.po | 1 +
+ 1 file changed, 1 insertion(+)
+
+commit d6edcc6759b339612888d99c2690e1d9f6729faf
+Author: Guillem Jover <guillem@debian.org>
+Date:   Fri Apr 1 01:39:42 2022 +0200
+
+    dpkg-fsys-usrunmess: Handle /lib/modules itself also being untracked
+    
+    For setups with completely untracked kernel and modules, we need to add
+    also /lib/modules to the list of pathnames that need to be copied over,
+    otherwise its contents will not find a directory to copy to.
+    
+    Closes: #1008764
+    (cherry picked from commit f9bf9b372ec76b8de8496b75edf123798f4ff35d)
+
+ scripts/dpkg-fsys-usrunmess.pl | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+commit 7086b1b623ed58a3b09e16cc1b111e5a7522d6f3
+Author: Guillem Jover <guillem@debian.org>
+Date:   Tue Mar 29 01:41:34 2022 +0200
+
+    dpkg-fsys-usrunmess: Special case untracked kernel module files
+    
+    Kernel module files are required as part of the system boot, so we need
+    to make sure any such files gets moved or the system might end up not
+    being able to boot, once the initramfs images get regenerated.
+    
+    In particular, kernel module files are easily found on systems as
+    untracked pathnames in the filesystem, either from custom built kernels,
+    or as part of modules built via machinery such as DKMS.
+    
+    One complication is that there appears to be some documentation
+    referencing /usr/lib/modules/ pathnames for at least apache, python and
+    ruby module locations. Which we do not want to be moving.
+    
+    To limit these unknowns, and as we are dealing with untracked pathnames,
+    we will restrict moving subdirectories that start with a digit, which
+    matches Linux and kFreeBSD module locations, in addition to the
+    modprobe.conf filename.
+    
+    Closes: #1008316
+    (cherry picked from commit 48e33c40691596b3bf91b86b50a8aa164b585639)
+    (cherry picked from commit b1898b812b71f64082107d4e2f98ccf020d18b70)
+
+ scripts/dpkg-fsys-usrunmess.pl | 37 ++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 36 insertions(+), 1 deletion(-)
+
+commit 47ed5399c463edff98afd84b889f9f3bae9f930e
+Author: Guillem Jover <guillem@debian.org>
+Date:   Sun Mar 27 13:09:35 2022 +0200
+
+    dpkg-fsys-usrunmess: Set a known umask before starting
+    
+    Even though we should already be explicitly setting user/group and mode
+    for created directories, we should in addition set a known umask we can
+    rely on, at least for defensive purposes.
+    
+    Ref: #1008478
+    (cherry picked from commit b29c959c5b9f271b8eb1873c49cf7f5dbf2bfda0)
+
+ scripts/dpkg-fsys-usrunmess.pl | 3 +++
+ 1 file changed, 3 insertions(+)
+
+commit 699c417f5da2b715fdca481a65db2c059512b94c
+Author: Guillem Jover <guillem@debian.org>
+Date:   Mon Mar 28 00:33:17 2022 +0200
+
+    dpkg-fsys-usrunmess: Explicitly set user/group and mode for created dirs
+    
+    We should explicitly set the user/group and mode for the newly created
+    directories, to make sure they end up with the expected values, instead
+    of assuming a good environment (umask and user/group). We will still be
+    setting a known umask in a subsequent commit as a defensive measure.
+    
+    Closes: #1008478
+    (cherry picked from commit 77756084e9e50d7a8578259ee56e64dcf4f6f9a0)
+
+ scripts/dpkg-fsys-usrunmess.pl | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+commit d796fcade9808a42f38ea848be4c994f5d403a04
+Author: Guillem Jover <guillem@debian.org>
+Date:   Sat Nov 20 20:41:45 2021 +0100
+
+    dpkg-fsys-usrunmess: Fix typo in debug message
+    
+    Stable-Candidate: 1.20.x
+    (cherry picked from commit c7e2c93c60e4fda1ee06110698f6f69e2eb1ffb5)
+
+ scripts/dpkg-fsys-usrunmess.pl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+commit d83a81f7c6bc901a9a8a7623516e6b380fb9202a
+Author: Guillem Jover <guillem@debian.org>
+Date:   Sat Nov 20 18:41:35 2021 +0100
+
+    dpkg-fsys-usrunmess: Do not fail when removing lingering directories
+    
+    These directories might contain untracked files, if they are not empty,
+    failing the whole script will be worse. Keep track of them, and print a
+    summary at the end of the run.
+    
+    Stable-Candidate: 1.20.x
+    (cherry picked from commit cf55e9f07217749dee34125be2bb0407fde75374)
+    (cherry picked from commit 2165119fe4d81207e49a3296d14e1a2cb64b93f1)
+
+ man/dpkg-fsys-usrunmess.pod    |  4 ++++
+ scripts/dpkg-fsys-usrunmess.pl | 17 ++++++++++++++---
+ 2 files changed, 18 insertions(+), 3 deletions(-)
+
+commit 6d4846d494e14100b6895708fa67fd23fc58f526
+Author: Guillem Jover <guillem@debian.org>
+Date:   Mon Aug 2 02:36:45 2021 +0200
+
+    dpkg-fsys-usrunmess: Install a local policy-rc.d to ignore service restarts
+    
+    When in systemd emergency mode, starting (including restarting) services
+    will force exiting the emergency mode, which can leave the system in a
+    pretty bad state. Part of the reason for reconfiguring all packages is
+    to both force any regeneration of missing files, and ideally to possibly
+    restart services so that they use the new real pathnames, but restarting
+    services is the most fragile part and with the most potential to fail
+    for whatever reason, so we will skip restarting services entirely. A
+    reboot after the conversion is strongly advised.
+    
+    Closes: #991190
+    Stable-Candidate: 1.20.x
+    (cherry picked from commit a335ee075be83eb7f69e85644b9ece40bc29a6a5)
+    (cherry picked from commit 2165119fe4d81207e49a3296d14e1a2cb64b93f1)
+
+ man/dpkg-fsys-usrunmess.pod    |  9 +++++++++
+ scripts/dpkg-fsys-usrunmess.pl | 46 ++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 55 insertions(+)
+
+commit bbdfbbcb54c24d341c74fe1eea38a45c968c6afb
+Author: Guillem Jover <guillem@debian.org>
+Date:   Sat Jul 17 20:13:36 2021 +0200
+
+    dpkg-fsys-usrunmess: Move forced reconfiguration to the last step
+    
+    Reconfiguring packages has the most potential for unaccounted breakage,
+    it is also the step that will take longer, and it should be the one
+    easier to recover from, by calling «dpkg --pending --configure» at a
+    later time. Move it at the end when we have done the reparation, and
+    performed the cleanup.
+    
+    Ref: #991190
+    Stable-Candidate: 1.20.x
+    (cherry picked from commit 66a9a35873c9789a2d3ae3f1d07c842ca0cb4a5c)
+
+ man/dpkg-fsys-usrunmess.pod    |  8 ++++----
+ scripts/dpkg-fsys-usrunmess.pl | 22 +++++++++++-----------
+ 2 files changed, 15 insertions(+), 15 deletions(-)
+
+commit 7c281df5f6e2f9b049052b974ea3de039b607add
+Author: Guillem Jover <guillem@debian.org>
+Date:   Tue Dec 7 22:37:59 2021 +0100
+
+    dpkg: Fix memory leak in remove-on-upgrade handling
+    
+    Fixes: commit 20e181fc2030385488e3db2d4cc3ce4114f0a498
+    Warned-by: coverity
+    Stable-Candidate: 1.20.x
+    (cherry picked from commit 29f3a8dafd07191bb132c471e4a44379553384d4)
+
+ src/unpack.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+commit 741d474aa4dffb15e47fd0e241e5af7e11b889d1
+Author: Guillem Jover <guillem@debian.org>
+Date:   Sun Oct 3 23:55:04 2021 +0200
+
+    dpkg: Fix conffile removal-on-upgrade handling
+    
+    We need to check for file conflicts during conffile removal, otherwise
+    we might end up removing files from any other packages that has started
+    owning them since we targeted the pathname for removal.
+    
+    We remove the conffiles during upgrade, as configure is a local
+    action that does not load all file lists files, so we cannot check for
+    file conflicts.
+    
+    Closes: #995387
+    Stable-Candidate: 1.20.x
+    (cherry picked from commit 20e181fc2030385488e3db2d4cc3ce4114f0a498)
+
+ src/configure.c                                    | 38 +--------
+ src/unpack.c                                       | 97 +++++++++++++++++++++-
+ tests/t-conffile-declarative-removal/.gitignore    |  1 +
+ tests/t-conffile-declarative-removal/Makefile      | 62 ++++++++++++--
+ .../pkg-conffile-owns-filename/DEBIAN/conffiles    |  1 +
+ .../pkg-conffile-owns-filename/DEBIAN/control      |  7 ++
+ .../test-dir/test-conffile-to-be-removed           |  0
+ .../pkg-conffile-owns-symlink/DEBIAN/conffiles     |  1 +
+ .../pkg-conffile-owns-symlink/DEBIAN/control       |  7 ++
+ .../test-dir/test-conffile-owned                   |  0
+ 10 files changed, 171 insertions(+), 43 deletions(-)
+
+commit 5a9f336dc31f2070b9e943cd9ddf82de92242331
+Author: Guillem Jover <guillem@debian.org>
+Date:   Tue Nov 23 02:26:50 2021 +0100
+
+    Dpkg::Shlibs::Objdump: Fix apply_relocations to work with versioned symbols
+    
+    Since binutils 2.26 (commit bb4d2ac2cc637c61232624d9d359b8d3f031e3e9)
+    versioned symbols in copy relocations are output as «symbol@@version»
+    when they are in an undefined section (otherwise they use «@»). We were
+    not taking this into account which meant these did not match and did not
+    get marked as undefined, and got ignored for symbol dependency
+    calculation.
+    
+    Try both the version qualified symbol and the bare symbol name to cope
+    with old and new formats.
+    
+    Known to be affected are at least any-amd64, hppa and m68k architectures.
+    
+    Closes: #1000421
+    (cherry picked from commit ecbd9f1b1f248fb5be182b3a78bc613591dba865)
+
+ scripts/Dpkg/Shlibs/Objdump.pm | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
+
+commit 8c587cec2ba1b9af6c39e7e0ff0cd3e875eb732b
+Author: Guillem Jover <guillem@debian.org>
+Date:   Fri May 28 04:07:49 2021 +0200
+
+    arch: Add support for ARCv2 CPU
+    
+    This is based on the ARCv2 32-bit little-endian hard-float ISA.
+    
+    Closes: #980963
+    Based-on-patch-by: Alexey Brodkin <Alexey.Brodkin@synopsys.com>
+    (cherry picked from commit 0d134cdcb0dcc6b21fa7926964c1426a5821181d)
+
+ data/cputable                  | 1 +
+ scripts/Dpkg/Shlibs/Objdump.pm | 1 +
+ scripts/t/Dpkg_Arch.t          | 4 ++--
+ t/codespell/stopwords          | 1 +
+ 4 files changed, 5 insertions(+), 2 deletions(-)
+
+commit 54d4ac15d144d1a5f9f87165b8c9e32831ebc01d
+Author: Guillem Jover <guillem@debian.org>
+Date:   Thu Sep 1 04:47:22 2022 +0200
+
+    Bump version to 1.20.12
+
+ debian/changelog | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
 commit 1cf7d9032627b5080496cde2f2a6b3b424d93501
 Author: Guillem Jover <guillem@debian.org>
 Date:   Sat Jul 2 05:10:53 2022 +0200

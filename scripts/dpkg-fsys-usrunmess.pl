@@ -26,6 +26,7 @@ our $PROGVERSION = '1.20.x';
 our $ADMINDIR = '/var/lib/dpkg/';
 
 use POSIX;
+use File::Find;
 use Getopt::Long qw(:config posix_default bundling_values no_ignorecase);
 
 eval q{
@@ -50,6 +51,9 @@ my @options_spec = (
     local $SIG{__WARN__} = sub { usageerr($_[0]) };
     GetOptions(@options_spec);
 }
+
+# Set a known umask.
+umask 0022;
 
 my @aliased_dirs;
 
@@ -96,6 +100,13 @@ my %aliased_pathnames;
 foreach my $dir (@aliased_dirs) {
     push @search_args, "$dir/*";
 }
+
+# We also need to track /usr/lib/modules to then be able to compute its
+# complement when looking for untracked kernel module files under aliased
+# dirs.
+my %usr_mod_pathnames;
+push @search_args, '/usr/lib/modules/*';
+
 open my $fh_paths, '-|', 'dpkg-query', '--search', @search_args
     or fatal("cannot execute dpkg-query --search: $!");
 while (<$fh_paths>) {
@@ -138,6 +149,32 @@ foreach my $selection (@selections) {
     close $fh_alts;
 }
 
+#
+# Unfortunately we need to special case untracked kernel module files,
+# as these are required for system booting. To reduce potentially moving
+# undesired non-kernel module files (such as apache, python or ruby ones),
+# we only look for sub-dirs starting with a digit, which should match for
+# both Linux and kFreeBSD modules, and also for the modprobe.conf filename.
+#
+
+find({
+    no_chdir => 1,
+    wanted => sub {
+        my $path = $_;
+
+        if (exists $aliased_pathnames{$path}) {
+            # Ignore pathname already handled.
+        } elsif (exists $usr_mod_pathnames{"/usr$path"}) {
+            # Ignore pathname owned elsewhere.
+        } elsif ($path eq '/lib/modules' or
+                 $path eq '/lib/modules/modprobe.conf' or
+                 $path =~ m{^/lib/modules/[0-9]}) {
+            add_pathname($path, 'untracked modules');
+        }
+    },
+}, '/lib/modules');
+
+
 my $sroot = '/.usrunmess';
 my @relabel;
 
@@ -152,6 +189,10 @@ foreach my $dir (@aliased_dirs) {
     debug("creating shadow dir = $sroot$dir");
     mkdir "$sroot$dir"
         or sysfatal("cannot create directory $sroot$dir");
+    chmod 0755, "$sroot$dir"
+        or sysfatal("cannot chmod 0755 $sroot$dir");
+    chown 0, 0, "$sroot$dir"
+        or sysfatal("cannot chown 0 0 $sroot$dir");
     push @relabel, "$sroot$dir";
 }
 
@@ -270,17 +311,6 @@ foreach my $dir (@aliased_dirs) {
 mac_relabel();
 
 #
-# Re-configure all packages, so that postinst maintscripts are executed.
-#
-
-debug('reconfigured all packages');
-if (not $opt_noact) {
-    local $ENV{DEBIAN_FRONTEND} = 'noninteractive';
-    system(qw(dpkg --configure --pending)) == 0
-        or fatal("cannot reconfigure packages: $!");
-}
-
-#
 # Cleanup backup directories.
 #
 
@@ -352,20 +382,81 @@ foreach my $dir (keys %deferred_dirnames) {
     $batch_size = 0;
 }
 
+my @dirs_linger;
+
 if (not $opt_noact) {
     foreach my $dirname (reverse sort keys %deferred_dirnames) {
-        rmdir $dirname
-            or sysfatal("cannot remove shadow directory $dirname");
+        next if rmdir $dirname;
+        warning("cannot remove shadow directory $dirname: $!");
+
+        push @dirs_linger, $dirname;
     }
 }
 
 if (not $opt_noact) {
     debug("cleaning up shadow root dir = $sroot");
     rmdir $sroot
-        or sysfatal("cannot remove shadow directory $sroot");
+        or warning("cannot remove shadow directory $sroot: $!");
+}
+
+#
+# Re-configure all packages, so that postinst maintscripts are executed.
+#
+
+my $policypath = '/usr/sbin/dpkg-fsys-usrunmess-policy-rc.d';
+
+debug('installing local policy-rc.d');
+if (not $opt_noact) {
+    open my $policyfh, '>', $policypath
+        or sysfatal("cannot create $policypath");
+    print { $policyfh } <<'POLICYRC';
+#!/bin/sh
+echo "$0: Denied action $2 for service $1"
+exit 101
+POLICYRC
+    close $policyfh or fatal("cannot write $policypath");
+
+    my @alt = (qw(/usr/sbin/policy-rc.d policy-rc.d), $policypath, qw(1000));
+    system(qw(update-alternatives --install), @alt) == 0
+        or fatal("cannot register $policypath");
+
+    system(qw(update-alternatives --set policy-rc.d), $policypath) == 0
+        or fatal("cannot select alternative $policypath");
+}
+
+debug('reconfiguring all packages');
+if (not $opt_noact) {
+    local $ENV{DEBIAN_FRONTEND} = 'noninteractive';
+    system(qw(dpkg --configure --pending)) == 0
+        or fatal("cannot reconfigure packages: $!");
+}
+
+debug('removing local policy-rc.d');
+if (not $opt_noact) {
+    system(qw(update-alternatives --remove policy-rc.d), $policypath) == 0
+        or fatal("cannot unregister $policypath: $!");
+
+    unlink $policypath
+        or warning("cannot remove $policypath");
+
+    # Restore the selections we saved initially.
+    open my $altfh, '|-', qw(update-alternatives --set-selections)
+        or fatal('cannot restore alternatives state');
+    print { $altfh } $_ foreach @selections;
+    close $altfh or fatal('cannot restore alternatives state');
+}
+
+print "\n";
+
+if (@dirs_linger) {
+    warning('lingering directories that could not be removed:');
+    foreach my $dir (@dirs_linger) {
+        warning("  $dir");
+    }
 }
 
 print "Done, hierarchy unmessed, congrats!\n";
+print "Rebooting now is very strongly advised.\n";
 
 print "(Note: you might need to run 'hash -r' in your shell.)\n";
 
@@ -380,6 +471,13 @@ sub debug
     my $msg = shift;
 
     print { \*STDERR } "D: $msg\n";
+}
+
+sub warning
+{
+    my $msg = shift;
+
+    warn "warning: $msg\n";
 }
 
 sub fatal
@@ -435,7 +533,10 @@ sub add_pathname
 {
     my ($pathname, $origin) = @_;
 
-    if ($pathname =~ m/$aliased_regex/) {
+    if ($pathname =~ m{^/usr/lib/modules/}) {
+        debug("tracking $origin = $pathname");
+        $usr_mod_pathnames{$pathname} = 1;
+    } elsif ($pathname =~ m/$aliased_regex/) {
         debug("adding $origin = $pathname");
         $aliased_pathnames{$pathname} = 1;
     }

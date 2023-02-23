@@ -81,10 +81,6 @@ opnieuw labelen.
 
 =item *
 
-Alle pakketten opnieuw configureren.
-
-=item *
-
 De back-up van de symbolische koppelingen verwijderen.
 
 =item *
@@ -101,12 +97,29 @@ dpkg-query niet naar wordt verwezen.
 
 De basisschaduwmap verwijderen.
 
+=item *
+
+Register a B<policy-rc.d> to disallow service actions, which means that
+services might need to be restarted afterwards, ideally via a reboot.
+
+=item *
+
+Alle pakketten opnieuw configureren.
+
+=item *
+
+Unregister the B<policy-rc.d> and restore the alternatives state.
+
 =back
 
 B<Opmerking>: Als je het programma uitvoert vanuit bepaalde shells, zoals L
 <bash (1)> of L <zsh (1)>, moet u na het uitvoeren van het programma
 mogelijk de shell vragen om alle herinnerde uitvoerbare locaties te vergeten
 met bijvoorbeeld C<hash -r>.
+
+B<Note>: Some directories might linger after the migration in case they
+contain untracked files. A list is printed once the script has finished for
+further investigation.
 
 B<Waarschuwing>: Merk op dat er een kans bestaat dat deze bewerking het
 systeem onbruikbaar of kapot maakt in geval van een plotselinge crash of een

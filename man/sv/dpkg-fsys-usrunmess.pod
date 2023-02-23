@@ -74,10 +74,6 @@ Märk om MAC-information för kataloger och symboliska länkar om nödvändigt.
 
 =item *
 
-Omkonfigurera alla paket.
-
-=item *
-
 Ta bort säkerhetskopierade symboliska länkar.
 
 =item *
@@ -92,11 +88,28 @@ Ta bort uppskjutna kataloger som inte refereras av dpkg-query.
 
 Ta bort skugg-rotkatalogen.
 
+=item *
+
+Register a B<policy-rc.d> to disallow service actions, which means that
+services might need to be restarted afterwards, ideally via a reboot.
+
+=item *
+
+Omkonfigurera alla paket.
+
+=item *
+
+Unregister the B<policy-rc.d> and restore the alternatives state.
+
 =back
 
 B<Observera>: När programmet körs från vissa skal såsom L<bash(1)> eller
 L<zsh(1)>, kan du efter att det har körts be skalet att glömma alla
 ihågkomna platser för körbara program med till exempel C<hash -r>.
+
+B<Note>: Some directories might linger after the migration in case they
+contain untracked files. A list is printed once the script has finished for
+further investigation.
 
 B<Varning>: Observera att den här åtgärden potentiellt kan göra systemet
 oanvändbart eller trasigt ifall det uppstår en plötslig krasch eller
