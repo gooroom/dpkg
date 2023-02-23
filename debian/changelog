@@ -1,3 +1,10 @@
+dpkg (1.20.12+grm3u1) bullseye; urgency=medium
+
+  [ Jenkins User ]
+  * [6186583c] Version 1.20.11+grm3u1 released
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Fri, 24 Feb 2023 07:13:20 +0900
+
 dpkg (1.20.12) bullseye; urgency=medium
 
   [ Guillem Jover ]
