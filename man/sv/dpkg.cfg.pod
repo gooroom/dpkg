@@ -18,11 +18,7 @@ dpkg.cfg - inställningsfil för dpkg
 
 =head1 BESKRIVNING
 
-Filen innehåller förvalda inställningar för dpkg. Varje rad består av en
-ensam flagga som är exakt densamma som en normal kommandoradsflagga för
-dpkg, förutom de inledande bindestrecken vilka inte används här. Citattecken
-runt flaggvärden tas bort. Kommentarer är tillåtna genom att inleda en rad
-med nummertecken (”B<#>”).
+Filen innehåller förvalda inställningar för dpkg. Varje rad består av en ensam flagga som är exakt densamma som en normal kommandoradsflagga för dpkg, förutom de inledande bindestrecken vilka inte används här. Citattecken runt flaggvärden tas bort. Kommentarer är tillåtna genom att inleda en rad med nummertecken (”B<#>”).
 
 =head1 FILER
 

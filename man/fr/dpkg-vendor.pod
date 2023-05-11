@@ -22,10 +22,7 @@ B<dpkg-vendor> [I<option>...] I<commande>
 
 =head1 DESCRIPTION
 
-B<dpkg-vendor> est un outil qui permet de récupérer des informations sur les
-éditeurs S<(« vendors »)> de distributions référencés dans
-B<%PKGCONFDIR%/origins>. B<%PKGCONFDIR%/origins/default> contient
-l'information relative à l'éditeur actuellement utilisé.
+B<dpkg-vendor> est un outil qui permet de récupérer des informations sur les éditeurs S<(« vendors »)> de distributions référencés dans B<%PKGCONFDIR%/origins>. B<%PKGCONFDIR%/origins/default> contient l'information relative à l'éditeur actuellement utilisé.
 
 =head1 COMMANDES
 
@@ -33,27 +30,23 @@ l'information relative à l'éditeur actuellement utilisé.
 
 =item B<--is> I<éditeur>
 
-Retourne B<0> si l'éditeur est I<éditeur>. Retourne B<1> dans le cas
-contraire.
+Retourne B<0> si l'éditeur est I<éditeur>. Retourne B<1> dans le cas contraire.
 
 =item B<--derives-from> I<éditeur>
 
-Retourne B<0> si la distribution de l'éditeur actuel est une distribution
-dérivée de I<éditeur>, autrement, retourne B<1>. Le champ B<Parent> est
-utilisé pour parcourir tous les ancêtres de l'éditeur actuel.
+Retourne B<0> si la distribution de l'éditeur actuel est une distribution dérivée de I<éditeur>, autrement, retourne B<1>. Le champ B<Parent> est utilisé pour parcourir tous les ancêtres de l'éditeur actuel.
 
 =item B<--query> I<champ>
 
-Affiche sur la sortie standard la valeur du champ spécifique I<champ> de
-l'éditeur actuel.
+Affiche sur la sortie standard la valeur du champ spécifique I<champ> de l'éditeur actuel.
 
 =item B<--help>
 
-Affiche un message d'aide puis quitte.
+Afficher un message d'aide puis quitter.
 
 =item B<--version>
 
-Affiche le numéro de version puis quitte.
+Afficher le numéro de version puis quitter.
 
 =back
 
@@ -63,8 +56,7 @@ Affiche le numéro de version puis quitte.
 
 =item B<--vendor> I<éditeur>
 
-Suppose que l'éditeur actuel est I<éditeur> au lieu d'utiliser la variable
-B<DEB_VENDOR> ou B<%PKGCONFDIR%/origins/default>.
+Suppose que l'éditeur actuel est I<éditeur> au lieu d'utiliser la variable B<DEB_VENDOR> ou B<%PKGCONFDIR%/origins/default>.
 
 =back
 
@@ -74,20 +66,15 @@ B<DEB_VENDOR> ou B<%PKGCONFDIR%/origins/default>.
 
 =item B<DEB_VENDOR>
 
-Ce réglage définit l'éditeur S<(« vendor »)> actuel. Si cette valeur est vide,
-le contenu du fichier B<%PKGCONFDIR%/origins/default> est utilisé.
+Ce réglage définit l'éditeur S<(« vendor »)> actuel. Si cette valeur est vide, le contenu du fichier B<%PKGCONFDIR%/origins/default> est utilisé.
 
 =item B<DPKG_COLORS>
 
-Définit le mode de couleur (depuis S<dpkg 1.18.5).> Les valeurs actuellement
-acceptées sont B<auto> (par défaut), B<always> et B<never>.
+Définit le mode de couleur (depuis S<dpkg 1.18.5).> Les valeurs actuellement acceptées sont B<auto> (par défaut), B<always> et B<never>.
 
 =item B<DPKG_NLS>
 
-Si cette variable est définie, elle sera utilisée pour décider l'activation
-de la prise en charge des langues (NLS S<– Native> Language Support), connu
-aussi comme la gestion de l'internationalisation (ou i18n) (depuis
-S<dpkg 1.19.0).> Les valeurs permises S<sont :> B<0> et B<1> (par défaut).
+Si cette variable est définie, elle sera utilisée pour décider l'activation de la prise en charge des langues (NLS – Native Language Support), connu aussi comme la gestion de l'internationalisation (ou i18n) (depuis S<dpkg 1.19.0).> Les valeurs permises S<sont :> B<0> et B<1> (par défaut).
 
 =back
 

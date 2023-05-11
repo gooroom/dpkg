@@ -22,21 +22,13 @@ B<dpkg-split> [I<opción>...] I<orden>
 
 =head1 DESCRIPCIÓN
 
-B<dpkg-split> separa un paquete binario de Debian en varias partes más
-pequeñas para luego volverlas a unir, posibilitando almacenar paquetes en
-dispositivos de poca capacidad, como disquetes.
+B<dpkg-split> separa un paquete binario de Debian en varias partes más pequeñas para luego volverlas a unir, posibilitando almacenar paquetes en dispositivos de poca capacidad, como disquetes.
 
-Se puede utilizar manualmente usando las opciones B<--split>, B<--join> y
-B<--info>.
+Se puede utilizar manualmente usando las opciones B<--split>, B<--join> y B<--info>.
 
-También ofrece un modo automático mediante la opción B<--auto>, que crea una
-cola con las partes que ha analizado pero aún separadas para después crear
-el paquete tras analizar todas las partes. Las opciones B<--listq> y
-B<--discard> permiten administrar la cola.
+También ofrece un modo automático mediante la opción B<--auto>, que crea una cola con las partes que ha analizado pero aún separadas para después crear el paquete tras analizar todas las partes. Las opciones B<--listq> y B<--discard> permiten administrar la cola.
 
-Los procesos de separar, unir y posicionado en cola producen mensajes
-informativos por la salida estándar, que se pueden ignorar sin ningún
-riesgo.
+Los procesos de separar, unir y posicionado en cola producen mensajes informativos por la salida estándar, que se pueden ignorar sin ningún riesgo.
 
 =head1 ÓRDENES
 
@@ -46,78 +38,51 @@ riesgo.
 
 Divide un único paquete binario de Debian en varias partes.
 
-Las partes reciben el nombre I<prefijo>B<.>I<N>B<of>I<M>B<.deb>, siendo I<N>
-el número de la parte, comenzando por 1, y I<M> el número total de partes
-(ambos en decimal).
+Las partes reciben el nombre I<prefijo>B<.>I<N>B<of>I<M>B<.deb>, siendo I<N> el número de la parte, comenzando por 1, y I<M> el número total de partes (ambos en decimal).
 
-Si no se proporciona ningún I<prefijo>, se toma el nombre del
-I<fichero-completo>, incluyendo el directorio, y eliminando cualquier
-terminación B<.deb>.
+Si no se proporciona ningún I<prefijo>, se toma el nombre del I<fichero-completo>, incluyendo el directorio, y eliminando cualquier terminación B<.deb>.
 
 =item B<-j>, B<--join> I<parte>...
 
-Une las partes de un paquete, dejando el paquete tal y como era
-originalmente.
+Une las partes de un paquete, dejando el paquete tal y como era originalmente.
 
-Las partes que se proporcionen como argumento deben ser todas parte del
-mismo fichero original. Cada parte se debe proporcionar una sola vez, aunque
-no necesariamente en orden.
+Las partes que se proporcionen como argumento deben ser todas parte del mismo fichero original. Cada parte se debe proporcionar una sola vez, aunque no necesariamente en orden.
 
-Todas las partes se deben generar con el mismo tamaño especificado en el
-momento de la división, lo que significa que todas se deben generar con la
-misma ejecución de B<dpkg-split --split>.
+Todas las partes se deben generar con el mismo tamaño especificado en el momento de la división, lo que significa que todas se deben generar con la misma ejecución de B<dpkg-split --split>.
 
 El nombre de las partes carece de importancia para el proceso de unión.
 
-Por omisión el fichero resultante se llama
-I<paquete>B<_>I<versión>B<_>I<arch>B<.deb>.
+Por omisión el fichero resultante se llama I<paquete>B<_>I<versión>B<_>I<arch>B<.deb>.
 
 =item B<-I>, B<--info> I<parte>...
 
-Muestra información, en un formato legible por el usuario, acerca de la
-parte o partes del fichero especificadas. Los argumentos que no son parte de
-un paquete binario producen un mensaje avisando del problema (por la salida
-estándar).
+Muestra información, en un formato legible por el usuario, acerca de la parte o partes del fichero especificadas. Los argumentos que no son parte de un paquete binario producen un mensaje avisando del problema (por la salida estándar).
 
-=item B<-a>, B<--auto -o> I<salida-completa parte>
+=item B<-a>, B<--auto -o> I<complete-output> I<part>
 
-Posiciona las partes en la cola automáticamente, y une nuevamente el
-paquete, si es posible.
+Posiciona las partes en la cola automáticamente, y une nuevamente el paquete, si es posible.
 
-La I<parte> especificada se examina y compara junto con las otras partes del
-mismo paquete (si hay alguna) en la cola de las partes de ficheros de
-paquete.
+La I<parte> especificada se examina y compara junto con las otras partes del mismo paquete (si hay alguna) en la cola de las partes de ficheros de paquete.
 
-Si están disponibles todas las partes del fichero al que pertenece la
-I<parte>, se une paquete y guarda en la I<salida-completa> (que normalmente
-no existe, aunque esto no es un error).
+Si están disponibles todas las partes del fichero al que pertenece la I<parte>, se une paquete y guarda en la I<salida-completa> (que normalmente no existe, aunque esto no es un error).
 
-De no se así, la I<parte> se copia en la cola pero no se crea la
-I<salida-completa>.
+De no se así, la I<parte> se copia en la cola pero no se crea la I<salida-completa>.
 
-Si la I<parte> no es una parte del paquete binario, B<dpkg-split> finalizará
-con un estado de salida igual a B<1>, si ocurre algún otro tipo de error el
-estado de salida será B<2>.
+Si la I<parte> no es una parte del paquete binario, B<dpkg-split> finalizará con un estado de salida igual a B<1>, si ocurre algún otro tipo de error el estado de salida será B<2>.
 
-Debe proporcionar la opción B<--output> o B<-o> cuando use B<--auto>. (Si
-este argumento no fuese obligatorio el programa que ejecute B<dpkg-split> no
-sabría que fichero esperar).
+Debe proporcionar la opción B<--output> o B<-o> cuando use B<--auto>. (Si este argumento no fuese obligatorio el programa que ejecute B<dpkg-split> no sabría que fichero esperar).
 
 =item B<-l>, B<--listq>
 
 Lista los contenidos de la cola de paquetes cuyas partes unir.
 
-Por cada fichero de un paquete que contenga partes en la cola se muestra el
-nombre del paquete, las partes en la cola y el número total de bytes
-guardados en ésta.
+Por cada fichero de un paquete que contenga partes en la cola se muestra el nombre del paquete, las partes en la cola y el número total de bytes guardados en ésta.
 
 =item B<-d>, B<--discard> [I<paquete>...]
 
-Descarta partes de la cola de aquéllas que esperan las partes restantes del
-paquete para su unión con otras.
+Descarta partes de la cola de aquéllas que esperan las partes restantes del paquete para su unión con otras.
 
-Si no se especifica ningún I<paquete> se limpia la cola por completo, si se
-especifica alguno sólo se eliminan las partes de los paquetes relevantes.
+Si no se especifica ningún I<paquete> se limpia la cola por completo, si se especifica alguno sólo se eliminan las partes de los paquetes relevantes.
 
 =item B<-?>, B<--help>
 
@@ -135,39 +100,37 @@ Muestra la versión y termina.
 
 =item B<--depotdir> I<directorio>
 
-Especifica un directorio alternativo para las partes que se encuentran en la
-cola esperando para ser unidas. Por omisión es B<%ADMINDIR%>.
+Specifies an alternative directory for the queue of parts awaiting automatic reassembly. The default is B<%ADMINDIR%/parts>.
+
+=item B<--admindir> I<directorio>
+
+Set the administrative directory to I<directory> (since dpkg 1.21.10).  This is where the I<statoverride> file is stored.  Defaults to «I<%ADMINDIR%>» if B<DPKG_ADMINDIR> has not been set.
+
+=item B<--root> I<directory>
+
+Set the root directory to B<directory> (since dpkg 1.21.10), which sets the installation directory to «I<directory>» and the administrative directory to «I<directory>B<%ADMINDIR%>» if B<DPKG_ROOT> has not been set.
 
 =item B<-S>, B<--partsize> I<kibibytes>
 
-Especifica el tamaño máximo de cada parte en kilobytes (1024 bytes). Por
-omisión es 450Kb.
+Especifica el tamaño máximo de cada parte en kilobytes (1024 bytes). Por omisión es 450Kb.
 
 =item B<-o>, B<--output> I<complete-output>
 
 Especifica el nombre del fichero generado por la unión de las partes.
 
-Ésto sustituye al nombre por omisión en modo manual (B<--join>),  y es
-obligatorio con el modo automático (B<--auto>).
+Ésto sustituye al nombre por omisión en modo manual (B<--join>),  y es obligatorio con el modo automático (B<--auto>).
 
 =item B<-Q>, B<--npquiet>
 
-Cuando B<dpkg-split> está en modo automático, normalmente muestra mensajes
-si se le pasa una I<parte> que no es parte del paquete binario. Esta opción
-suprime estos mensajes, permitiendo que programas como B<dpkg> puedan
-separar y unir paquetes sin producir mensajes poco informativos.
+Cuando B<dpkg-split> está en modo automático, normalmente muestra mensajes si se le pasa una I<parte> que no es parte del paquete binario. Esta opción suprime estos mensajes, permitiendo que programas como B<dpkg> puedan separar y unir paquetes sin producir mensajes poco informativos.
 
 =item B<--msdos>
 
 Forces the output filenames generated by B<--split> to be MSDOS-compatible.
 
-Esta opción modifica el prefijo (tanto el prefijo por omisión como el
-proporcionado por un argumento): los caracteres alfanuméricos se pasan a
-minúsculas, los signos de suma «+» se reemplazan con B<x> y se descartan el
-resto de caracteres.
+Esta opción modifica el prefijo (tanto el prefijo por omisión como el proporcionado por un argumento): los caracteres alfanuméricos se pasan a minúsculas, los signos de suma «+» se reemplazan con B<x> y se descartan el resto de caracteres.
 
-El resultado se trunca hasta donde sea necesario de forma que se generan
-ficheros con la forma I<prefijoN>B<of>I<M>B<.deb>.
+El resultado se trunca hasta donde sea necesario de forma que se generan ficheros con la forma I<prefijoN>B<of>I<M>B<.deb>.
 
 =back
 
@@ -177,20 +140,15 @@ ficheros con la forma I<prefijoN>B<of>I<M>B<.deb>.
 
 =item B<0>
 
-La división, unión u otra orden ha finalizado con éxito. Las órdenes
-B<--info> se dan cómo satisfactorias incluso si los ficheros no son parte de
-ningún paquete binario.
+La división, unión u otra orden ha finalizado con éxito. Las órdenes B<--info> se dan cómo satisfactorias incluso si los ficheros no son parte de ningún paquete binario.
 
 =item B<1>
 
-Aparece solo al utilizar la opción B<--auto>, e indica que la I<parte> no
-era parte de un paquete binario.
+Aparece solo al utilizar la opción B<--auto>, e indica que la I<parte> no era parte de un paquete binario.
 
 =item B<2>
 
-Fatal or unrecoverable error due to invalid command-line usage, a file that
-looked like a package part file but was corrupted, or interactions with the
-system, such as accesses to the database, memory allocations, etc.
+Fatal or unrecoverable error due to invalid command-line usage, a file that looked like a package part file but was corrupted, or interactions with the system, such as accesses to the database, memory allocations, etc.
 
 =back
 
@@ -198,15 +156,25 @@ system, such as accesses to the database, memory allocations, etc.
 
 =over 
 
+=item B<DPKG_ROOT>
+
+If set and B<--root> option has not been specified, it will be used as the filesystem root directory (since dpkg 1.21.10).
+
+=item B<DPKG_ADMINDIR>
+
+If set and the B<--admindir> or B<--root> options have not been specified, it will be used as the B<dpkg> data directory (since dpkg 1.21.10).
+
+=item B<DPKG_DEBUG>
+
+Sets the debug mask (since dpkg 1.21.10) from an octal value.  The currently accepted flags are described in the B<dpkg --debug> option, but not all these flags might have an effect on this program.
+
 =item B<DPKG_COLORS>
 
-Sets the color mode (since dpkg 1.18.5).  The currently accepted values are:
-B<auto> (default), B<always> and B<never>.
+Sets the color mode (since dpkg 1.18.5).  The currently accepted values are: B<auto> (default), B<always> and B<never>.
 
 =item B<SOURCE_DATE_EPOCH>
 
-If set, it will be used as the timestamp (as seconds since the epoch) in the
-B<deb-split>(5)'s B<ar>(5) container.
+If set, it will be used as the timestamp (as seconds since the epoch) in the B<deb-split>(5)'s B<ar>(5) container.
 
 =back
 
@@ -218,20 +186,15 @@ B<deb-split>(5)'s B<ar>(5) container.
 
 El directorio por omisión donde las partes esperan para la unión automática.
 
-Los nombre de los ficheros usados en este directorio se encuentran en un
-formato interno de B<dpkg-split>, y es improbable que sean útiles para otros
-programas. En cualquier caso, no se debería depender del formato del nombre
-del fichero.
+Los nombre de los ficheros usados en este directorio se encuentran en un formato interno de B<dpkg-split>, y es improbable que sean útiles para otros programas. En cualquier caso, no se debería depender del formato del nombre del fichero.
 
 =back
 
 =head1 FALLOS
 
-Es imposible obtener todos los detalles de los paquetes que están en la cola
-sin investigar directamente la cola.
+Es imposible obtener todos los detalles de los paquetes que están en la cola sin investigar directamente la cola.
 
-No existe una manera sencilla de comprobar si el fichero que puede ser parte
-de un paquete binario es realmente uno.
+No existe una manera sencilla de comprobar si el fichero que puede ser parte de un paquete binario es realmente uno.
 
 =head1 VÉASE TAMBIÉN
 

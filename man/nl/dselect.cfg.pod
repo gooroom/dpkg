@@ -18,12 +18,7 @@ dselect.cfg - configuratiebestand voor dselect
 
 =head1 BESCHRIJVING
 
-Dit bestand bevat de standaardopties voor dselect. Elke regel bevat één
-enkele optie, die exact hetzelfde is als de gewone commandoregeloptie voor
-dselect, behalve wat de verbindingstekens aan het begin betreft, die hier
-niet gebruikt worden. Als de opties tussen aanhalingstekens staan, worden
-die laatste verwijderd. Commentaar is toegelaten. Daarvoor moet men de regel
-met een hekje (‘B<#>’) laten beginnen.
+Dit bestand bevat de standaardopties voor dselect. Elke regel bevat één enkele optie, die exact hetzelfde is als de gewone commandoregeloptie voor dselect, behalve wat de verbindingstekens aan het begin betreft, die hier niet gebruikt worden. Als de opties tussen aanhalingstekens staan, worden die laatste verwijderd. Commentaar is toegelaten. Daarvoor moet men de regel met een hekje (‘B<#>’) laten beginnen.
 
 =head1 BESTANDEN
 

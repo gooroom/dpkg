@@ -24,17 +24,11 @@ B<dpkg-trigger> [I<option>...] I<command>
 
 =head1 DESCRIÇÃO
 
-B<dpkg-trigger> é uma ferramenta para activar explicitamente triggers e
-verificar o seu suporte no B<dpkg> em execução.
+B<dpkg-trigger> é uma ferramenta para activar explicitamente triggers e verificar o seu suporte no B<dpkg> em execução.
 
-Isto pode ser usado pelos scripts do maintainer em situações complexas e
-condicionais onde os gatilhos do ficheiro, ou a directiva de ficheiro
-declarativa de gatilhos B<activate>, sejam insuficientemente ricos. Também
-pode ser usado para testes e por administradores de sistema (mas note que os
-gatilhos não serão realmente corridos pelo B<dpkg-trigger>).
+Isto pode ser usado pelos scripts do maintainer em situações complexas e condicionais onde os gatilhos do ficheiro, ou a directiva de ficheiro declarativa de gatilhos B<activate>, sejam insuficientemente ricos. Também pode ser usado para testes e por administradores de sistema (mas note que os gatilhos não serão realmente corridos pelo B<dpkg-trigger>).
 
-Sintaxes de nome de trigger não reconhecidas são um erro para o
-B<dpkg-trigger>.
+Sintaxes de nome de trigger não reconhecidas são um erro para o B<dpkg-trigger>.
 
 =head1 COMANDOS
 
@@ -42,11 +36,7 @@ B<dpkg-trigger>.
 
 =item B<--check-supported>
 
-Verifica se o B<dpkg> a correr suporta gatilhos (geralmente chamados a
-partir de um postinst). Irá terminar com B<0> se correu um B<dpkg> com
-capacidade-de-gatilhos, ou B<1> com uma mensagem de erro para o stderr se
-não. No entanto, é normalmente melhor apenas activar o gatilho desejado com
-B<dpkg-trigger>.
+Verifica se o B<dpkg> a correr suporta gatilhos (geralmente chamados a partir de um postinst). Irá terminar com B<0> se correu um B<dpkg> com capacidade-de-gatilhos, ou B<1> com uma mensagem de erro para o stderr se não. No entanto, é normalmente melhor apenas activar o gatilho desejado com B<dpkg-trigger>.
 
 =item B<-?>, B<--help>
 
@@ -64,29 +54,23 @@ Mostra a versão e termina.
 
 =item B<--admindir=>I<dir>
 
-Altera a localização da base de dados do B<dpkg>. A localização predefinida
-é I<%ADMINDIR%>.
+Altera a localização da base de dados do B<dpkg>. A predefinição é I<%ADMINDIR%> se B<DPKG_ADMINDIR> não estiver definido.
+
+=item B<--root=>I<directory>
+
+Define o directório raiz para I<directory>, o que define o directório administrativo para «I<directory>%ADMINDIR%» (desde dpkg 1.21.0).
 
 =item B<--by-package=>I<package>
 
-Sobrepõe o esperador do gatilho (normalmente definido pelo B<dpkg> através
-da variável de ambiente B<DPKG_MAINTSCRIPT_PACKAGE> dos scripts do
-maintainer, que nomeiam o pacote ao qual o script pertence, e isto será
-usado por predefinição).
+Sobrepõe o esperador do gatilho (normalmente definido pelo B<dpkg> através da variável de ambiente B<DPKG_MAINTSCRIPT_PACKAGE> dos scripts do maintainer, que nomeiam o pacote ao qual o script pertence, e isto será usado por predefinição).
 
 =item B<--no-await>
 
-Esta opção faz com que o pacote chamador I<T> (se existir) não precisa de
-esperar o processamento deste gatilho; os pacotes interessados I<I>, não
-serão adicionados à lista de espera de processamento de gatilhos de I<T> e o
-estado de I<T> não alterou. I<T> pode ser considerado instalado mesmo apesar
-de I<I> ainda não ter processado o gatilho.
+Esta opção faz com que o pacote chamador I<T> (se existir) não precisa de esperar o processamento deste gatilho; os pacotes interessados I<I>, não serão adicionados à lista de espera de processamento de gatilhos de I<T> e o estado de I<T> não alterou. I<T> pode ser considerado instalado mesmo apesar de I<I> ainda não ter processado o gatilho.
 
 =item B<--await>
 
-Esta opção faz o inverso de B<--no-await> (desde dpkg 1.17.21). Se o pacote
-interessado declarou uma directiva “noawait”, então esta opção não será
-efectiva. Actualmente é o comportamento predefinido.
+Esta opção faz o inverso de B<--no-await> (desde dpkg 1.17.21). Se o pacote interessado declarou uma directiva “noawait”, então esta opção não será efectiva. Actualmente é o comportamento predefinido.
 
 =item B<--no-act>
 
@@ -100,8 +84,7 @@ Apenas testa, na realidade não alterada nada.
 
 =item B<0>
 
-A acção requisitada foi executada com sucesso. Ou uma verificação ou comando
-de afirmação retornou verdadeiro.
+A acção requisitada foi executada com sucesso. Ou uma verificação ou comando de afirmação retornou verdadeiro.
 
 =item B<1>
 
@@ -109,9 +92,7 @@ Uma verificação ou comando de afirmação retornou falso.
 
 =item B<2>
 
-Erro fatal ou irrecuperável devido a utilização de linha de comandos
-inválida, ou interações com o sistema, tais como acesso à base de dados,
-alocações de memória, etc.
+Erro fatal ou irrecuperável devido a utilização de linha de comandos inválida, ou interações com o sistema, tais como acesso à base de dados, alocações de memória, etc.
 
 =back
 
@@ -119,21 +100,27 @@ alocações de memória, etc.
 
 =over 
 
+=item B<DPKG_ROOT>
+
+Se definido e a opção B<--root> não foi especificada, será usado como o directório raiz do sistema de ficheiros (desde dpkg 1.21.0).
+
 =item B<DPKG_ADMINDIR>
 
-Se definido e a opção B<--admindir> não for especificada, será usado como o
-directório de dados do B<dpkg>.
+Se definido e a opção B<--admindir> não for especificada, será usado como o directório de dados do B<dpkg>.
+
+=item B<DPKG_DEBUG>
+
+Define a máscara de depuração (desde dpkg 1.21.10) a partir dum valor octal. As bandeiras presentemente aceites estão descritas na opção B<dpkg --debug>, mas nem todas estas bandeiras podem ter um efeito neste programa.
 
 =item B<DPKG_COLORS>
 
-Define o modo de cor (desde dpkg 1.18.5). Os valores actualmente aceites
-são: B<auto> (predefinido), B<always> e B<never>.
+Define o modo de cor (desde dpkg 1.18.5). Os valores actualmente aceites são: B<auto> (predefinido), B<always> e B<never>.
 
 =back
 
 =head1 VEJA TAMBÉM
 
-B<dpkg>(1), B<deb-triggers>(5), B<%PKGDOCDIR%/triggers.txt.gz>.
+B<dpkg>(1), B<deb-triggers>(5), B<%PKGDOCDIR%/spec/triggers.txt>.
 
 
 =head1 TRADUÇÃO

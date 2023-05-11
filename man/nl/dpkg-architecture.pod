@@ -14,8 +14,7 @@ If the PO get lost, keeping this translation up-to-date will be harder.
 
 =head1 NAAM
 
-dpkg-architecture - de architectuur voor het bouwen van pakketten instellen
-en vaststellen
+dpkg-architecture - de architectuur voor het bouwen van pakketten instellen en vaststellen
 
 =head1 OVERZICHT
 
@@ -23,24 +22,11 @@ B<dpkg-architecture> [I<optie>...] [I<commando>]
 
 =head1 BESCHRIJVING
 
-B<dpkg-architecture> biedt een mogelijkheid om de bouw- en host-architectuur
-voor het bouwen van pakketten vast te stellen en in te stellen.
+B<dpkg-architecture> biedt een mogelijkheid om de bouw- en host-architectuur voor het bouwen van pakketten vast te stellen en in te stellen.
 
-De bouwarchitectuur wordt steeds bepaald door ofwel de variabele
-B<DEB_BUILD_ARCH> indien deze ingesteld is (en B<--force> niet werd
-opgegeven), of door een externe aanroep van B<dpkg>(1) en kan niet ingesteld
-worden aan de commandoregel.
+De bouwarchitectuur wordt steeds bepaald door ofwel de variabele B<DEB_BUILD_ARCH> indien deze ingesteld is (en B<--force> niet werd opgegeven), of door een externe aanroep van B<dpkg>(1) en kan niet ingesteld worden aan de commandoregel.
 
-U kunt de host-architectuur specificeren door een van of allebei de opties
-B<--host-arch> en B<--host-type> op te geven, anders wordt de variabele
-B<DEB_HOST_ARCH> gebruikt als die ingesteld werd (en B<--force> niet
-opgegeven werd). Wat de standaard is, wordt vastgesteld door een externe
-aanroep van B<gcc>(1) of, als zowel B<CC> als gcc onbeschikbaar zijn,
-gelijkgesteld aan de bouwarchitectuur. Een van beide, B<--host-arch> of
-B<--host-type>, volstaat. De andere waarde zal op een gebruikelijke
-standaardwaarde ingesteld worden. Het is inderdaad dikwijls beter om slechts
-één waarde op te geven, vermits B<dpkg-architecture> een waarschuwing zal
-geven als de keuze die u maakt niet met de standaardwaarde overeenkomt.
+U kunt de host-architectuur specificeren door een van of allebei de opties B<--host-arch> en B<--host-type> op te geven, anders wordt de variabele B<DEB_HOST_ARCH> gebruikt als die ingesteld werd (en B<--force> niet opgegeven werd). Wat de standaard is, wordt vastgesteld door een externe aanroep van B<gcc>(1) of, als zowel B<CC> als gcc onbeschikbaar zijn, gelijkgesteld aan de bouwarchitectuur. Een van beide, B<--host-arch> of B<--host-type>, volstaat. De andere waarde zal op een gebruikelijke standaardwaarde ingesteld worden. Het is inderdaad dikwijls beter om slechts één waarde op te geven, vermits B<dpkg-architecture> een waarschuwing zal geven als de keuze die u maakt niet met de standaardwaarde overeenkomt.
 
 =head1 COMMANDO'S
 
@@ -48,24 +34,15 @@ geven als de keuze die u maakt niet met de standaardwaarde overeenkomt.
 
 =item B<-l>, B<--list>
 
-De omgevingsvariabelen weergeven, één per regel, volgens de indeling
-I<VARIABELE=waarde>. Dit is de standaardactie.
+De omgevingsvariabelen weergeven, één per regel, volgens de indeling I<VARIABELE=waarde>. Dit is de standaardactie.
 
 =item B<-e>, B<--equal> I<architectuur>
 
-Nagaan of de architecturen gelijk zijn (sinds dpkg 1.13.13). Het vergelijkt
-de huidige of opgegeven Debian host-architectuur met I<architectuur> om na
-te gaan of ze gelijk zijn. Deze actie zal geen architectuurjokertekens
-verwerken. Het commando sluit af met een afsluitstatus 0 bij gelijkheid en 1
-bij ongelijkheid.
+Nagaan of de architecturen gelijk zijn (sinds dpkg 1.13.13). Het vergelijkt de huidige of opgegeven Debian host-architectuur met I<architectuur> om na te gaan of ze gelijk zijn. Deze actie zal geen architectuurjokertekens verwerken. Het commando sluit af met een afsluitstatus 0 bij gelijkheid en 1 bij ongelijkheid.
 
 =item B<-i>, B<--is> I<architectuurjokerteken>
 
-Nagaan of de architecturen gelijk zijn (sinds dpkg 1.13.13). Het vergelijkt
-de huidige of opgegeven Debian host-architectuur met
-I<architectuurjokerteken>, nadat dit als een architectuurjokerteken verwerkt
-werd, om na te gaan of beide gelijk zijn. Het commando sluit af met een
-afsluitstatus 0 bij gelijkheid en 1 bij ongelijkheid.
+Nagaan of de architecturen gelijk zijn (sinds dpkg 1.13.13). Het vergelijkt de huidige of opgegeven Debian host-architectuur met I<architectuurjokerteken>, nadat dit als een architectuurjokerteken verwerkt werd, om na te gaan of beide gelijk zijn. Het commando sluit af met een afsluitstatus 0 bij gelijkheid en 1 bij ongelijkheid.
 
 =item B<-q>, B<--query> I<variabelenaam>
 
@@ -73,25 +50,19 @@ De waarde van één enkele variabele tonen.
 
 =item B<-s>, B<--print-set>
 
-Een export-commando tonen. Dit kan gebruikt worden om de omgevingsvariabelen
-in te stellen met behulp van het commando B<eval> van de POSIX shell of van
-make, afhankelijk van de indeling van de uitvoer.
+Een export-commando tonen. Dit kan gebruikt worden om de omgevingsvariabelen in te stellen met behulp van het commando B<eval> van de POSIX shell of van make, afhankelijk van de indeling van de uitvoer.
 
 =item B<-u>, B<--print-unset>
 
-Een commando tonen dat vergelijkbaar is met B<--print-set>, maar om alle
-variabelen leeg te maken.
+Een commando tonen dat vergelijkbaar is met B<--print-set>, maar om alle variabelen leeg te maken.
 
 =item B<-c>, B<--command> I<commando-tekenreeks>
 
-Een I<commando-tekenreeks> uitvoeren in een omgeving waarin alle variabelen
-ingesteld zijn op de vastgelegde waarde.
+Een I<commando-tekenreeks> uitvoeren in een omgeving waarin alle variabelen ingesteld zijn op de vastgelegde waarde.
 
 =item B<-L>, B<--list-known>
 
-Een lijst van geldige architectuurbenamingen tonen. Kan eventueel ingeperkt
-worden met een of meer van de vergelijkingsopties B<--match-wildcard>,
-B<--match-bits> of B<--match-endian> (sinds dpkg 1.17.14).
+Een lijst van geldige architectuurbenamingen tonen. Kan eventueel ingeperkt worden met een of meer van de vergelijkingsopties B<--match-wildcard>, B<--match-bits> of B<--match-endian> (sinds dpkg 1.17.14).
 
 =item B<-?>, B<--help>
 
@@ -125,34 +96,23 @@ Het GNU-systeemtype instellen voor het doel (sinds dpkg 1.17.14).
 
 =item B<-W>, B<--match-wildcard> I<architectuurjokerteken>
 
-De architecturen die door B<--list-known> weergegeven worden, beperken tot
-die welke beantwoorden aan het opgegeven architectuurjokerteken (sinds dpkg
-1.17.14).
+De architecturen die door B<--list-known> weergegeven worden, beperken tot die welke beantwoorden aan het opgegeven architectuurjokerteken (sinds dpkg 1.17.14).
 
 =item B<-B>, B<--match-bits> I<architectuur-bits>
 
-De architecturen die door B<--list-known> weergegeven worden, beperken tot
-die met de opgegeven CPU-bits (sinds dpkg 1.17.14). Ofwel B<32> ofwel B<64>.
+De architecturen die door B<--list-known> weergegeven worden, beperken tot die met de opgegeven CPU-bits (sinds dpkg 1.17.14). Ofwel B<32> ofwel B<64>.
 
 =item B<-E>, B<--match-endian> I<architectuur-bytevolgorde>
 
-De architecturen die door B<--list-known> weergegeven worden, beperken tot
-die met de opgegeven bytevolgorde (endianness) (sinds dpkg 1.17.14). Ofwel
-B<little> ofwel B<big>.
+De architecturen die door B<--list-known> weergegeven worden, beperken tot die met de opgegeven bytevolgorde (endianness) (sinds dpkg 1.17.14). Ofwel B<little> ofwel B<big>.
 
 =item B<--print-format> I<indeling>
 
-Stelt de indeling van de uitvoer van B<--print-set> en B<--print-unset>
-(sinds dpkg 1.20.6) in op ofwel B<shell> (standaard) of B<make>.
+Stelt de indeling van de uitvoer van B<--print-set> en B<--print-unset> (sinds dpkg 1.20.6) in op ofwel B<shell> (standaard) of B<make>.
 
 =item B<-f>, B<--force>
 
-Waarden die door bestaande omgevingsvariabelen ingesteld zijn en die
-dezelfde naam hebben als die welke door de scripts gebruikt worden, worden
-gehonoreerd (d.w.z. gebruikt door B<dpkg-architecture>), behalve wanneer
-deze forceer-vlag gebruikt wordt. Dit laat de gebruiker toe om een waarde te
-vervangen, zelfs als het aanroepen van B<dpkg-architecture> ingebed zit in
-een ander script (bijvoorbeeld B<dpkg-buildpackage>(1)).
+Waarden die door bestaande omgevingsvariabelen ingesteld zijn en die dezelfde naam hebben als die welke door de scripts gebruikt worden, worden gehonoreerd (d.w.z. gebruikt door B<dpkg-architecture>), behalve wanneer deze forceer-vlag gebruikt wordt. Dit laat de gebruiker toe om een waarde te vervangen, zelfs als het aanroepen van B<dpkg-architecture> ingebed zit in een ander script (bijvoorbeeld B<dpkg-buildpackage>(1)).
 
 =back
 
@@ -170,34 +130,19 @@ De machine waarvoor het pakket gebouwd wordt.
 
 =item doelmachine
 
-De machine waarvoor de compiler bouwt. Dit is enkel nodig bij het bouwen van
-een kruisgereedschapskist (cross-toolchain), een gereedschapskist die
-gebouwd zal worden op de bouwarchitectuur om uitgevoerd te worden op de
-hostarchitectuur en code moet bouwen voor de doelarchitectuur.
+De machine waarvoor de compiler bouwt of waar de emulator code voor zal uitvoeren. Dit is enkel nodig bij het bouwen van een kruisgereedschapsketen (cross-toolchain) (of emulator), een die gebouwd zal worden op de bouwarchitectuur om uitgevoerd te worden op de hostarchitectuur en code moet bouwen (of geëmuleerd moet uitvoeren) voor de doelarchitectuur.
 
 =item Debian-architectuur
 
-De tekenreeks waarmee de Debian-architectuur aangeduid wordt en die ook de
-boomstructuur met de binaire pakketten in het FTP-archief
-specificeert. Voorbeelden: i386, sparc, hurd-i386.
+De tekenreeks waarmee de Debian-architectuur aangeduid wordt en die ook de boomstructuur met de binaire pakketten in het FTP-archief specificeert. Voorbeelden: i386, sparc, hurd-i386.
 
 =item Debian-architectuurtupel
 
-Een Debian-architectuurtupel is de volledige unieke architectuurnaam met de
-expliciete  vermelding van alle componenten. Dit verschilt minstens daarin
-van een Debian architectuur dat de component I<cpu> niet de I<abi>
-impliceert. Het huidige tupel heeft als vorm
-I<abi>-I<libc>-I<os>-I<cpu>. Voorbeelden: base-gnu-linux-amd64,
-eabihf-musl-linux-arm.
+Een Debian-architectuurtupel is de volledige unieke architectuurnaam met de expliciete  vermelding van alle componenten. Dit verschilt minstens daarin van een Debian architectuur dat de component I<cpu> niet de I<abi> impliceert. Het huidige tupel heeft als vorm I<abi>-I<libc>-I<os>-I<cpu>. Voorbeelden: base-gnu-linux-amd64, eabihf-musl-linux-arm.
 
 =item Debian-architectuurjokerteken
 
-Een Debian-architectuurjokerteken is een speciale architectuurtekenreeks die
-een overeenkomst oplevert met elke echte architectuur die er onder hoort. De
-algemene vorm is een Debian-architectuurtupel met vier of minder elementen
-en waarvan er minstens een B<any> is. Ontbrekende elementen van de tupel
-worden impliciet als B<any> voorgevoegd, en dus zijn de volgende koppels
-equivalent:
+Een Debian-architectuurjokerteken is een speciale architectuurtekenreeks die een overeenkomst oplevert met elke echte architectuur die er onder hoort. De algemene vorm is een Debian-architectuurtupel met vier of minder elementen en waarvan er minstens een B<any> is. Ontbrekende elementen van de tupel worden impliciet als B<any> voorgevoegd, en dus zijn de volgende koppels equivalent:
 
 =over 
 
@@ -213,27 +158,17 @@ Voorbeelden: linux-any, any-i386, hurd-any, eabi-any-any-arm, musl-any-any.
 
 =item GNU-systeemtype
 
-Een tekenreeks die een architectuurspecificatie inhoudt en bestaat uit twee
-delen met daartussen een koppelteken: cpu en systeem. Voorbeelden:
-i586-linux-gnu, sparc-linux-gnu, i686-gnu, x86_64-netbsd.
+Een tekenreeks die een architectuurspecificatie inhoudt en bestaat uit twee delen met daartussen een koppelteken: cpu en systeem. Voorbeelden: i586-linux-gnu, sparc-linux-gnu, i686-gnu, x86_64-netbsd.
 
 =item multiarch-triplet
 
-Het uitgezuiverde GNU-systeemtype dat voor bestandssysteempaden gebruikt
-wordt. Dit triplet verandert zelfs niet wanneer het referentie-ISA verhoogd
-wordt, waardoor de resulterende paden stabiel blijven door de tijd. Het
-enige verschil met het GNU-systeemtype is momenteel dat voor op i386
-gebaseerde systemen het CPU-gedeelte steeds i386 is. Voorbeelden:
-i386-linux-gnu, x86_64-linux-gnu. Voorbeelden van paden:
-/lib/powerpc64le-linux-gnu/, /usr/lib/i386-kfreebsd-gnu/.
+Het uitgezuiverde GNU-systeemtype dat voor bestandssysteempaden gebruikt wordt. Dit triplet verandert zelfs niet wanneer het referentie-ISA verhoogd wordt, waardoor de resulterende paden stabiel blijven door de tijd. Het enige verschil met het GNU-systeemtype is momenteel dat voor op i386 gebaseerde systemen het CPU-gedeelte steeds i386 is. Voorbeelden: i386-linux-gnu, x86_64-linux-gnu. Voorbeelden van paden: /lib/powerpc64le-linux-gnu/, /usr/lib/i386-kfreebsd-gnu/.
 
 =back
 
 =head1 VARIABELEN
 
-De volgende variabelen worden gelezen uit de omgeving (tenzij B<--force>
-werd opgegeven) en door B<dpkg-architecture> ingesteld (zie de sectie
-B<TERMS> voor een beschrijving van het naamgevingsschema):
+De volgende variabelen worden gelezen uit de omgeving (tenzij B<--force> werd opgegeven) en door B<dpkg-architecture> ingesteld (zie de sectie B<TERMS> voor een beschrijving van het naamgevingsschema):
 
 =over 
 
@@ -263,8 +198,7 @@ De pointergrootte van de bouwmachine (in bits; sinds dpkg 1.15.4).
 
 =item B<DEB_BUILD_ARCH_ENDIAN>
 
-De bytevolgorde (endianness) van de bouwmachine (little / big; sinds dpkg
-1.15.4).
+De bytevolgorde (endianness) van de bouwmachine (little / big; sinds dpkg 1.15.4).
 
 =item B<DEB_BUILD_GNU_CPU>
 
@@ -280,8 +214,7 @@ Het GNU-systeemtype van de bouwmachine.
 
 =item B<DEB_BUILD_MULTIARCH>
 
-Het uitgezuiverde GNU-systeemtype van de bouwmachine, dat gebruikt wordt
-voor bestandssysteempaden (sinds dpkg 1.16.0).
+Het uitgezuiverde GNU-systeemtype van de bouwmachine, dat gebruikt wordt voor bestandssysteempaden (sinds dpkg 1.16.0).
 
 =item B<DEB_HOST_ARCH>
 
@@ -309,8 +242,7 @@ De pointergrootte van de hostmachine (in bits; sinds dpkg 1.15.4).
 
 =item B<DEB_HOST_ARCH_ENDIAN>
 
-De bytevolgorde (endianness) van de hostmachine (little / big; sinds dpkg
-1.15.4).
+De bytevolgorde (endianness) van de hostmachine (little / big; sinds dpkg 1.15.4).
 
 =item B<DEB_HOST_GNU_CPU>
 
@@ -326,8 +258,7 @@ Het GNU-systeemtype van de hostmachine.
 
 =item B<DEB_HOST_MULTIARCH>
 
-Het uitgezuiverde GNU-systeemtype van de hostmachine, dat gebruikt wordt
-voor bestandssysteem-paden (sinds dpkg 1.16.0).
+Het uitgezuiverde GNU-systeemtype van de hostmachine, dat gebruikt wordt voor bestandssysteem-paden (sinds dpkg 1.16.0).
 
 =item B<DEB_TARGET_ARCH>
 
@@ -355,8 +286,7 @@ De pointergrootte van de doelmachine (in bits; sinds dpkg 1.17.14).
 
 =item B<DEB_TARGET_ARCH_ENDIAN>
 
-De bytevolgorde (endianness) van de doelmachine (little / big; sinds dpkg
-1.17.14).
+De bytevolgorde (endianness) van de doelmachine (little / big; sinds dpkg 1.17.14).
 
 =item B<DEB_TARGET_GNU_CPU>
 
@@ -372,8 +302,7 @@ Het GNU-systeemtype van de doelmachine (sinds dpkg 1.17.14).
 
 =item B<DEB_TARGET_MULTIARCH>
 
-Het uitgezuiverde GNU-systeemtype van de doelmachine, dat gebruikt wordt
-voor bestandssysteempaden (sinds dpkg 1.17.14).
+Het uitgezuiverde GNU-systeemtype van de doelmachine, dat gebruikt wordt voor bestandssysteempaden (sinds dpkg 1.17.14).
 
 =back
 
@@ -381,33 +310,25 @@ voor bestandssysteempaden (sinds dpkg 1.17.14).
 
 =head2 Architectuurtabellen
 
-Al deze bestanden moeten aanwezig zijn, wil B<dpkg-architecture> kunnen
-werken. Hun locatie kan veranderd worden bij de programmauitvoering met de
-omgevingsvariabele B<DPKG_DATADIR>. Deze tabellen bevatten op hun eerste
-regel een pseudo-veld format B<Version> om hun indeling aan te geven, zodat
-ontleders kunnen nagaan of zij ermee kunnen omgaan, zoals "# Version=1.0".
+Al deze bestanden moeten aanwezig zijn, wil B<dpkg-architecture> kunnen werken. Hun locatie kan veranderd worden bij de programmauitvoering met de omgevingsvariabele B<DPKG_DATADIR>. Deze tabellen bevatten op hun eerste regel een pseudo-veld format B<Version> om hun indeling aan te geven, zodat ontleders kunnen nagaan of zij ermee kunnen omgaan, zoals "# Version=1.0".
 
 =over 
 
 =item I<%PKGDATADIR%/cputable>
 
-Tabel met gekende CPU-namen en hun omzetting naar een GNU-naam. Indeling
-versie 1.0 (sinds dpkg 1.13.2).
+Tabel met gekende CPU-namen en hun omzetting naar een GNU-naam. Indeling versie 1.0 (sinds dpkg 1.13.2).
 
 =item I<%PKGDATADIR%/ostable>
 
-Tabel van gekende namen van besturingssystemen en hun omzetting naar een
-GNU-naam. Indeling versie 2.0 (sinds dpkg 1.18.11).
+Tabel van gekende namen van besturingssystemen en hun omzetting naar een GNU-naam. Indeling versie 2.0 (sinds dpkg 1.18.11).
 
 =item I<%PKGDATADIR%/tupletable>
 
-Omzetting tussen Debian architectuurtupels en Debian
-architectuurnamen. Indeling versie 1.0 (sinds dpkg 1.18.11).
+Omzetting tussen Debian architectuurtupels en Debian architectuurnamen. Indeling versie 1.0 (sinds dpkg 1.18.11).
 
 =item I<%PKGDATADIR%/abitable>
 
-Tabel van Debian architectuur-ABI-attribuutvervangingen. Indeling versie 2.0
-(sinds dpkg 1.18.11).
+Tabel van Debian architectuur-ABI-attribuutvervangingen. Indeling versie 2.0 (sinds dpkg 1.18.11).
 
 =back
 
@@ -417,15 +338,13 @@ Tabel van Debian architectuur-ABI-attribuutvervangingen. Indeling versie 2.0
 
 =item I<%PKGDATADIR%/architecture.mk>
 
-Makefile-fragment dat alle variabelen die B<dpkg-architecture> uitvoert,
-behoorlijk instelt en exporteert (sinds dpkg 1.16.1).
+Makefile-fragment dat alle variabelen die B<dpkg-architecture> uitvoert, behoorlijk instelt en exporteert (sinds dpkg 1.16.1).
 
 =back
 
 =head1 VOORBEELDEN
 
-B<dpkg-buildpackage> kan gebruikt worden met de optie B<-a> en geeft die
-door aan B<dpkg-architecture>. Andere voorbeelden:
+B<dpkg-buildpackage> kan gebruikt worden met de optie B<-a> en geeft die door aan B<dpkg-architecture>. Andere voorbeelden:
 
 =over 
 
@@ -435,8 +354,7 @@ door aan B<dpkg-architecture>. Andere voorbeelden:
 
 =back
 
-Verifiëren of de huidige of opgegeven hostarchitectuur gelijk is aan een
-architectuur:
+Verifiëren of de huidige of opgegeven hostarchitectuur gelijk is aan een architectuur:
 
 =over 
 
@@ -458,13 +376,7 @@ Verifiëren of de huidige of opgegeven hostarchitectuur een Linux-systeem is:
 
 =head2 Het gebruik in debian/rules
 
-De omgevingsvariabelen die door B<dpkg-architecture> ingesteld worden,
-worden doorgegeven aan I<debian/rules> als variabelen voor make (zie de
-documentatie van make). U mag er echter niet op vertrouwen, aangezien dit
-het handmatig uitvoeren van het script verhindert. In de plaats daarvan zou
-u ze altijd moeten initialiseren met door B<dpkg-architecture> met de optie
-B<-q> te gebruiken. Hier volgen enkele voorbeelden die ook illustreren hoe u
-in uw pakket ondersteuning voor cross-compilatie kunt verbeteren:
+De omgevingsvariabelen die door B<dpkg-architecture> ingesteld worden, worden doorgegeven aan I<debian/rules> als variabelen voor make (zie de documentatie van make). U mag er echter niet op vertrouwen, aangezien dit het handmatig uitvoeren van het script verhindert. In de plaats daarvan zou u ze altijd moeten initialiseren met door B<dpkg-architecture> met de optie B<-q> te gebruiken. Hier volgen enkele voorbeelden die ook illustreren hoe u in uw pakket ondersteuning voor cross-compilatie kunt verbeteren:
 
 Het opvragen van het GNU-systeemtype en dit doorgeven aan ./configure:
 
@@ -496,12 +408,9 @@ Iets enkel voor een specifieke architectuur doen:
 
 =back
 
-of indien u enkel dient te controleren wat het type CPU of OS is, moet u de
-variabele B<DEB_HOST_ARCH_CPU> of B<DEB_HOST_ARCH_OS> gebruiken.
+of indien u enkel dient te controleren wat het type CPU of OS is, moet u de variabele B<DEB_HOST_ARCH_CPU> of B<DEB_HOST_ARCH_OS> gebruiken.
 
-Merk op dat u ook kunt betrouwen op een extern Makefile-fragment om al de
-variabelen behoorlijk in te stellen die door B<dpkg-architecture> kunnen
-aangeleverd worden:
+Merk op dat u ook kunt betrouwen op een extern Makefile-fragment om al de variabelen behoorlijk in te stellen die door B<dpkg-architecture> kunnen aangeleverd worden:
 
 =over 
 
@@ -513,8 +422,7 @@ aangeleverd worden:
 
 =back
 
-In ieder geval moet u nooit B<dpkg --print-architecture> gebruiken om
-architectuurinformatie te bekomen tijdens het bouwen van een pakket.
+In ieder geval moet u nooit B<dpkg --print-architecture> gebruiken om architectuurinformatie te bekomen tijdens het bouwen van een pakket.
 
 =head1 OMGEVING
 
@@ -522,28 +430,21 @@ architectuurinformatie te bekomen tijdens het bouwen van een pakket.
 
 =item B<DPKG_DATADIR>
 
-Indien deze variabele een waarde heeft, zal ze gebruikt worden als de
-data-map van B<dpkg> waarin zich de architectuurtabellen bevinden (sinds
-dpkg 1.14.17). Staat standaard ingesteld op «%PKGDATADIR%».
+Indien deze variabele een waarde heeft, zal ze gebruikt worden als de data-map van B<dpkg> waarin zich de architectuurtabellen bevinden (sinds dpkg 1.14.17). Staat standaard ingesteld op «%PKGDATADIR%».
 
 =item B<DPKG_COLORS>
 
-Stelt de kleurmodus in (sinds dpkg 1.18.5). Waarden die momenteel gebruikt
-mogen worden zijn: B<auto> (standaard), B<always> en B<never>.
+Stelt de kleurmodus in (sinds dpkg 1.18.5). Waarden die momenteel gebruikt mogen worden zijn: B<auto> (standaard), B<always> en B<never>.
 
 =item B<DPKG_NLS>
 
-Indien dit ingesteld is, zal het gebruikt worden om te beslissen over het
-activeren van moedertaalondersteuning, ook gekend als
-internationaliseringsondersteuning (of i18n) (sinds dpkg 1.19.0). Geldige
-waarden zijn: B<0> and B<1> (standaard).
+Indien dit ingesteld is, zal het gebruikt worden om te beslissen over het activeren van moedertaalondersteuning, ook gekend als internationaliseringsondersteuning (of i18n) (sinds dpkg 1.19.0). Geldige waarden zijn: B<0> and B<1> (standaard).
 
 =back
 
 =head1 OPMERKINGEN
 
-Alle lange commando- en optienamen kunnen slechts sinds dpkg 1.17.17
-gebruikt worden.
+Alle lange commando- en optienamen kunnen slechts sinds dpkg 1.17.17 gebruikt worden.
 
 =head1 ZIE OOK
 

@@ -22,10 +22,7 @@ B<DEBIAN/postrm>
 
 =head1 DESCRIPTION
 
-Un paquet peut réaliser plusieurs actions post-retrait à l'aide de scripts
-du responsable, en incluant un fichier I<postrm> exécutable dans son archive
-de contrôle (c'est-à-dire I<DEBIAN/postrm> au moment de la création du
-paquet).
+Un paquet peut réaliser plusieurs actions post-retrait à l'aide de scripts du responsable, en incluant un fichier I<postrm> exécutable dans son archive de contrôle (c'est-à-dire I<DEBIAN/postrm> au moment de la création du paquet).
 
 Le script peut être appelé de diverses S<manières :>
 
@@ -43,9 +40,11 @@ Après la purge du paquet.
 
 Après la mise à niveau du paquet.
 
-=item I<new-postrm> B<failed-upgrade> I<old-version> I<new-version>
+=item I<nouveau-postrm> B<failed-upgrade> I<ancienne-version> I<nouvelle-version>
 
 Si l'appel B<upgrade> ci-dessus échoue.
+
+La I<nouvelle_version> est passée depuis S<dpkg 1.18.5.>
 
 =item I<postrm> B<disappear> I<paquet-de-remplacement> I<version-de-remplacement>
 
@@ -53,15 +52,19 @@ Après que l'ensemble des fichiers de paquets ont été remplacés
 
 =item I<nouveau-postrm> B<abort-install>
 
-Si I<preinst> échoue lors de l'installation.
+Si I<preinst> échoue lors de B<install>.
 
-=item I<nouveau-postrm> B<abort-install> I<ancienne-version nouvelle-version>
+=item I<nouveau-postrm> B<abort-install> I<ancienne-version> I<nouvelle-version>
 
-Si I<preinst> échoue lors de la mise à niveau d'un paquet supprimé.
+Si I<preinst> échoue lors de B<install> pour la mise à niveau d'un paquet supprimé.
 
-=item I<nouveau-postrm> B<abort-upgrade> I<ancienne-version nouvelle-version>
+La I<nouvelle_version> est passée depuis S<dpkg 1.18.5.>
 
-Si I<preinst> échoue lors d'une mise à niveau.
+=item I<nouveau-postrm> B<abort-upgrade> I<ancienne-version> I<nouvelle-version>
+
+Si I<preinst> échoue lors d'un B<upgrade>.
+
+La I<nouvelle_version> est passée depuis S<dpkg 1.18.5.>
 
 =back
 

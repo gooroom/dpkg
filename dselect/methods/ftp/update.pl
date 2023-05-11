@@ -21,11 +21,11 @@ use warnings;
 
 eval q{
     pop @INC if $INC[-1] eq '.';
-    use Net::FTP;
+
+    use Dpkg; # Dummy import to require the presence of Dpkg::*.
 };
 if ($@) {
-    warn "Please install the 'perl' package if you want to use the\n" .
-         "FTP access method of dselect.\n\n";
+    warn "Missing Dpkg modules required by the FTP access method.\n\n";
     exit 1;
 }
 
@@ -56,7 +56,7 @@ if ($option eq 'manual') {
 #print "vardir: $vardir, method: $method, option: $option\n";
 
 my $arch = qx(dpkg --print-architecture);
-$arch='i386' if $?;
+$arch = 'i386' if $?;
 chomp $arch;
 my $exit = 0;
 
@@ -73,7 +73,6 @@ my $packages_modified = 0;
 
 sub download {
 foreach (@{$CONFIG{site}}) {
-
    my $site = $_;
 
         $ftp = do_connect(ftpsite => $_->[0],

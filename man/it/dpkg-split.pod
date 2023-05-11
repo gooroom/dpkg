@@ -22,21 +22,13 @@ B<dpkg-split> [I<opzione>...] I<comando>
 
 =head1 DESCRIZIONE
 
-B<dpkg-split> suddivide i file dei pacchetti binari Debian in parti più
-piccole e li riassembla, per permettere l'archiviazione di grandi file di
-pacchetto su supporti piccoli, come floppy disk.
+B<dpkg-split> suddivide i file dei pacchetti binari Debian in parti più piccole e li riassembla, per permettere l'archiviazione di grandi file di pacchetto su supporti piccoli, come floppy disk.
 
-Può essere utilizzato manualmente usando le opzioni B<--split>, B<--join> e
-B<--info>.
+Può essere utilizzato manualmente usando le opzioni B<--split>, B<--join> e B<--info>.
 
-Ha anche una modalità automatica, invocata usando l'opzione B<--auto>, con
-la quale mantiene una coda di parti viste ma non ancora riassemblate, e
-riassembla un file di pacchetto quando ha visto tutte le sue parti. Le
-opzioni B<--listq> e B<--discard> permettono la gestione della coda.
+Ha anche una modalità automatica, invocata usando l'opzione B<--auto>, con la quale mantiene una coda di parti viste ma non ancora riassemblate, e riassembla un file di pacchetto quando ha visto tutte le sue parti. Le opzioni B<--listq> e B<--discard> permettono la gestione della coda.
 
-Tutte le azioni di suddivisione, unione e gestione della coda producono
-messaggi informativi sullo standard output che possono essere ignorati senza
-problemi.
+Tutte le azioni di suddivisione, unione e gestione della coda producono messaggi informativi sullo standard output che possono essere ignorati senza problemi.
 
 =head1 COMANDI
 
@@ -46,82 +38,51 @@ problemi.
 
 Suddivide un singolo pacchetto binario Debian in più parti.
 
-Le parti vengono chiamate I<prefisso>B<.>I<N>B<of>I<M>B<.deb> dove I<N> è il
-numero della parte, cominciando da 1, e I<M> è il numero totale delle parti
-(entrambi in forma decimale).
+Le parti vengono chiamate I<prefisso>B<.>I<N>B<of>I<M>B<.deb> dove I<N> è il numero della parte, cominciando da 1, e I<M> è il numero totale delle parti (entrambi in forma decimale).
 
-Se non viene specificato un I<prefisso>, allora viene usato il nome file
-I<archivio-completo>, inclusa la directory, rimuovendo qualsiasi parte
-B<.deb> finale.
+Se non viene specificato un I<prefisso>, allora viene usato il nome file I<archivio-completo>, inclusa la directory, rimuovendo qualsiasi parte B<.deb> finale.
 
 =item B<-j>, B<--join> I<parte>...
 
-Unisce insieme le parti di un pacchetto, riassemblando il file originale
-così come era prima che fosse suddiviso.
+Unisce insieme le parti di un pacchetto, riassemblando il file originale così come era prima che fosse suddiviso.
 
-I file delle parti specificati come argomenti devono rappresentare tutte le
-parti dello stesso identico file binario originale. Ogni parte deve essere
-presente una ed una sola volta nell'elenco degli argomenti, anche se non è
-necessario che le parti siano elencate in ordine.
+I file delle parti specificati come argomenti devono rappresentare tutte le parti dello stesso identico file binario originale. Ogni parte deve essere presente una ed una sola volta nell'elenco degli argomenti, anche se non è necessario che le parti siano elencate in ordine.
 
-Naturalmente, le parti devono essere state tutte generate specificando, al
-momento della suddivisione, la medesima dimensione delle parti, il che
-solitamente significa che devono essere state generate con la medesima
-invocazione di B<dpkg-split --split>.
+Naturalmente, le parti devono essere state tutte generate specificando, al momento della suddivisione, la medesima dimensione delle parti, il che solitamente significa che devono essere state generate con la medesima invocazione di B<dpkg-split --split>.
 
-I nomi dei file delle parti non sono significativi per il processo di
-riassemblaggio.
+I nomi dei file delle parti non sono significativi per il processo di riassemblaggio.
 
-In modo predefinito il file di output si chiama
-I<pacchetto>B<_>I<versione>B<_>I<arch>B<.deb>.
+In modo predefinito il file di output si chiama I<pacchetto>B<_>I<versione>B<_>I<arch>B<.deb>.
 
 =item B<-I>, B<--info> I<parte>...
 
-Stampa informazioni, in un formato intelligibile, riguardo ai file delle
-parti specificati. Gli argomenti che non sono parti di un pacchetto binario
-producono invece un messaggio che informa della cosa (ma sempre sullo
-standard output).
+Stampa informazioni, in un formato intelligibile, riguardo ai file delle parti specificati. Gli argomenti che non sono parti di un pacchetto binario producono invece un messaggio che informa della cosa (ma sempre sullo standard output).
 
-=item B<-a>, B<--auto -o> I<output-completo parte>
+=item B<-a>, B<--auto -o> I<complete-output> I<part>
 
-Accoda automaticamente le parti e riassembla un pacchetto se ciò è
-possibile.
+Accoda automaticamente le parti e riassembla un pacchetto se ciò è possibile.
 
-La I<parte> specificata viene esaminata e confrontata con altre parti dello
-stesso pacchetto (se presenti) nella coda delle parti dei file pacchetto.
+La I<parte> specificata viene esaminata e confrontata con altre parti dello stesso pacchetto (se presenti) nella coda delle parti dei file pacchetto.
 
-Se sono disponibili tutte le parti del file pacchetto a cui appartiene
-I<parte>, allora il pacchetto viene riassemblato e scritto in
-I<output-completo> (che normalmente non dovrebbe essere già esistente,
-benché ciò non causi un errore).
+Se sono disponibili tutte le parti del file pacchetto a cui appartiene I<parte>, allora il pacchetto viene riassemblato e scritto in I<output-completo> (che normalmente non dovrebbe essere già esistente, benché ciò non causi un errore).
 
-Altrimenti, la I<parte> viene copiata nella coda e non viene creato
-I<output-completo>.
+Altrimenti, la I<parte> viene copiata nella coda e non viene creato I<output-completo>.
 
-Se I<parte> non è una parte di un pacchetto binario suddiviso, allora
-B<dpkg-split> terminerà con lo stato B<1>; se si verifica qualche altro
-problema allora terminerà con lo stato B<2>.
+Se I<parte> non è una parte di un pacchetto binario suddiviso, allora B<dpkg-split> terminerà con lo stato B<1>; se si verifica qualche altro problema allora terminerà con lo stato B<2>.
 
-Quando si usa B<--auto> deve essere specificata l'opzione B<--output> o
-B<-o>. (Se ciò non fosse obbligatorio il programma che sta invocando
-l'azione non saprebbe quale file di output attendersi.)
+Quando si usa B<--auto> deve essere specificata l'opzione B<--output> o B<-o>. (Se ciò non fosse obbligatorio il programma che sta invocando l'azione non saprebbe quale file di output attendersi.)
 
 =item B<-l>, B<--listq>
 
 Elenca il contenuto della coda dei pacchetti da riassemblare.
 
-Per ogni file di pacchetto per il quale esistono parti nella coda, l'output
-fornisce il nome del pacchetto, le parti nella coda e il numero totale di
-byte archiviati nella coda.
+Per ogni file di pacchetto per il quale esistono parti nella coda, l'output fornisce il nome del pacchetto, le parti nella coda e il numero totale di byte archiviati nella coda.
 
 =item B<-d>, B<--discard> [I<pacchetto>...]
 
-Questo scarta parti dalla coda di quelle in attesa delle parti restanti del
-proprio pacchetto.
+Questo scarta parti dalla coda di quelle in attesa delle parti restanti del proprio pacchetto.
 
-Se non viene specificato alcun I<pacchetto>, allora la coda viene svuotata
-completamente; se ne è specificato qualcuno, allora vengono eliminate solo
-le parti dei pacchetti indicati.
+Se non viene specificato alcun I<pacchetto>, allora la coda viene svuotata completamente; se ne è specificato qualcuno, allora vengono eliminate solo le parti dei pacchetti indicati.
 
 =item B<-?>, B<--help>
 
@@ -139,42 +100,37 @@ Mostra la versione ed esce.
 
 =item B<--depotdir> I<directory>
 
-Specifica una directory alternativa per la coda delle parti in attesa di
-essere automaticamente riassemblate. Il valore predefinito è
-B</var/lib/dpkg>.
+Specifies an alternative directory for the queue of parts awaiting automatic reassembly. The default is B<%ADMINDIR%/parts>.
+
+=item B<--admindir> I<directory>
+
+Set the administrative directory to I<directory> (since dpkg 1.21.10).  This is where the I<statoverride> file is stored.  Defaults to «I<%ADMINDIR%>» if B<DPKG_ADMINDIR> has not been set.
+
+=item B<--root> I<directory>
+
+Set the root directory to B<directory> (since dpkg 1.21.10), which sets the installation directory to «I<directory>» and the administrative directory to «I<directory>B<%ADMINDIR%>» if B<DPKG_ROOT> has not been set.
 
 =item B<-S>, B<--partsize> I<kibibyte>
 
-Specifica la dimensione massima, in kibibyte (1024 byte), delle parti quando
-viene fatta la suddivisione. Il valore predefinito è 450 KiB.
+Specifica la dimensione massima, in kibibyte (1024 byte), delle parti quando viene fatta la suddivisione. Il valore predefinito è 450 KiB.
 
 =item B<-o>, B<--output> I<output-completo>
 
 Specifica il nome del file di output per il riassemblamento.
 
-Questo valore scavalca quello predefinito per il riassemblaggio manuale
-(B<--join>) ed è obbligatorio per la messa in coda o il riassemblaggio
-automatici (B<--auto>).
+Questo valore scavalca quello predefinito per il riassemblaggio manuale (B<--join>) ed è obbligatorio per la messa in coda o il riassemblaggio automatici (B<--auto>).
 
 =item B<-Q>, B<--npquiet>
 
-Quando vengono fatti una messa in coda o un riassemblaggio automatici,
-B<dpkg-split> stampa solitamente un messaggio se gli viene passata una
-I<parte> che non è una parte di un pacchetto binario. Questa opzione
-disabilita tali messaggi per permettere a programmi come B<dpkg> di gestire
-sia pacchetti suddivisi sia non suddivisi, senza produrre messaggi spuri.
+Quando vengono fatti una messa in coda o un riassemblaggio automatici, B<dpkg-split> stampa solitamente un messaggio se gli viene passata una I<parte> che non è una parte di un pacchetto binario. Questa opzione disabilita tali messaggi per permettere a programmi come B<dpkg> di gestire sia pacchetti suddivisi sia non suddivisi, senza produrre messaggi spuri.
 
 =item B<--msdos>
 
 Forces the output filenames generated by B<--split> to be MSDOS-compatible.
 
-Questo storpia il prefisso, o quello predefinito derivato dal nome file di
-input o quello fornito come argomento: i caratteri alfanumerici vengono resi
-minuscoli, i caratteri «+» vengono sostituiti da B<x> e tutti gli altri
-caratteri vengono eliminati.
+Questo storpia il prefisso, o quello predefinito derivato dal nome file di input o quello fornito come argomento: i caratteri alfanumerici vengono resi minuscoli, i caratteri «+» vengono sostituiti da B<x> e tutti gli altri caratteri vengono eliminati.
 
-Il risultato viene quindi troncato alla lunghezza necessaria e vengono
-generati nomi di file nella forma I<prefissoN>B<of>I<M>B<.deb>.
+Il risultato viene quindi troncato alla lunghezza necessaria e vengono generati nomi di file nella forma I<prefissoN>B<of>I<M>B<.deb>.
 
 =back
 
@@ -184,20 +140,15 @@ generati nomi di file nella forma I<prefissoN>B<of>I<M>B<.deb>.
 
 =item B<0>
 
-La suddivisione, unione o altra azione richiesta ha avuto successo. I
-comandi B<--info> vengono considerati conclusi con successo anche se i file
-non sono parti di un pacchetto binario.
+La suddivisione, unione o altra azione richiesta ha avuto successo. I comandi B<--info> vengono considerati conclusi con successo anche se i file non sono parti di un pacchetto binario.
 
 =item B<1>
 
-Si verifica solo con B<--auto> e indica che il file I<parte> non era una
-parte di un pacchetto binario.
+Si verifica solo con B<--auto> e indica che il file I<parte> non era una parte di un pacchetto binario.
 
 =item B<2>
 
-Fatal or unrecoverable error due to invalid command-line usage, a file that
-looked like a package part file but was corrupted, or interactions with the
-system, such as accesses to the database, memory allocations, etc.
+Fatal or unrecoverable error due to invalid command-line usage, a file that looked like a package part file but was corrupted, or interactions with the system, such as accesses to the database, memory allocations, etc.
 
 =back
 
@@ -205,15 +156,25 @@ system, such as accesses to the database, memory allocations, etc.
 
 =over 
 
+=item B<DPKG_ROOT>
+
+If set and B<--root> option has not been specified, it will be used as the filesystem root directory (since dpkg 1.21.10).
+
+=item B<DPKG_ADMINDIR>
+
+If set and the B<--admindir> or B<--root> options have not been specified, it will be used as the B<dpkg> data directory (since dpkg 1.21.10).
+
+=item B<DPKG_DEBUG>
+
+Sets the debug mask (since dpkg 1.21.10) from an octal value.  The currently accepted flags are described in the B<dpkg --debug> option, but not all these flags might have an effect on this program.
+
 =item B<DPKG_COLORS>
 
-Sets the color mode (since dpkg 1.18.5).  The currently accepted values are:
-B<auto> (default), B<always> and B<never>.
+Sets the color mode (since dpkg 1.18.5).  The currently accepted values are: B<auto> (default), B<always> and B<never>.
 
 =item B<SOURCE_DATE_EPOCH>
 
-If set, it will be used as the timestamp (as seconds since the epoch) in the
-B<deb-split>(5)'s B<ar>(5) container.
+If set, it will be used as the timestamp (as seconds since the epoch) in the B<deb-split>(5)'s B<ar>(5) container.
 
 =back
 
@@ -223,22 +184,17 @@ B<deb-split>(5)'s B<ar>(5) container.
 
 =item I<%ADMINDIR%/parts>
 
-La directory predefinita per la coda dei file delle parti in attesa di
-essere automaticamente riassemblate.
+La directory predefinita per la coda dei file delle parti in attesa di essere automaticamente riassemblate.
 
-I nomi dei file usati in questa directory sono nel formato interno di
-B<dpkg-split> ed è improbabile che siano utili per altri programmi; in ogni
-caso non si dovrebbe fare affidamento sul formato del nome file.
+I nomi dei file usati in questa directory sono nel formato interno di B<dpkg-split> ed è improbabile che siano utili per altri programmi; in ogni caso non si dovrebbe fare affidamento sul formato del nome file.
 
 =back
 
 =head1 BUG
 
-I dettagli completi sui pacchetti nella coda sono impossibili da ottenere a
-meno che l'utente non guardi da solo nella directory della coda.
+I dettagli completi sui pacchetti nella coda sono impossibili da ottenere a meno che l'utente non guardi da solo nella directory della coda.
 
-Non esiste un modo semplice per testare se un file che potrebbe essere una
-parte di un pacchetto binario lo è realmente.
+Non esiste un modo semplice per testare se un file che potrebbe essere una parte di un pacchetto binario lo è realmente.
 
 =head1 VEDERE ANCHE
 

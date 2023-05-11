@@ -19,17 +19,18 @@
 use strict;
 use warnings;
 
+use File::Path qw(make_path remove_tree);
+use File::Basename;
+
 eval q{
     pop @INC if $INC[-1] eq '.';
-    use Net::FTP;
-    use File::Path qw(make_path remove_tree);
-    use File::Basename;
     use File::Find;
     use Data::Dumper;
+
+    use Dpkg::File;
 };
 if ($@) {
-    warn "Please install the 'perl' package if you want to use the\n" .
-         "FTP access method of dselect.\n\n";
+    warn "Missing Dpkg modules required by the FTP access method.\n\n";
     exit 1;
 }
 
@@ -63,11 +64,7 @@ make_path("$methdir/$CONFIG{dldir}", { mode => 0755 });
 #Read md5sums already calculated
 my %md5sums;
 if (-f "$methdir/md5sums") {
-  local $/;
-  open(my $md5sums_fh, '<', "$methdir/md5sums")
-    or die "couldn't read file $methdir/md5sums";
-  my $code = <$md5sums_fh>;
-  close $md5sums_fh;
+  my $code = file_slurp("$methdir/md5sums");
   my $VAR1; ## no critic (Variables::ProhibitUnusedVariables)
   my $res = eval $code;
   if ($@) {
@@ -76,12 +73,12 @@ if (-f "$methdir/md5sums") {
   if (ref($res)) { %md5sums = %{$res} }
 }
 
-# get a block
+# Get a stanza.
 # returns a ref to a hash containing flds->fld contents
 # white space from the ends of lines is removed and newlines added
 # (no trailing newline).
 # die's if something unexpected happens
-sub getblk {
+sub get_stanza {
     my $fh = shift;
     my %flds;
     my $fld;
@@ -119,7 +116,7 @@ sub procstatus {
     my (%flds, $fld);
     open(my $status_fh, '<', "$vardir/status") or
         die 'Could not open status file';
-    while (%flds = getblk($status_fh), %flds) {
+    while (%flds = get_stanza($status_fh), %flds) {
 	if($flds{'status'} =~ /^install ok/) {
 	    my $cs = (split(/ /, $flds{'status'}))[2];
 	    if (($cs eq 'not-installed') ||
@@ -161,7 +158,7 @@ sub procpkgfile {
     my (@files, @sizes, @md5sums, $pkg, $ver, $nfs, $fld);
     my(%flds);
     open(my $pkgfile_fh, '<', $fn) or die "could not open package file $fn";
-    while (%flds = getblk($pkgfile_fh), %flds) {
+    while (%flds = get_stanza($pkgfile_fh), %flds) {
 	$pkg = $flds{'package'};
 	$ver = $curpkgs{$pkg};
 	@files = split(/[\s\n]+/, $flds{'filename'});
@@ -315,11 +312,9 @@ if($totsize == 0) {
 }
 
 sub download() {
-
  my $i = 0;
 
  foreach my $site (@{$CONFIG{site}}) {
-
     my @getfiles = grep { $pkgfiles{$_}[2] == $i } keys %downloads;
     my @pre_dist = (); # Directory to add before $fn
 
@@ -469,7 +464,7 @@ sub getdebinfo($) {
     if($type == 1) {
 	open(my $pkgfile_fh, '-|', "dpkg-deb --field $fn")
 	    or die "cannot create pipe for 'dpkg-deb --field $fn'";
-	my %fields = getblk($pkgfile_fh);
+	my %fields = get_stanza($pkgfile_fh);
 	close($pkgfile_fh);
 	$pkg = $fields{'package'};
 	$ver = $fields{'version'};
@@ -624,9 +619,6 @@ foreach my $file (keys %md5sums) {
   next if -f $file;
   delete $md5sums{$file};
 }
-open(my $md5sums_fh, '>', "$methdir/md5sums")
-  or die "can't open $methdir/md5sums in write mode: $!\n";
-print { $md5sums_fh } Dumper(\%md5sums);
-close $md5sums_fh;
+file_dump("$methdir/md5sums", Dumper(\%md5sums));
 
 exit $exit;

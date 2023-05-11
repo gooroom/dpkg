@@ -84,13 +84,15 @@ const struct fieldinfo fieldinfos[]= {
   { FIELD("Description"),      f_charfield,       w_charfield,      PKGIFPOFF(description)   },
   { FIELD("Triggers-Pending"), f_trigpend,        w_trigpend                                 },
   { FIELD("Triggers-Awaited"), f_trigaw,          w_trigaw                                   },
-  /* Note that aliases are added to the nicknames table. */
-  { FIELD("Revision"),         f_revision,        w_null                                     },
-  { FIELD("Recommended"),      f_dependency,      w_null                                     },
-  { FIELD("Optional"),         f_dependency,      w_null                                     },
-  { FIELD("Class"),            f_priority,        w_null                                     },
-  { FIELD("Package-Revision"), f_revision,        w_null                                     },
-  { FIELD("Package_Revision"), f_revision,        w_null                                     },
+
+  /* The following are the obsolete fields that get remapped to their
+   * modern forms, while emitting an obsolescence warning. */
+  { FIELD("Recommended"),      f_obs_dependency,  w_null,           dep_recommends           },
+  { FIELD("Optional"),         f_obs_dependency,  w_null,           dep_suggests             },
+  { FIELD("Class"),            f_obs_class,       w_null                                     },
+  { FIELD("Revision"),         f_obs_revision,    w_null                                     },
+  { FIELD("Package-Revision"), f_obs_revision,    w_null                                     },
+  { FIELD("Package_Revision"), f_obs_revision,    w_null                                     },
   { NULL                                                                                     }
 };
 
@@ -259,7 +261,7 @@ pkg_parse_verify(struct parsedb_state *ps,
                 _("package has status %s but no triggers pending"),
                 pkg_status_name(pkg));
 
-  /* FIXME: There was a bug that could make a not-installed package have
+  /* Note: There was a bug that could make a not-installed package have
    * conffiles, so we check for them here and remove them (rather than
    * calling it an error, which will do at some point). */
   if (!(ps->flags & pdb_recordavailable) &&
@@ -271,10 +273,8 @@ pkg_parse_verify(struct parsedb_state *ps,
     pkgbin->conffiles = NULL;
   }
 
-  /* XXX: Mark not-installed leftover packages for automatic removal on
-   * next database dump. This code can be removed after dpkg 1.16.x, when
-   * there's guarantee that no leftover is found on the status file on
-   * major distributions. */
+  /* Note: Mark not-installed leftover packages for automatic removal on
+   * next database dump. */
   if (!(ps->flags & pdb_recordavailable) &&
       pkg->status == PKG_STAT_NOTINSTALLED &&
       pkg->eflag == PKG_EFLAG_OK &&
@@ -283,7 +283,7 @@ pkg_parse_verify(struct parsedb_state *ps,
     pkg_set_want(pkg, PKG_WANT_UNKNOWN);
   }
 
-  /* XXX: Mark not-installed non-arch-qualified selections for automatic
+  /* Note: Mark not-installed non-arch-qualified selections for automatic
    * removal, as they do not make sense in a multiarch enabled world, and
    * might cause those selections to be unreferencable from command-line
    * interfaces when there's other more specific selections. */
@@ -294,7 +294,7 @@ pkg_parse_verify(struct parsedb_state *ps,
       pkgbin->arch->type == DPKG_ARCH_EMPTY)
     pkg_set_want(pkg, PKG_WANT_UNKNOWN);
 
-  /* XXX: Versions before dpkg 1.13.10 did not blank the Origin and Bugs
+  /* Note: Versions before dpkg 1.13.10 did not blank the Origin and Bugs
    * fields, so there can be packages that should be garbage collected but
    * are lingering around. Blank them to make sure we will forget all about
    * them on the next database dump. */

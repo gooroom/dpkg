@@ -22,10 +22,7 @@ B<dpkg-genbuildinfo> [I<option>...]
 
 =head1 DESCRIÇÃO
 
-B<dpkg-genbuildinfo> lê informação a partir de uma árvore fonte Debian
-compilada e desempacotada e dos ficheiros que gerou, e gera um ficheiro de
-controle Debian que descreve o ambiente de compilação e os artefactos de
-compilação (ficheiro B<.buildinfo>).
+B<dpkg-genbuildinfo> lê informação a partir de uma árvore fonte Debian compilada e desempacotada e dos ficheiros que gerou, e gera um ficheiro de controle Debian que descreve o ambiente de compilação e os artefactos de compilação (ficheiro B<.buildinfo>).
 
 Este comando foi introduzido no dpkg 1.18.11.
 
@@ -35,8 +32,7 @@ Este comando foi introduzido no dpkg 1.18.11.
 
 =item B<--build=>I<type>
 
-Especifica o I<type> de compilação a partir de uma lista de componente
-separados por vírgulas.
+Especifica o I<type> de compilação a partir de uma lista de componente separados por vírgulas.
 
 Os valores permitidos são:
 
@@ -44,95 +40,71 @@ Os valores permitidos são:
 
 =item B<any>
 
-Gera informação de compilação incluindo dependências de compilação não
-qualificadas (B<Build-Depends>) e dependências de compilação específicas da
-arquitectura (B<Build-Depends-Arch>).
+Gera informação de compilação incluindo dependências de compilação não qualificadas (B<Build-Depends>) e dependências de compilação específicas da arquitectura (B<Build-Depends-Arch>).
 
 =item B<all>
 
-Gera informação de compilação incluindo dependências de compilação não
-qualificadas (B<Build-Depends>) e dependências de compilação independentes
-da arquitectura (B<Build-Depends-Indep>).
+Gera informação de compilação incluindo dependências de compilação não qualificadas (B<Build-Depends>) e dependências de compilação independentes da arquitectura (B<Build-Depends-Indep>).
 
 =item B<source>
 
-Efectivamente ignorado; gera informação de compilação com apenas as
-dependências de compilação não qualificadas (B<Build-Depends>).
+Efectivamente ignorado; gera informação de compilação com apenas as dependências de compilação não qualificadas (B<Build-Depends>).
 
 =item B<binary>
 
-Gera informação de compilação com todos os três tipos de dependências de
-compilação. Isto é um alias para B<any,all>.
+Gera informação de compilação com todos os três tipos de dependências de compilação. Isto é um alias para B<any,all>.
 
 =item B<full>
 
-Gera informação de compilação com todos os três tipos de dependências de
-compilação. Isto é um alias para B<any,all,source>, e o mesmo que o caso
-predefinido quando não é especificada nenhuma opção de compilação.
+Gera informação de compilação com todos os três tipos de dependências de compilação. Isto é um alias para B<any,all,source>, e o mesmo que o caso predefinido quando não é especificada nenhuma opção de compilação.
 
 =back
 
 =item B<-c>I<controlfile>
 
-Especifica o ficheiro de controle fonte principal de onde ler informação. A
-predefinição é B<debian/control>.
+Especifica o ficheiro de controle fonte principal de onde ler informação. A predefinição é B<debian/control>.
 
 =item B<-l>I<changelog-file>
 
-Especifica o ficheiro de registo de alterações de onde ler informação. A
-predefinição é B<debian/changelog>.
+Especifica o ficheiro de registo de alterações de onde ler informação. A predefinição é B<debian/changelog>.
 
 =item B<-f>I<files-list-file>
 
-Especifica onde está a lista de ficheiros que foram produzidos pela
-compilação em vez de se usar B<debian/files>.
+Especifica onde está a lista de ficheiros que foram produzidos pela compilação em vez de se usar B<debian/files>.
 
 =item B<-F>I<changelog-format>
 
-Especifica o formato do registo de alterações. Veja
-B<dpkg-parsechangelog>(1) para informação acerca dos formatos alternativos.
+Especifica o formato do registo de alterações. Veja B<dpkg-parsechangelog>(1) para informação acerca dos formatos alternativos.
 
 =item B<-O>[I<filename>]
 
-Escreve o ficheiro buildinfo na saída standard (ou I<filename> se
-especificado) em vez de
-I<dir>B</>I<source-name>B<_>I<binary-version>B<_>I<arch>B<.buildinfo> (onde
-I<dir> é B<..> por predefinição ou I<upload-files-dir> se for usado B<-u>).
+Escreve o ficheiro buildinfo na saída standard (ou I<filename> se especificado) em vez de I<dir>B</>I<source-name>B<_>I<binary-version>B<_>I<arch>B<.buildinfo> (onde I<dir> é B<..> por predefinição ou I<upload-files-dir> se for usado B<-u>).
 
 =item B<-u>I<upload-files-dir>
 
-Procura pelos ficheiros a serem enviados em I<upload-files-dir> em vez de
-B<..> (B<dpkg-genbuildinfo> precisa de encontrar estes ficheiros para que
-possa incluir os seus tamanhos e somatórios de verificação no ficheiro
-B<.buildinfo>).
+Procura pelos ficheiros a serem enviados em I<upload-files-dir> em vez de B<..> (B<dpkg-genbuildinfo> precisa de encontrar estes ficheiros para que possa incluir os seus tamanhos e somatórios de verificação no ficheiro B<.buildinfo>).
 
 =item B<--always-include-kernel>
 
 Por predefinição, o campo B<Build-Kernel-Version> não será escrito.
 
-Especifica que esta opção (desde dpkg 1.19.0) deve sempre escrever um campo
-B<Build-Kernel-Version> quando gera o B<.buildinfo>.
+Especifica que esta opção (desde dpkg 1.19.0) deve sempre escrever um campo B<Build-Kernel-Version> quando gera o B<.buildinfo>.
 
 =item B<--always-include-path>
 
-Por predefinição, o campo B<Build-Path> só será escrito se o directório
-actual começar com um padrão autorizado.
+Por predefinição, o campo B<Build-Path> só será escrito se o directório actual começar com um padrão autorizado.
 
-Em Debian e derivados, o padrão corresponde a B</build/> no inicio do nome
-de caminho.
+Em Debian e derivados, o padrão corresponde a B</build/> no inicio do nome de caminho.
 
-Especifica que esta opção deve sempre escrever um campo B<Build-Path> quando
-gera o B<.buildinfo>.
+Especifica que esta opção deve sempre escrever um campo B<Build-Path> quando gera o B<.buildinfo>.
 
 =item B<--admindir=>I<dir>
 
-Altera a localização da base de dados do B<dpkg>. A localização predefinida
-é I</var/lib/dpkg>.
+Altera a localização da base de dados do B<dpkg>. A localização predefinida é I</var/lib/dpkg>.
 
 =item B<-q>
 
-B<dpkg-genbuildinfo> pode produzir mensagens informativas no erro
-standard. B<-q> suprime essas mensagens.
+B<dpkg-genbuildinfo> pode produzir mensagens informativas no erro standard. B<-q> suprime essas mensagens.
 
 =item B<-?>, B<--help>
 
@@ -150,25 +122,15 @@ Mostra a versão e termina.
 
 =item B<DEB_BUILD_OPTIONS>
 
-Esta variável pode ser usada para activar e desactivar várias
-funcionalidades que afectam a informação incluída no ficheiro .buildinfo,
-via opção B<buildinfo> (desde dpkg 1.18.19). Esta opção contém uma lista
-separada por vírgulas de funcionalidades, prefixadas com os modificadores
-‘B<+>’ ou ‘B<->’, para denotar se se os deve activar ou desactivar. A
-funcionalidade especial “B<all>” pode ser usada para activar ou desactivar
-todas as outras funcionalidades. A funcionalidade "B<path>” controla se se
-deve incluir incondicionalmente o campo B<Build-Path>.
+Esta variável pode ser usada para activar e desactivar várias funcionalidades que afectam a informação incluída no ficheiro .buildinfo, via opção B<buildinfo> (desde dpkg 1.18.19). Esta opção contém uma lista separada por vírgulas de funcionalidades, prefixadas com os modificadores ‘B<+>’ ou ‘B<->’, para denotar se se os deve activar ou desactivar. A funcionalidade especial “B<all>” pode ser usada para activar ou desactivar todas as outras funcionalidades. A funcionalidade "B<path>” controla se se deve incluir incondicionalmente o campo B<Build-Path>.
 
 =item B<DPKG_COLORS>
 
-Define o modo de cor (desde dpkg 1.18.5). Os valores actualmente aceites
-são: B<auto> (predefinido), B<always> e B<never>.
+Define o modo de cor (desde dpkg 1.18.5). Os valores actualmente aceites são: B<auto> (predefinido), B<always> e B<never>.
 
 =item B<DPKG_NLS>
 
-Se definida, será usada para decidir se deve activar o Suporte a Linguagem
-Nativa. Também como conhecido como suporte de internacionalização (ou i18n)
-(desde dpkg 1.19.0). Os valores aceites são B<0> e B<1> (predefinição).
+Se definida, será usada para decidir se deve activar o Suporte a Linguagem Nativa. Também como conhecido como suporte de internacionalização (ou i18n) (desde dpkg 1.19.0). Os valores aceites são B<0> e B<1> (predefinição).
 
 =back
 
@@ -178,8 +140,7 @@ Nativa. Também como conhecido como suporte de internacionalização (ou i18n)
 
 =item B<debian/files>
 
-A lista de ficheiros gerados.  B<dpkg-genbuildinfo> lê os dados aqui quando
-produz um ficheiro B<.buildinfo>.
+A lista de ficheiros gerados.  B<dpkg-genbuildinfo> lê os dados aqui quando produz um ficheiro B<.buildinfo>.
 
 =back
 

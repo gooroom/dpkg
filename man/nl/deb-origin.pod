@@ -22,24 +22,17 @@ B<%PKGCONFDIR%/origins/>I<bestandsnaam>
 
 =head1 BESCHRIJVING
 
-De bestanden in B<%PKGCONFDIR%/origins> kunnen informatie verschaffen over
-de verschillende leveranciers die Debian pakketten leveren.
+De bestanden in B<%PKGCONFDIR%/origins> kunnen informatie verschaffen over de verschillende leveranciers die Debian pakketten leveren.
 
-Ze bevatten een aantal velden, of commentaar in het geval de regel begint
-met een ‘B<#>’. Elk veld begint met een markering, zoals B<Vendor> of
-B<Parent>, gevolgd door een dubbele punt en het tekstgedeelte van het
-veld. Velden zijn enkel van elkaar gescheiden door de veldmarkeringen. Met
-andere woorden de tekst van een veld mag meerdere regels lang zijn, maar de
-gereedschappen zullen de regels samenvoegen bij het verwerken van het
-tekstgedeelte van het veld.
+Ze bevatten een aantal velden, of commentaar in het geval de regel begint met een ‘B<#>’. Elk veld begint met een markering, zoals B<Vendor> of B<Parent>, gevolgd door een dubbele punt en het tekstgedeelte van het veld. Velden zijn enkel van elkaar gescheiden door de veldmarkeringen. Met andere woorden de tekst van een veld mag meerdere regels lang zijn, maar de gereedschappen zullen de regels samenvoegen bij het verwerken van het tekstgedeelte van het veld.
 
-Het bestand zou een naam moeten krijgen die overeenstemt met de naam van de
-leverancier. Het is gebruikelijk om het leveranciersbestand de naam van de
-leverancier te geven in kleine letters, maar een zekere mate van variatie is
-toegestaan. Met name wordt een spatie omgezet naar een liggend streepje
-(‘B<->’) en kan de bestandsnaam op dezelfde manier gebruik maken van
-hoofdletters en kleine letters zoals dat het geval is voor de waarde van het
-veld B<Vendor> of hij kan volledig uit hoofdletters bestaan.
+Het bestand zou een naam moeten krijgen die overeenstemt met de naam van de leverancier. Het is gebruikelijk om het leveranciersbestand de naam van de leverancier te geven in kleine letters, maar een zekere mate van variatie is toegestaan.
+
+Met name worden (sinds dpkg 1.21.10) eerst niet-alfanumerieke tekens (‘B<[^A-Za-z0-9]>’) omgezet naar een liggend streepje (‘B<->’) en daarna zal achtereenvolgens geprobeerd worden om de resulterende naam om te zetten naar kleine letters, te behouden zoals hij is, om te zetten naar kleine letters en hem daarna een hoofdletter te geven (dat wil zeggen het eerste teken in een hoofdletter te plaatsen), en tenslotte, hem louter naar hoofdletters om te zetten.
+
+Bovendien wordt voor historische redenen en voor redenen van achterwaartse compatibiliteit geprobeerd de naam te behouden zoals hij is zonder omzetting van de niet-alfanumerieke tekens, waarna achtereenvolgens wordt geprobeerd de resulterende naam om te zetten in kleine letters, hem te behouden zoals hij is, hem om te zetten naar kleine letters en hem daarna een beginhoofdletter te geven, en tenslotte, hem louter naar hoofdletters om te zetten. En tenslotte zal geprobeerd worden om in de naam spaties om te zetten naar liggende streepjes (‘B<->’), waarna achtereenvolgens wordt geprobeerd de resulterende naam om te zetten in kleine letters, hem te behouden zoals hij is, hem om te zetten naar kleine letters en hem daarna een beginhoofdletter te geven, en tenslotte, hem louter naar hoofdletters om te zetten.
+
+Maar dit modulaire zoeken naar achterwaarts compatibiliteit zal verwijderd worden tijdens de releasecyclus van dpkg 1.22.x.
 
 =head1 VELDEN
 
@@ -55,15 +48,11 @@ De waarde van dit veld bepaalt de URL van de leverancier.
 
 =item B<Bugs:> I<bug-URL>
 
-De waarde van dit veld bepaalt het type en het adres van het
-bugopvolgingssysteem dat door deze leverancier gebruikt wordt. Het kan gaan
-om een URL van het type mailto of een URL van het type debbugs
-(bijv. debbugs://bugs.debian.org/).
+De waarde van dit veld bepaalt het type en het adres van het bugopvolgingssysteem dat door deze leverancier gebruikt wordt. Het kan gaan om een URL van het type mailto of een URL van het type debbugs (bijv. debbugs://bugs.debian.org/).
 
 =item B<Parent:> I<leveranciersnaam>
 
-De waarde van dit veld bepaalt de naam van de leverancier waarvan deze
-leverancier een derivaat maakt.
+De waarde van dit veld bepaalt de naam van de leverancier waarvan deze leverancier een derivaat maakt.
 
 =back
 

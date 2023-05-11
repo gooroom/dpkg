@@ -22,25 +22,13 @@ B<DEBIAN/conffiles>
 
 =head1 BESCHRIJVING
 
-Een pakket declareert zijn lijst van conffiles (configuratiebestanden die
-geregistreerd staan als bestanden die door de gebruiker aangepast kunnen
-worden) door een bestand I<conffiles> op te nemen in zijn controle-archief
-(nl. I<DEBIAN/conffiles> bij het creëren van het pakket).
+Een pakket declareert zijn lijst van conffiles (configuratiebestanden die geregistreerd staan als bestanden die door de gebruiker aangepast kunnen worden) door een bestand I<conffiles> op te nemen in zijn controle-archief (nl. I<DEBIAN/conffiles> bij het creëren van het pakket).
 
-Dit bestand bevat een lijst met bestanden, één per regel, met facultatief
-aan het begin een vlag gescheiden door witruimte. De configuratiebestanden
-moeten worden vermeld als absolute padnamen. Achterliggende witruimte wordt
-weggedaan, maar lege regels of regels met alleen witruimte worden niet
-geaccepteerd.
+Dit bestand bevat een lijst met bestanden, één per regel, met facultatief aan het begin een vlag gescheiden door witruimte. De configuratiebestanden moeten worden vermeld als absolute padnamen. Achterliggende witruimte wordt weggedaan, maar lege regels of regels met alleen witruimte worden niet geaccepteerd.
 
-Bestanden zonder een vlag moeten in het binair pakket aanwezig zijn, anders
-zal L<dpkg(1)> deze negeren.
+Bestanden zonder een vlag moeten in het binair pakket aanwezig zijn, anders zal L<dpkg(1)> deze negeren.
 
-Er wordt momenteel slechts één vlag ondersteund, B<remove-on-upgrade>, om te
-markeren dat een configuratiebestand bij de volgende upgrade verwijderd moet
-worden (sinds dpkg 1.20.6). Deze bestanden mogen niet aanwezig zijn in het
-binaire pakket, omdat zowel L<dpkg(1)> als L<dpkg-deb(1)> niet zullen
-aanvaarden om dergelijke binaire pakketten te bouwen of te verwerken.
+Er wordt momenteel slechts één vlag ondersteund, B<remove-on-upgrade>, om te markeren dat een configuratiebestand bij de volgende upgrade verwijderd moet worden (sinds dpkg 1.20.6). Deze bestanden mogen niet aanwezig zijn in het binaire pakket, omdat zowel L<dpkg(1)> als L<dpkg-deb(1)> niet zullen aanvaarden om dergelijke binaire pakketten te bouwen of te verwerken.
 
 =head1 VOORBEELD
 

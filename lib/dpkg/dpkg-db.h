@@ -346,15 +346,15 @@ enum parsedbflags {
   /** Perform laxer version parsing. */
   pdb_lax_version_parser	= DPKG_BIT(6),
   /** Perform laxer control stanza parsing. */
-  pdb_lax_stanza_parser		= DPKG_BIT(9),
+  pdb_lax_stanza_parser		= DPKG_BIT(7),
   /** Perform laxer parsing, used to transition to stricter parsing. */
   pdb_lax_parser		= pdb_lax_stanza_parser | pdb_lax_version_parser,
   /** Close file descriptor on context destruction. */
-  pdb_close_fd			= DPKG_BIT(7),
+  pdb_close_fd			= DPKG_BIT(8),
   /** Interpret filename ‘-’ as stdin. */
-  pdb_dash_is_stdin		= DPKG_BIT(8),
+  pdb_dash_is_stdin		= DPKG_BIT(9),
   /** Allow empty/missing files. */
-  pdb_allow_empty		= DPKG_BIT(9),
+  pdb_allow_empty		= DPKG_BIT(10),
 
   /* Standard operations. */
 
@@ -393,7 +393,11 @@ extern const struct namevalue wantinfos[];
 
 #include <dpkg/error.h>
 
-enum versiondisplayepochwhen { vdew_never, vdew_nonambig, vdew_always };
+enum versiondisplayepochwhen {
+	vdew_never,
+	vdew_nonambig,
+	vdew_always,
+};
 void varbufversion(struct varbuf *, const struct dpkg_version *,
                    enum versiondisplayepochwhen);
 int parseversion(struct dpkg_version *version, const char *,
@@ -408,6 +412,8 @@ enum pkg_name_arch_when {
   pnaw_never,
   /** Display arch only when it's non-ambiguous. */
   pnaw_nonambig,
+  /** Display arch only when it's a Multi-Arch same package. */
+  pnaw_same,
   /** Display arch only when it's a foreign one. */
   pnaw_foreign,
   /** Always display arch. */
@@ -449,8 +455,9 @@ const char *pkg_priority_name(const struct pkginfo *pkg);
 
 /*** from dump.c ***/
 
-void writerecord(FILE*, const char*,
-                 const struct pkginfo *, const struct pkgbin *);
+void
+write_stanza(FILE *, const char *,
+             const struct pkginfo *, const struct pkgbin *);
 
 enum writedb_flags {
   /** Dump ‘available’ in-core structures, not ‘status’. */
@@ -459,13 +466,15 @@ enum writedb_flags {
   wdb_must_sync			= DPKG_BIT(1),
 };
 
-void writedb_records(FILE *fp, const char *filename, enum writedb_flags flags);
+void
+writedb_stanzas(FILE *fp, const char *filename, enum writedb_flags flags);
 void writedb(const char *filename, enum writedb_flags flags);
 
 /* Note: The varbufs must have been initialized and will not be
  * NUL-terminated. */
-void varbufrecord(struct varbuf *, const struct pkginfo *,
-                  const struct pkgbin *);
+void
+varbuf_stanza(struct varbuf *, const struct pkginfo *,
+              const struct pkgbin *);
 void varbufdependency(struct varbuf *vb, struct dependency *dep);
 
 /*** from depcon.c ***/

@@ -22,10 +22,7 @@ B<DEBIAN/postinst>
 
 =head1 DESCRIPTION
 
-Un paquet peut réaliser plusieurs actions post-installation à l'aide de
-scripts du responsable, en incluant un fichier I<postinst> exécutable dans
-son archive de contrôle (c'est-à-dire I<DEBIAN/postinst> au moment de la
-création du paquet).
+Un paquet peut réaliser plusieurs actions post-installation à l'aide de scripts du responsable, en incluant un fichier I<postinst> exécutable dans son archive de contrôle (c'est-à-dire I<DEBIAN/postinst> au moment de la création du paquet).
 
 Le script peut être appelé de diverses S<manières :>
 
@@ -35,30 +32,29 @@ Le script peut être appelé de diverses S<manières :>
 
 Après l'installation paquet
 
-=item I<postinst> B<triggered> "I<trigger-name...>"
+=item I<postinst> B<triggered> "I<nom-action-différée...>"
 
-After the package was triggered.  The list of space-separated
-I<trigger-name>s is passed as the second argument.
+Après le déclenchement des actions différées du paquet. La liste des I<noms-action-différée> séparés par des espaces est transmise comme second argument.
 
 =item I<ancien-postinst> B<abort-upgrade> I<nouvelle-version>
 
-Si I<prerm> échoue durant la mise à niveau ou échoue après l'échec de la
-mise à niveau.
+Si I<prerm> échoue durant B<upgrade> ou échoue après B<failed-upgrade>.
 
 =item I<ancien-postinst> B<abort-remove>
 
-Si I<prerm> échoue durant la suppression.
+Si I<prerm> échoue durant B<remove>.
 
-=item I<postinst> B<abort-deconfigure in-favour> I<nouveau-paquet
-nouvelle-version>
+=item I<postinst> B<abort-deconfigure> B<in-favour> I<nouveau-paquet>
+I<nouvelle-version>
 
-=item S< >[ B<removing> I<old-package old-version> ]
+=item S< >[ B<removing> I<ancien-paquet> I<ancienne-version> ]
 
-Si I<prerm> échoue durant la déconfiguration d'un paquet.
+Si I<prerm> échoue durant B<deconfigure in-favour> d'un paquet.
 
-=item I<postinst> B<abort-remove in-favour> I<nouveau-paquet nouvelle-version>
+=item I<postinst> B<abort-remove> B<in-favour> I<nouveau-paquet>
+I<nouvelle-version>
 
-Si I<prerm> échoue durant un remplacement à cause d'un conflit.
+Si I<prerm> échoue durant B<remove in-favour> pour un remplacement à cause d'un conflit.
 
 =back
 

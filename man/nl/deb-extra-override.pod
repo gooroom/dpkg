@@ -22,14 +22,9 @@ B<override>
 
 =head1 BESCHRIJVING
 
-Terwijl de meeste informatie over een binair/broncode-pakket kan gevonden
-worden in het bestand control/.dsc, kan elk element ervan vervangen worden
-wanneer het geëxporteerd wordt naar Packages/Sources-bestanden. Het extra
-override-bestand bevat die vervangingen.
+Terwijl de meeste informatie over een binair/broncode-pakket kan gevonden worden in het bestand control/.dsc, kan elk element ervan vervangen worden wanneer het geëxporteerd wordt naar Packages/Sources-bestanden. Het extra override-bestand bevat die vervangingen.
 
-Het extra override-bestand heeft een eenvoudige indeling waarbij de
-elementen door witruimte van elkaar gescheiden worden. Commentaar is
-toegestaan (aangegeven met een B<#>).
+Het extra override-bestand heeft een eenvoudige indeling waarbij de elementen door witruimte van elkaar gescheiden worden. Commentaar is toegestaan (aangegeven met een B<#>).
 
 =over 
 
@@ -41,13 +36,9 @@ I<pakket> is de naam van het binaire/broncode-pakket.
 
 I<veldnaam> is de naam van het veld dat overschreven/gemodificeerd wordt.
 
-I<waarde> is de waarde die in het veld geplaatst moet worden. Ze kan
-witruimte bevatten aangezien de regel bij het ontleden ervan in niet meer
-dan 3 kolommen opgesplitst wordt.
+I<waarde> is de waarde die in het veld geplaatst moet worden. Ze kan witruimte bevatten aangezien de regel bij het ontleden ervan in niet meer dan 3 kolommen opgesplitst wordt.
 
-De extra override-bestanden die gebruikt worden om de officiële
-Packages-lijsten te maken kunnen op elke Debian spiegelserver gevonden
-worden in de map I<indices>.
+De extra override-bestanden die gebruikt worden om de officiële Packages-lijsten te maken kunnen op elke Debian spiegelserver gevonden worden in de map I<indices>.
 
 =head1 ZIE OOK
 

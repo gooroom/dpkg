@@ -22,10 +22,7 @@ B<DEBIAN/preinst>
 
 =head1 BESCHRIJVING
 
-Een pakket kan verschillende pre-installatieacties uitvoeren via scripts van
-de pakketonderhouder door in zijn control-archief een uitvoerbaar bestand
-I<preinst> op te nemen (d.w.z. I<DEBIAN/preinst> bij het creëren van het
-pakket).
+Een pakket kan verschillende pre-installatieacties uitvoeren via scripts van de pakketonderhouder door in zijn control-archief een uitvoerbaar bestand I<preinst> op te nemen (d.w.z. I<DEBIAN/preinst> bij het creëren van het pakket).
 
 Het script kan op de volgende manieren geactiveerd worden:
 
@@ -35,18 +32,21 @@ Het script kan op de volgende manieren geactiveerd worden:
 
 Vooraleer het pakket geïnstalleerd wordt.
 
-=item I<new-preinst> B<install> I<oude-versie nieuwe-versie>
+=item I<new-preinst> B<install> I<oude-versie> I<nieuwe-versie>
 
 Vooraleer een verwijderd pakket opgewaardeerd wordt.
 
-=item I<new-preinst> B<upgrade> I<oude-versie nieuwe-versie>
+De optie I<nieuwe-versie> wordt pas meegegeven sinds dpkg 1.18.5.
+
+=item I<new-preinst> B<upgrade> I<oude-versie> I<nieuwe-versie>
 
 Vooraleer het pakket opgewaardeerd wordt.
 
+De optie I<nieuwe-versie> wordt pas meegegeven sinds dpkg 1.18.5.
+
 =item I<old-preinst> B<abort-upgrade> I<nieuwe-versie>
 
-Indien I<postrm> mislukt tijdens het opwaarderen of mislukt bij een mislukte
-opwaardering.
+Indien I<postrm> mislukt tijdens het opwaarderen of mislukt bij een mislukte opwaardering.
 
 =back
 

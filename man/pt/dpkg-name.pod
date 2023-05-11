@@ -22,14 +22,7 @@ B<dpkg-name> [I<option>...] [B<-->] I<file>...
 
 =head1 DESCRIÇÃO
 
-Este manual documenta o programa B<dpkg-name> o qual fornece uma maneira
-fácil de renomear pacotes B<Debian> nos seus nomes de pacote
-completos. Todos os nomes de pacote completos consistem de
-I<pacote>B<_>I<versão>B<_>I<arquitectura>B<.>I<tipo-de-pacote> como
-especificado no ficheiro de controle do pacote. A parte I<versão> do nome do
-ficheiro consiste da informação de versão do autor seguida opcionalmente por
-um hífen e a informação de revisão. A parte I<tipo-de-pacote> vem desse
-campo se presente ou regressa a B<deb>.
+Este manual documenta o programa B<dpkg-name> o qual fornece uma maneira fácil de renomear pacotes B<Debian> nos seus nomes de pacote completos. Todos os nomes de pacote completos consistem de I<pacote>B<_>I<versão>B<_>I<arquitectura>B<.>I<tipo-de-pacote> como especificado no ficheiro de controle do pacote. A parte I<versão> do nome do ficheiro consiste da informação de versão do autor seguida opcionalmente por um hífen e a informação de revisão. A parte I<tipo-de-pacote> vem desse campo se presente ou regressa a B<deb>.
 
 =head1 OPÇÕES
 
@@ -45,27 +38,17 @@ Cria um link simbólico, em vez de mover.
 
 =item B<-o>, B<--overwrite>
 
-Os ficheiros existentes serão sobrescritos se tiverem o mesmo nome que o
-nome de ficheiro de destino.
+Os ficheiros existentes serão sobrescritos se tiverem o mesmo nome que o nome de ficheiro de destino.
 
 =item B<-s>, B<--subdir> [I<dir>]
 
-Os ficheiros serão movidos para um sub-directório. Se o directório dado como
-argumento existir, os ficheiros serão movidos para esse directório, caso
-contrário, o nome do directório alvo é extraído do campo section na parte de
-controlo do pacote. O directório alvo irá ser
-«unstable/binary-I<architecture>/I<section>».  Se a section não for
-encontrada no controlo, então é assumido B<no-section>, e neste caso, assim
-como para secções B<non-free> e B<contrib> o directório alvo é
-«I<section>/binary-I<architecture>».  O campo section não é necessário,
-assim muitos pacotes irão encontrar o seu caminho até à área B<no-section>.
+Os ficheiros serão movidos para um sub-directório. Se o directório dado como argumento existir, os ficheiros serão movidos para esse directório, caso contrário, o nome do directório alvo é extraído do campo section na parte de controlo do pacote. O directório alvo irá ser «unstable/binary-I<architecture>/I<section>».  Se a section não for encontrada no controlo, então é assumido B<no-section>, e neste caso, assim como para secções B<non-free> e B<contrib> o directório alvo é «I<section>/binary-I<architecture>».  O campo section não é necessário, assim muitos pacotes irão encontrar o seu caminho até à área B<no-section>.
 
 B<Warning:> I<Use esta opção com cuidado, ela faz porcaria.>
 
 =item B<-c>, B<--create-dir>
 
-Esta opção pode ser usada em conjunto com a opção B<-s>. Se um directório
-meta não for encontrado será criado automaticamente.
+Esta opção pode ser usada em conjunto com a opção B<-s>. Se um directório meta não for encontrado será criado automaticamente.
 
 B<Aviso> I<Use esta opção com cuidado.>
 
@@ -85,24 +68,17 @@ Mostra a versão e termina.
 
 =item B<DPKG_COLORS>
 
-Define o modo de cor (desde dpkg 1.18.5). Os valores actualmente aceites
-são: B<auto> (predefinido), B<always> e B<never>.
+Define o modo de cor (desde dpkg 1.18.5). Os valores actualmente aceites são: B<auto> (predefinido), B<always> e B<never>.
 
 =item B<DPKG_NLS>
 
-Se definida, será usada para decidir se deve activar o Suporte a Linguagem
-Nativa. Também como conhecido como suporte de internacionalização (ou i18n)
-(desde dpkg 1.19.0). Os valores aceites são B<0> e B<1> (predefinição).
+Se definida, será usada para decidir se deve activar o Suporte a Linguagem Nativa. Também como conhecido como suporte de internacionalização (ou i18n) (desde dpkg 1.19.0). Os valores aceites são B<0> e B<1> (predefinição).
 
 =back
 
 =head1 BUGS
 
-Alguns pacotes não seguem a estrutura de nome
-I<pacote>B<_>I<versão>B<_>I<arquitectura>B<.deb>. Os pacotes renomeados pelo
-B<dpkg-name> irá seguir estas estrutura. Geralmente isto não terá impacto
-sobre como os pacotes serão instalados pelos B<dselect>(1)/B<dpkg>(1), mas
-outras ferramentas de instalação podem depender desta estrutura de nomes.
+Alguns pacotes não seguem a estrutura de nome I<pacote>B<_>I<versão>B<_>I<arquitectura>B<.deb>. Os pacotes renomeados pelo B<dpkg-name> irá seguir estas estrutura. Geralmente isto não terá impacto sobre como os pacotes serão instalados pelos B<dselect>(1)/B<dpkg>(1), mas outras ferramentas de instalação podem depender desta estrutura de nomes.
 
 =head1 EXEMPLOS
 
@@ -110,20 +86,15 @@ outras ferramentas de instalação podem depender desta estrutura de nomes.
 
 =item B<dpkg-name bar-foo.deb>
 
-O ficheiro B<bar-foo.deb> ir+a ser renomeado para bar-foo_1.0-2_i386.deb ou
-algo semelhante (dependendo de que informação estiver na parte de controle
-de B<bar-foo.deb>).
+O ficheiro B<bar-foo.deb> ir+a ser renomeado para bar-foo_1.0-2_i386.deb ou algo semelhante (dependendo de que informação estiver na parte de controle de B<bar-foo.deb>).
 
 =item B<find /root/debian/ -name '*.deb' | xargs -n 1 dpkg-name -a>
 
-Todos os ficheiros com a extensão B<deb> no directório /root/debian e nos
-seus sub-directórios serão renomeados pelo B<dpkg-name> se tal for requerido
-para nomes sem nenhuma informação de arquitectura.
+Todos os ficheiros com a extensão B<deb> no directório /root/debian e nos seus sub-directórios serão renomeados pelo B<dpkg-name> se tal for requerido para nomes sem nenhuma informação de arquitectura.
 
 =item B<find -name '*.deb' | xargs -n 1 dpkg-name -a -o -s -c>
 
-B<Não faça isto.> O seu arquivo será baralhado completamente porque muitos
-pacotes não vêm com informação de secção. B<Não faça isto.>
+B<Não faça isto.> O seu arquivo será baralhado completamente porque muitos pacotes não vêm com informação de secção. B<Não faça isto.>
 
 =item B<dpkg-deb --build debian-tmp && dpkg-name -o -s .. debian-tmp.deb>
 
@@ -133,8 +104,7 @@ Isto pode ser usado quando se compila novos pacotes.
 
 =head1 VEJA TAMBÉM
 
-B<deb>(5), B<deb-control>(5), B<dpkg>(1), B<dpkg-deb>(1), B<find>(1),
-B<xargs>(1).
+B<deb>(5), B<deb-control>(5), B<dpkg>(1), B<dpkg-deb>(1), B<find>(1), B<xargs>(1).
 
 
 =head1 TRADUÇÃO

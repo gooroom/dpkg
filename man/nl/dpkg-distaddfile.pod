@@ -22,16 +22,11 @@ B<dpkg-distaddfile> [I<optie>...] I<bestandsnaam sectie prioriteit>
 
 =head1 BESCHRIJVING
 
-B<dpkg-distaddfile> voegt aan B<debian/files> een item toe voor het vermelde
-bestand.
+B<dpkg-distaddfile> voegt aan B<debian/files> een item toe voor het vermelde bestand.
 
-Het verwacht drie niet-optie argumenten, de bestandsnaam, de sectie en de
-prioriteit voor het bestand B<.changes>.
+Het verwacht drie niet-optie argumenten, de bestandsnaam, de sectie en de prioriteit voor het bestand B<.changes>.
 
-De bestandsnaam moet opgegeven worden relatief ten opzichte van de map waar
-B<dpkg-genchanges> de bestanden verwacht te vinden, gewoonlijk B<..>, eerder
-dan als een padnaam relatief ten opzichte van de huidige map op het ogenblik
-dat B<dpkg-distaddfile> uitgevoerd wordt.
+De bestandsnaam moet opgegeven worden relatief ten opzichte van de map waar B<dpkg-genchanges> de bestanden verwacht te vinden, gewoonlijk B<..>, eerder dan als een padnaam relatief ten opzichte van de huidige map op het ogenblik dat B<dpkg-distaddfile> uitgevoerd wordt.
 
 =head1 OPTIES
 
@@ -39,8 +34,7 @@ dat B<dpkg-distaddfile> uitgevoerd wordt.
 
 =item B<-f>I<bestand-met-bestandenlijst>
 
-De lijst van bestanden die geüpload moeten worden hier lezen of schrijven,
-eerder dan B<debian/files> te gebruiken.
+De lijst van bestanden die geüpload moeten worden hier lezen of schrijven, eerder dan B<debian/files> te gebruiken.
 
 =item B<-?>, B<--help>
 
@@ -58,15 +52,11 @@ De versie tonen en afsluiten.
 
 =item B<DPKG_COLORS>
 
-Stelt de kleurmodus in (sinds dpkg 1.18.5). Waarden die momenteel gebruikt
-mogen worden zijn: B<auto> (standaard), B<always> en B<never>.
+Stelt de kleurmodus in (sinds dpkg 1.18.5). Waarden die momenteel gebruikt mogen worden zijn: B<auto> (standaard), B<always> en B<never>.
 
 =item B<DPKG_NLS>
 
-Indien dit ingesteld is, zal het gebruikt worden om te beslissen over het
-activeren van moedertaalondersteuning, ook gekend als
-internationaliseringsondersteuning (of i18n) (sinds dpkg 1.19.0). Geldige
-waarden zijn: B<0> and B<1> (standaard).
+Indien dit ingesteld is, zal het gebruikt worden om te beslissen over het activeren van moedertaalondersteuning, ook gekend als internationaliseringsondersteuning (of i18n) (sinds dpkg 1.19.0). Geldige waarden zijn: B<0> and B<1> (standaard).
 
 =back
 
@@ -76,9 +66,7 @@ waarden zijn: B<0> and B<1> (standaard).
 
 =item B<debian/files>
 
-De lijst van aangemaakte bestanden die deel uitmaken van de upload die
-voorbereid wordt. B<dpkg-distaddfile> kan gebruikt worden om bijkomende
-bestanden toe te voegen.
+De lijst van aangemaakte bestanden die deel uitmaken van de upload die voorbereid wordt. B<dpkg-distaddfile> kan gebruikt worden om bijkomende bestanden toe te voegen.
 
 =back
 

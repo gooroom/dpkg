@@ -22,15 +22,7 @@ B<dpkg-name> [I<option>...] [B<-->] I<fichier>...
 
 =head1 DESCRIPTION
 
-Cette page de manuel documente le programme B<dpkg-name> qui fournit une
-façon simple de redonner aux paquets B<Debian> leur nom complet. Ce nom
-consiste en une chaîne
-I<paquet>B<_>I<version>B<_>I<architecture>B<.>I<type-de-paquet> telle
-qu'elle est indiquée dans le fichier S<« control »> du paquet. La partie
-I<version> du nom est composée d'informations sur la version originelle qui
-peuvent ou non être suivies d'un trait d'union et d'informations sur la
-révision. La partie I<type-de-paquet> provient de ce champ s'il existe. La
-valeur par défaut est B<deb>.
+Cette page de manuel documente le programme B<dpkg-name> qui fournit une façon simple de redonner aux paquets B<Debian> leur nom complet. Ce nom consiste en une chaîne I<paquet>B<_>I<version>B<_>I<architecture>B<.>I<type-de-paquet> telle qu'elle est indiquée dans le fichier S<« control »> du paquet. La partie I<version> du nom est composée d'informations sur la version originelle qui peuvent ou non être suivies d'un trait d'union et d'informations sur la révision. La partie I<type-de-paquet> provient de ce champ s'il existe. La valeur par défaut est B<deb>.
 
 =head1 OPTIONS
 
@@ -46,37 +38,27 @@ Fait un lien symbolique plutôt qu'une transposition.
 
 =item B<-o>, B<--overwrite>
 
-Remplace des fichiers existants s'ils ont le même nom que le fichier de
-destination.
+Remplace des fichiers existants s'ils ont le même nom que le fichier de destination.
 
 =item B<-s>, B<--subdir> [I<rep>]
 
-Files will be moved into a subdirectory. If the directory given as argument
-exists the files will be moved into that directory otherwise the name of the
-target directory is extracted from the section field in the control part of
-the package. The target directory will be
-«unstable/binary-I<architecture>/I<section>».  If the section is not found
-in the control, then B<no-section> is assumed, and in this case, as well as
-for sections B<non-free> and B<contrib> the target directory is
-«I<section>/binary-I<architecture>».  The section field is not required so a
-lot of packages will find their way to the B<no-section> area.
+Met les fichiers dans un sous-répertoire. Si le répertoire donné en paramètre existe, les fichiers sont déplacés dans ce répertoire ; sinon le répertoire cible, extrait du champ S<« section »> que contient la partie contrôle du paquet, sera S<« unstable/binary-I<architecture>/I<section> ».> Quand aucune information sur la section n'est trouvée dans le fichier S<« control »,> la section est supposée être B<no-section>. Dans ce cas, ainsi que si la section est B<non-free> ou B<contrib>, le répertoire cible est S<« I<section>/binary-I<architecture> ».> Le champ S<« section »> est facultatif ; aussi beaucoup de paquets sont dans la zone S<« no-section ».>
 
-B<Warning:> I<Use this option with care, it is messy.>
+S<B<Attention> :> I<Utilisez cette option avec S<précaution :> elle est compliquée.>
 
 =item B<-c>, B<--create-dir>
 
-This option can used together with the B<-s> option. If a target directory
-isn't found it will be created automatically.
+On peut utiliser cette option avec l'option B<-s>. Quand un répertoire cible n'est pas trouvé, il est créé automatiquement.
 
-B<Warning:> I<Use this option with care.>
+S<B<Attention> :> I<Utilisez cette option avec précaution.>
 
 =item B<-?>, B<--help>
 
-Affiche un message d'aide puis quitte.
+Afficher un message d'aide puis quitter.
 
 =item B<-v>, B<--version>
 
-Affiche le numéro de version puis quitte.
+Afficher le numéro de version puis quitter.
 
 =back
 
@@ -86,59 +68,43 @@ Affiche le numéro de version puis quitte.
 
 =item B<DPKG_COLORS>
 
-Définit le mode de couleur (depuis S<dpkg 1.18.5).> Les valeurs actuellement
-acceptées sont B<auto> (par défaut), B<always> et B<never>.
+Définit le mode de couleur (depuis S<dpkg 1.18.5).> Les valeurs actuellement acceptées sont B<auto> (par défaut), B<always> et B<never>.
 
 =item B<DPKG_NLS>
 
-Si cette variable est définie, elle sera utilisée pour décider l'activation
-de la prise en charge des langues (NLS S<– Native> Language Support), connu
-aussi comme la gestion de l'internationalisation (ou i18n) (depuis
-S<dpkg 1.19.0).> Les valeurs permises S<sont :> B<0> et B<1> (par défaut).
+Si cette variable est définie, elle sera utilisée pour décider l'activation de la prise en charge des langues (NLS – Native Language Support), connu aussi comme la gestion de l'internationalisation (ou i18n) (depuis S<dpkg 1.19.0).> Les valeurs permises S<sont :> B<0> et B<1> (par défaut).
 
 =back
 
 =head1 BOGUES
 
-Certains paquets ne respectent pas l'organisation
-I<paquet>B<_>I<version>B<_>I<architecture>B<.deb>. Les paquets traités par
-B<dpkg-name> la respectent. Cela n'a pas de conséquence sur la façon dont
-B<dselect>(1) ou B<dpkg>(1) installent les paquets, mais il se peut que
-d'autres systèmes d'installation aient besoin de cette organisation.
+Certains paquets ne respectent pas l'organisation I<paquet>B<_>I<version>B<_>I<architecture>B<.deb>. Les paquets traités par B<dpkg-name> la respectent. Cela n'a pas de conséquence sur la façon dont B<dselect>(1) ou B<dpkg>(1) installent les paquets, mais il se peut que d'autres systèmes d'installation aient besoin de cette organisation.
 
 =head1 EXEMPLES
 
 =over 
 
-=item B<dpkg-name bar-foo.deb>
+=item B<dpkg-name bar-toto.deb>
 
-Le nom du fichier I<bar-foo.deb> devient I<bar-foo_1.0-2_i386.deb> ou
-quelque chose de similaire suivant les renseignements que contient la partie
-de contrôle de I<bar-foo.deb>.
+Le nom du fichier I<bar-toto.deb> devient I<bar-toto_1.0-2_i386.deb> ou quelque chose de similaire suivant les renseignements que contient la partie de contrôle de I<bar-toto.deb>.
 
 =item B<find /root/debian/ -name '*.deb' | xargs -n 1 dpkg-name -a>
 
-Cette commande B<dpkg-name> redonne leur nom complet à tous les fichiers qui
-se trouvent dans le répertoire /root/debian et ses sous-répertoires et qui
-possèdent une extension B<deb>, mais supprime l'information sur
-l'architecture.
+Cette commande B<dpkg-name> redonne leur nom complet à tous les fichiers qui se trouvent dans le répertoire /root/debian et ses sous-répertoires et qui possèdent une extension B<deb>, mais supprime l'information sur l'architecture.
 
 =item B<find -name '*.deb' | xargs -n 1 dpkg-name -a -o -s -c>
 
-B<Ne faites pas S<ça !>> L'archive sera complètement gâchée par des paquets qui
-ne possèdent pas d'informations sur la section. B<Ne faites pas S<ça !>>
+B<Ne faites pas ça !> L'archive sera complètement gâchée par des paquets qui ne possèdent pas d'informations sur la section. B<Ne faites pas ça !>
 
 =item B<dpkg-deb --build debian-tmp && dpkg-name -o -s .. debian-tmp.deb>
 
-On peut se servir de cette commande lors de la construction d'un nouveau
-paquet.
+On peut se servir de cette commande lors de la construction d'un nouveau paquet.
 
 =back
 
 =head1 VOIR AUSSI
 
-B<deb>(5), B<deb-control>(5), B<dpkg>(1), B<dpkg-deb>(1), B<find>(1),
-B<xargs>(1).
+B<deb>(5), B<deb-control>(5), B<dpkg>(1), B<dpkg-deb>(1), B<find>(1), B<xargs>(1).
 
 
 =head1 TRADUCTION

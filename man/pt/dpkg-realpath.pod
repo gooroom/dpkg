@@ -22,17 +22,9 @@ B<dpkg-realpath> [I<option>...] I<pathname>
 
 =head1 DESCRIÇÃO
 
-B<dpkg-realpath> é uma ferramenta (desde dpkg 1.20.1) para resolver um nome
-de caminho, que toma o directório raiz do L<dpkg(1)> em conta, seja
-implicitamente a partir da variável de ambiente B<DPKG_ROOT> ou a partir das
-opções B<--root> ou B<--instdir> da linha de comandos, e retorna um
-I<pathname> absoluto relativo ao directório raiz. O directório raiz não pode
-ser prefixado ao I<pathname> para ser resolvido.
+B<dpkg-realpath> é uma ferramenta (desde dpkg 1.20.1) para resolver um nome de caminho, que toma o directório raiz do L<dpkg(1)> em conta, seja implicitamente a partir da variável de ambiente B<DPKG_ROOT> ou a partir das opções B<--root> ou B<--instdir> da linha de comandos, e retorna um I<pathname> absoluto relativo ao directório raiz. O directório raiz não pode ser prefixado ao I<pathname> para ser resolvido.
 
-Isto destina-se a ser usado por outros ajudantes do B<dpkg>, ou por scripts
-de maintainer em vez de se usar L<realpath(1)> ou L<readlink(1)> para
-canonizar nomes de caminhos, pois estes últimos comandos não suportam
-canonização relativa a uma raiz diferente de F</>.
+Isto destina-se a ser usado por outros ajudantes do B<dpkg>, ou por scripts de maintainer em vez de se usar L<realpath(1)> ou L<readlink(1)> para canonizar nomes de caminhos, pois estes últimos comandos não suportam canonização relativa a uma raiz diferente de F</>.
 
 =head1 OPÇÕES
 
@@ -40,15 +32,13 @@ canonização relativa a uma raiz diferente de F</>.
 
 =item B<-z>, B<--zero>
 
-Usa um byte NUL para terminar as linhas de resultados em vez do caractere de
-nova linha (desde dpkg 1.20.6).
+Usa um byte NUL para terminar as linhas de resultados em vez do caractere de nova linha (desde dpkg 1.20.6).
 
 =item B<--instdir> I<directory>
 
 =item B<--root> I<directory>
 
-Define o directório raiz para I<directory>, o qual é o directório base com
-que os nomes de caminho são canonizados. A predefinição é «B</>».
+Define o directório raiz para I<directory>, o qual é o directório base com que os nomes de caminho são canonizados. A predefinição é «B</>» se B<DPKG_ROOT> não estiver definido.
 
 =item B<-?>, B<--help>
 
@@ -66,13 +56,11 @@ Mostra a versão e termina.
 
 =item B<DPKG_ROOT>
 
-Se definido e as opções B<--instdir> ou B<--root> não foram especificadas,
-será usado como o directório raiz do sistema de ficheiros.
+Se definido e as opções B<--instdir> ou B<--root> não foram especificadas, será usado como o directório raiz do sistema de ficheiros.
 
 =item B<DPKG_COLORS>
 
-Define o modo de cor. Os valores actualmente aceites são: B<auto>
-(predefinido), B<always> e B<never>.
+Define o modo de cor. Os valores actualmente aceites são: B<auto> (predefinido), B<always> e B<never>.
 
 =back
 

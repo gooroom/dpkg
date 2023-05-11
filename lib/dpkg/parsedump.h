@@ -27,6 +27,8 @@
 
 #include <dpkg/error.h>
 
+DPKG_BEGIN_DECLS
+
 /**
  * @defgroup parsedump In-core package database parsing and reading
  * @ingroup dpkg-public
@@ -101,9 +103,15 @@ typedef void freadfunction(struct pkginfo *pkg, struct pkgbin *pkgbin,
 freadfunction f_name;
 freadfunction f_charfield;
 freadfunction f_priority;
+freadfunction f_obs_class;
 freadfunction f_section;
 freadfunction f_status;
-freadfunction f_boolean, f_dependency, f_conffiles, f_version, f_revision;
+freadfunction f_boolean;
+freadfunction f_dependency;
+freadfunction f_conffiles;
+freadfunction f_version;
+freadfunction f_obs_revision;
+freadfunction f_obs_dependency;
 freadfunction f_configversion;
 freadfunction f_multiarch;
 freadfunction f_architecture;
@@ -162,5 +170,7 @@ void parse_ensure_have_field(struct parsedb_state *ps,
 extern const struct fieldinfo fieldinfos[];
 
 /** @} */
+
+DPKG_END_DECLS
 
 #endif /* LIBDPKG_PARSEDUMP_H */

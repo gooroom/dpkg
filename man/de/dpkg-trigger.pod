@@ -24,16 +24,9 @@ B<dpkg-trigger> [I<Option> …] I<Befehl>
 
 =head1 BESCHREIBUNG
 
-B<dpkg-trigger> ist ein Werkzeug, um Trigger (deutsch: Auslöser) explizit zu
-aktivieren und das laufenden B<dpkg> auf deren Unterstützung hin zu
-überprüfen.
+B<dpkg-trigger> ist ein Werkzeug, um Trigger (deutsch: Auslöser) explizit zu aktivieren und das laufenden B<dpkg> auf deren Unterstützung hin zu überprüfen.
 
-Dies kann von Betreuerskripten in komplexen und durch Bedingungen
-beeinflusste Situationen verwandt werden, wo die Datei-Trigger oder die
-Steuerung von Dateidirektiven durch explizite B<activate>-Trigger nicht
-ausreichen. Es kann auch zum Testen und von Systemadministratoren verwandt
-werden (beachten Sie aber, dass Trigger nicht tatsächlich durch
-B<dpkg-trigger> ausgeführt werden).
+Dies kann von Betreuerskripten in komplexen und durch Bedingungen beeinflusste Situationen verwandt werden, wo die Datei-Trigger oder die Steuerung von Dateidirektiven durch explizite B<activate>-Trigger nicht ausreichen. Es kann auch zum Testen und von Systemadministratoren verwandt werden (beachten Sie aber, dass Trigger nicht tatsächlich durch B<dpkg-trigger> ausgeführt werden).
 
 Nicht erkannte Triggernamen-Syntaxen sind für B<dpkg-trigger> ein Fehler.
 
@@ -43,11 +36,7 @@ Nicht erkannte Triggernamen-Syntaxen sind für B<dpkg-trigger> ein Fehler.
 
 =item B<--check-supported>
 
-Überprüft, ob das laufende B<dpkg> Trigger unterstützt (normalerweise vom
-Postinst aufgerufen). Endet mit B<0>, falls ein Trigger-fähiger B<dpkg>
-ausgeführt wurde, oder mit B<1> und einer Fehlermeldung nach Stderr, falls
-nicht. Normalerweise ist es allerdings besser, einfach den gewünschten
-Trigger mit B<dpkg-trigger> zu aktivieren.
+Überprüft, ob das laufende B<dpkg> Trigger unterstützt (normalerweise vom Postinst aufgerufen). Endet mit B<0>, falls ein Trigger-fähiger B<dpkg> ausgeführt wurde, oder mit B<1> und einer Fehlermeldung nach Stderr, falls nicht. Normalerweise ist es allerdings besser, einfach den gewünschten Trigger mit B<dpkg-trigger> zu aktivieren.
 
 =item B<-?>, B<--help>
 
@@ -65,31 +54,23 @@ Gibt die Version aus und beendet das Programm.
 
 =item B<--admindir=>I<Verz>
 
-Ändert den Ablageort der B<dpkg>-Datenbank. Der Standardort ist
-I<%ADMINDIR%>.
+Ändert den Ablageort der B<dpkg>-Datenbank. Standardmäßig I<%ADMINDIR%>, falls B<DPKG_ADMINDIR> nicht gesetzt wurde.
+
+=item B<--root=>I<Verzeichnis>
+
+Setzt das Wurzelverzeichnis auf I<Verzeichnis>, wodurch das Administrationsverzeichnis auf „I<Verzeichnis>%ADMINDIR%“ gesetzt wird (seit Dpkg 1.21.0).
 
 =item B<--by-package=>I<Paket>
 
-Setzt den Trigger-Erwartenden außer Kraft (normalerweise wird dies von
-B<dpkg> durch die Umgebungsvariable B<DPKG_MAINTSCRIPT_PACKAGE> der
-Betreuerskripte gesetzt, wobei das Paket benannt wird, zu dem das Skript
-gehört und dies wird standardmäßig verwandt).
+Setzt den Trigger-Erwartenden außer Kraft (normalerweise wird dies von B<dpkg> durch die Umgebungsvariable B<DPKG_MAINTSCRIPT_PACKAGE> der Betreuerskripte gesetzt, wobei das Paket benannt wird, zu dem das Skript gehört und dies wird standardmäßig verwandt).
 
 =item B<--no-await>
 
-Diese Option arrangiert, dass das aufrufende Paket I<T> (falls zutreffend)
-nicht auf die Abarbeitung des Triggers warten muss, das bzw. die
-interessierte(n) Paket(e) I<I> werden nicht zu der Liste der auf Bearbeitung
-wartenden Trigger von I<T> hinzugefügt und der Status von I<T> bleibt
-unverändert. I<T> kann als installiert betrachtet werden, obwohl I<I> den
-Trigger noch nicht verarbeitet haben könnte.
+Diese Option arrangiert, dass das aufrufende Paket I<T> (falls zutreffend) nicht auf die Abarbeitung des Triggers warten muss, das bzw. die interessierte(n) Paket(e) I<I> werden nicht zu der Liste der auf Bearbeitung wartenden Trigger von I<T> hinzugefügt und der Status von I<T> bleibt unverändert. I<T> kann als installiert betrachtet werden, obwohl I<I> den Trigger noch nicht verarbeitet haben könnte.
 
 =item B<--await>
 
-Diese Option führt das Inverse von B<--no-await> aus (seit Dpkg
-1.17.21). Falls das interessierte Paket eine Direktive „noawait“ angegeben
-hat, dann wird diese Option nicht wirksam sein. Derzeit ist sie die
-Voreinstellung.
+Diese Option führt das Inverse von B<--no-await> aus (seit Dpkg 1.17.21). Falls das interessierte Paket eine Direktive „noawait“ angegeben hat, dann wird diese Option nicht wirksam sein. Derzeit ist sie die Voreinstellung.
 
 =item B<--no-act>
 
@@ -103,8 +84,7 @@ Testet nur, ändert nichts tatsächlich.
 
 =item B<0>
 
-Die angeforderte Aktion wurde erfolgreich ausgeführt. Oder ein Prüfausdruck
-oder eine Zusicherung (Assertion) lieferte Wahr zurück.
+Die angeforderte Aktion wurde erfolgreich ausgeführt. Oder ein Prüfausdruck oder eine Zusicherung (Assertion) lieferte Wahr zurück.
 
 =item B<1>
 
@@ -112,9 +92,7 @@ Ein Prüfausdruck oder eine Zusicherung lieferte Falsch zurück.
 
 =item B<2>
 
-Fataler oder nicht behebbarer Fehler aufgrund eines ungültigen
-Befehlszeilenaufrufs oder Interaktionen mit dem System, wie Zugriffe auf die
-Datenbank, Speicherzuweisungen usw.
+Fataler oder nicht behebbarer Fehler aufgrund eines ungültigen Befehlszeilenaufrufs oder Interaktionen mit dem System, wie Zugriffe auf die Datenbank, Speicherzuweisungen usw.
 
 =back
 
@@ -122,26 +100,32 @@ Datenbank, Speicherzuweisungen usw.
 
 =over 
 
+=item B<DPKG_ROOT>
+
+Falls gesetzt und die Option B<--root> nicht angegeben wurde, wird dies als Dateisystemwurzelverzeichnis verwandt (seit Dpkg 1.21.0).
+
 =item B<DPKG_ADMINDIR>
 
-Falls gesetzt und die Option B<--admindir> nicht verwandt wurde, wird dies
-als Datenverzeichnis von B<dpkg> verwandt.
+Falls gesetzt und die Option B<--admindir> nicht verwandt wurde, wird dies als Datenverzeichnis von B<dpkg> verwandt.
+
+=item B<DPKG_DEBUG>
+
+Setzt die Fehlersuchmaske (seit Dpkg 1.21.10) aus einem oktalen Wert. Die derzeit akzeptierten Schalter werden in der Option B<dpkg --debug> beschrieben, aber nicht alle dieser Schalter könnten Auswirkungen auf dieses Programm haben.
 
 =item B<DPKG_COLORS>
 
-Setzt den Farbmodus (seit Dpkg 1.18.5). Die derzeit unterstützten Werte
-sind: B<auto> (Vorgabe), B<always> und B<never>.
+Setzt den Farbmodus (seit Dpkg 1.18.5). Die derzeit unterstützten Werte sind: B<auto> (Vorgabe), B<always> und B<never>.
 
 =back
 
 =head1 SIEHE AUCH
 
-B<dpkg>(1), B<deb-triggers>(5), B<%PKGDOCDIR%/triggers.txt.gz>.
+B<dpkg>(1), B<deb-triggers>(5), B<%PKGDOCDIR%/spec/triggers.txt>.
 
 
 =head1 ÜBERSETZUNG
 
-Die deutsche Übersetzung wurde 2004, 2006-2020 von Helge Kreutzmann
+Die deutsche Übersetzung wurde 2004, 2006-2023 von Helge Kreutzmann
 <debian@helgefjell.de>, 2007 von Florian Rehnisch <eixman@gmx.de> und
 2008 von Sven Joachim <svenjoac@gmx.de>
 angefertigt. Diese Übersetzung ist Freie Dokumentation; lesen Sie die

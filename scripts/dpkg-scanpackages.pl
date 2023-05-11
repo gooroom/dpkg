@@ -44,15 +44,16 @@ my %packages;
 my %overridden;
 my @checksums;
 
-my %options = (help            => sub { usage(); exit 0; },
-	       version         => sub { version(); exit 0; },
-	       type            => undef,
-	       arch            => undef,
-	       hash            => undef,
-	       multiversion    => 0,
-	       'extra-override'=> undef,
-               medium          => undef,
-	      );
+my %options = (
+    help            => sub { usage(); exit 0; },
+    version         => sub { version(); exit 0; },
+    type            => undef,
+    arch            => undef,
+    hash            => undef,
+    multiversion    => 0,
+    'extra-override' => undef,
+    medium          => undef,
+);
 
 my @options_spec = (
     'help|?',
@@ -80,7 +81,7 @@ Options:
   -m, --multiversion       allow multiple versions of a single package.
   -e, --extra-override <file>
                            use extra override file.
-  -M, --medium <medium>    add X-Medium field for dselect multicd access method
+  -M, --medium <medium>    add X-Medium field for dselect media access method
   -?, --help               show this help message.
       --version            show the version.
 "), $Dpkg::PROGNAME;
@@ -264,7 +265,7 @@ foreach my $fn (@archives) {
 load_override($override) if defined $override;
 load_override_extra($options{'extra-override'}) if defined $options{'extra-override'};
 
-my @missingover=();
+my @missingover = ();
 
 my $records_written = 0;
 for my $p (sort keys %packages) {

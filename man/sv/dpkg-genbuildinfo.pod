@@ -22,9 +22,7 @@ B<dpkg-genbuildinfo> [I<flagga>...]
 
 =head1 BESKRIVNING
 
-B<dpkg-genbuildinfo> läser information från ett uppackat och byggt
-Debiankällkodsträd och från de filer det har genererat, och genererar en
-styrfil som beskriver byggmiljön och byggartifakterna (B<.buildinfo>-filen).
+B<dpkg-genbuildinfo> läser information från ett uppackat och byggt Debiankällkodsträd och från de filer det har genererat, och genererar en styrfil som beskriver byggmiljön och byggartifakterna (B<.buildinfo>-filen).
 
 Kommandot introducerades i dpkg 1.18.11.
 
@@ -42,84 +40,63 @@ Tillåtna värden är:
 
 =item B<any>
 
-Genererar bygginformation, inkluderande okvalificerade byggberoenden
-(B<Build-Depends>) och arkitekturspecifika byggberoenden
-(B<Build-Depends-Arch>).
+Genererar bygginformation, inkluderande okvalificerade byggberoenden (B<Build-Depends>) och arkitekturspecifika byggberoenden (B<Build-Depends-Arch>).
 
 =item B<all>
 
-Genererar bygginformation, inkluderande okvalificerade byggberoenden
-(B<Build-Depends>) och arkitekturoberoenden byggberoenden
-(B<Build-Depends-Indep>).
+Genererar bygginformation, inkluderande okvalificerade byggberoenden (B<Build-Depends>) och arkitekturoberoenden byggberoenden (B<Build-Depends-Indep>).
 
 =item B<source>
 
-Praktiskt taget ignorerad; skapar bygginformation med bara de okvalificerade
-byggberoendena (B<Build-Depends>).
+Praktiskt taget ignorerad; skapar bygginformation med bara de okvalificerade byggberoendena (B<Build-Depends>).
 
 =item B<binary>
 
-Skapar bygginformation med alla tre typer byggberoenden. Detta är ett alias
-för B<any,all>.
+Skapar bygginformation med alla tre typer byggberoenden. Detta är ett alias för B<any,all>.
 
 =item B<full>
 
-Skapar bygginformation med alla tre typer byggberoenden. Detta är ett alias
-för B<any,all,source>, och samma som standardfallet när inga byggflaggor
-anges.
+Skapar bygginformation med alla tre typer byggberoenden. Detta är ett alias för B<any,all,source>, och samma som standardfallet när inga byggflaggor anges.
 
 =back
 
 =item B<-c>I<control-fil>
 
-Anger huvudkällkodsstyrfilen som information ska läsas från. Standardvärdet
-är B<debian/control>.
+Anger huvudkällkodsstyrfilen som information ska läsas från. Standardvärdet är B<debian/control>.
 
 =item B<-l>I<ändringsloggfil>
 
-Anger ändringsloggfilen som information ska läsas från. Standardvärdet är
-B<debian/changelog>.
+Anger ändringsloggfilen som information ska läsas från. Standardvärdet är B<debian/changelog>.
 
 =item B<-f>I<fillistfil>
 
-Anger var  listan över filer som har producerats av bygget är, istället för
-att använda B<debian/files>.
+Anger var  listan över filer som har producerats av bygget är, istället för att använda B<debian/files>.
 
 =item B<-F>I<ändringsloggformat>
 
-Anger format på ändringsloggen. Se B<dpkg-parsechangelog>(1) för information
-om alternativa format.
+Anger format på ändringsloggen. Se B<dpkg-parsechangelog>(1) för information om alternativa format.
 
 =item B<-O>[I<filnamn>]
 
-Skriv buildinfo-filen på standard ut (eller I<filnamn>, om angivet), i
-stället för till
-I<kat>B</>I<källkodsnamn>B<_>I<binärversion>B<_>I<ark>B<.buildinfo> (där
-förvalet för I<kat> är B<..> eller I<insändningskatalog> om B<-u> användes).
+Skriv buildinfo-filen på standard ut (eller I<filnamn>, om angivet), i stället för till I<kat>B</>I<källkodsnamn>B<_>I<binärversion>B<_>I<ark>B<.buildinfo> (där förvalet för I<kat> är B<..> eller I<insändningskatalog> om B<-u> användes).
 
 =item B<-u>I<insändningskatalog>
 
-Se efter filer som ska sändas in i I<insändningskatalog> istället för B<..>
-(B<dpkg-genchanges> måste kunna se dessa filer så att det kan lägga in deras
-storlekar och kontrollsummor i B<.buildinfo>-filen).
+Se efter filer som ska sändas in i I<insändningskatalog> istället för B<..> (B<dpkg-genchanges> måste kunna se dessa filer så att det kan lägga in deras storlekar och kontrollsummor i B<.buildinfo>-filen).
 
 =item B<--always-include-kernel>
 
 Förvalet är att inte skriva fältet B<Build-Kernel-Version>.
 
-Ange den här flaggan (sedan dpkg 1.19.0) för att alltid skriva fältet
-B<Build-Kernel-Version> när B<.buildinfo> genereras.
+Ange den här flaggan (sedan dpkg 1.19.0) för att alltid skriva fältet B<Build-Kernel-Version> när B<.buildinfo> genereras.
 
 =item B<--always-include-path>
 
-Förvalet är att bara skriva fältet B<Build-Path> om aktuell katalog startar
-med ett tillåtet mönster.
+Förvalet är att bara skriva fältet B<Build-Path> om aktuell katalog startar med ett tillåtet mönster.
 
-På Debian och derivat träffar mönstret på B</build/> i början av
-sökvägsnamnet.
+På Debian och derivat träffar mönstret på B</build/> i början av sökvägsnamnet.
 
-Ange den här flaggan för att alltid skriva fältet B<Build-Path> när
-B<.buildinfo> genereras.
+Ange den här flaggan för att alltid skriva fältet B<Build-Path> när B<.buildinfo> genereras.
 
 =item B<--admindir=>I<kat>
 
@@ -127,8 +104,7 @@ B<.buildinfo> genereras.
 
 =item B<-q>
 
-B<dpkg-genchanges> kan generera informativa meddelanden på standard
-fel. B<-q> undertrycker dessa meddelanden.
+B<dpkg-genchanges> kan generera informativa meddelanden på standard fel. B<-q> undertrycker dessa meddelanden.
 
 =item B<-?>, B<--help>
 
@@ -146,25 +122,15 @@ Visar version och avslutar.
 
 =item B<DEB_BUILD_OPTIONS>
 
-Den här variabeln kan aanvändas för att aktivera eller inaktivera olika
-funktioner som påverkar den information som tas med i filen .buildinfo, via
-flaggan B<buildinfo> (sedan dpkg 1.18.19). Flaggan innehåller en
-kommaavdelad lista över funktioner, inledda med modifieringstecknen ”B<+>”
-eller ”B<->”, för att ange om de ska aktiveras eller
-inaktiveras. Specialfunktionen ”B<all>” kan användas för att aktivera eller
-inaktivera alla andra funktioner. Funktionen ”B<path>” styr huruvida fältet
-B<Build-Path> ska tas ovillkorligen med.
+Den här variabeln kan aanvändas för att aktivera eller inaktivera olika funktioner som påverkar den information som tas med i filen .buildinfo, via flaggan B<buildinfo> (sedan dpkg 1.18.19). Flaggan innehåller en kommaavdelad lista över funktioner, inledda med modifieringstecknen ”B<+>” eller ”B<->”, för att ange om de ska aktiveras eller inaktiveras. Specialfunktionen ”B<all>” kan användas för att aktivera eller inaktivera alla andra funktioner. Funktionen ”B<path>” styr huruvida fältet B<Build-Path> ska tas ovillkorligen med.
 
 =item B<DPKG_COLORS>
 
-Väljer färgläge (sedan dpkg 1.18.5). För närvarande godtas följande värden:
-B<auto> (förval), B<always> och B<never>.
+Väljer färgläge (sedan dpkg 1.18.5). För närvarande godtas följande värden: B<auto> (förval), B<always> och B<never>.
 
 =item B<DPKG_NLS>
 
-Om satt, används för att bestämma om lokalt språkstöd ska aktiveras, även
-känt som internationaliseringsstöd (eller i18n) (sedan dpkg
-1.19.0). Tillåtna värden är: B<0> och B<1> (förval).
+Om satt, används för att bestämma om lokalt språkstöd ska aktiveras, även känt som internationaliseringsstöd (eller i18n) (sedan dpkg 1.19.0). Tillåtna värden är: B<0> och B<1> (förval).
 
 =back
 
@@ -174,8 +140,7 @@ känt som internationaliseringsstöd (eller i18n) (sedan dpkg
 
 =item B<debian/files>
 
-Listan över genererade filer. B<dpkg-genbuildinfo> läser data här när
-B<.buildinfo>-filen skapas.
+Listan över genererade filer. B<dpkg-genbuildinfo> läser data här när B<.buildinfo>-filen skapas.
 
 =back
 

@@ -24,7 +24,7 @@ use warnings;
 use Dpkg ();
 use Dpkg::Gettext;
 use Dpkg::ErrorHandling qw(:DEFAULT report REPORT_STATUS);
-use Dpkg::Build::Env;
+use Dpkg::BuildEnv;
 use Dpkg::BuildFlags;
 use Dpkg::Vendor qw(get_current_vendor);
 
@@ -118,11 +118,13 @@ if ($action eq 'list') {
     exit 1 unless $build_flags->has_features($param);
 
     my %features = $build_flags->get_features($param);
+    my %builtins = $build_flags->get_builtins($param);
     my $para_shown = 0;
     foreach my $feature (sort keys %features) {
         print $para_shown++ ? "\n" : '';
         printf "Feature: %s\n", $feature;
-        printf "Enabled: %s\n", $features{$feature} ? 'yes' : 'no';
+        printf "Enabled: %s\n", $features{$feature} // $builtins{$feature} ? 'yes' : 'no';
+        printf "Builtin: %s\n", $builtins{$feature} ? 'yes' : 'no' if exists $builtins{$feature};
     }
 } elsif ($action =~ m/^export-(.*)$/) {
     my $export_type = $1;
@@ -150,7 +152,7 @@ if ($action eq 'list') {
     # also show which ones could have set to modify it).
     printf "Vendor: %s\n", Dpkg::Vendor::get_current_vendor() || 'undefined';
     print "Environment:\n";
-    for my $envvar (Dpkg::Build::Env::list_accessed()) {
+    for my $envvar (Dpkg::BuildEnv::list_accessed()) {
         print " $envvar=$ENV{$envvar}\n" if exists $ENV{$envvar};
     }
 
@@ -160,8 +162,13 @@ if ($action eq 'list') {
         print "Area: $area\n";
         print "Features:\n";
         my %features = $build_flags->get_features($area);
+        my %builtins = $build_flags->get_builtins($area);
         foreach my $feature (sort keys %features) {
-            printf " %s=%s\n", $feature, $features{$feature} ? 'yes' : 'no';
+            printf " %s=%s\n", $feature, $features{$feature} // $builtins{$feature} ? 'yes' : 'no';
+        }
+        print "Builtins:\n";
+        foreach my $feature (sort keys %builtins) {
+            printf " %s=%s\n", $feature, $builtins{$feature} ? 'yes' : 'no';
         }
     }
 
@@ -184,7 +191,7 @@ if ($action eq 'list') {
     # First print all environment variables that might have changed the
     # results (only existing ones, might make sense to add an option to
     # also show which ones could have set to modify it).
-    my @envvars = Dpkg::Build::Env::list_accessed();
+    my @envvars = Dpkg::BuildEnv::list_accessed();
     for my $envvar (@envvars) {
 	if (exists $ENV{$envvar}) {
 	    printf report(REPORT_STATUS, 'environment variable %s=%s',
@@ -197,10 +204,17 @@ if ($action eq 'list') {
     foreach my $area (sort $build_flags->get_feature_areas()) {
 	my $fs;
 	my %features = $build_flags->get_features($area);
+	my %builtins = $build_flags->get_builtins($area);
 	foreach my $feature (sort keys %features) {
-	    $fs .= sprintf(' %s=%s', $feature, $features{$feature} ? 'yes' : 'no');
+	    $fs .= sprintf(' %s=%s', $feature, $features{$feature} // $builtins{$feature} ? 'yes' : 'no');
 	}
 	print report(REPORT_STATUS, "$area features:$fs");
+        my $bs = q{};
+        foreach my $feature (sort keys %builtins) {
+            next if ! exists $builtins{$feature};
+            $bs .= sprintf(' %s=%s', $feature, $builtins{$feature} ? 'yes' : 'no');
+        }
+        print report(REPORT_STATUS, "$area builtins:$bs");
     }
     # Then the resulting values (with their origin):
     foreach my $flag ($build_flags->list()) {

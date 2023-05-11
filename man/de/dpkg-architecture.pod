@@ -22,24 +22,11 @@ B<dpkg-architecture> [I<Option> …] [I<Befehl>]
 
 =head1 BESCHREIBUNG
 
-B<dpkg-architecture> stellt eine Möglichkeit bereit, die Rechner-Architektur
-für den Paketbau zu bestimmen und zu setzen.
+B<dpkg-architecture> stellt eine Möglichkeit bereit, die Rechner-Architektur für den Paketbau zu bestimmen und zu setzen.
 
-Die Bau-Architektur wird immer über due Variable B<DEB_BUILD_ARCH> (falls
-diese gesetzt und B<--force> nicht angegeben ist) oder durch einen externen
-Aufruf an B<dpkg>(1) bestimmt und kann nicht auf der Befehlszeile gesetzt
-werden.
+Die Bau-Architektur wird immer über due Variable B<DEB_BUILD_ARCH> (falls diese gesetzt und B<--force> nicht angegeben ist) oder durch einen externen Aufruf an B<dpkg>(1) bestimmt und kann nicht auf der Befehlszeile gesetzt werden.
 
-Sie können die Host-Architektur (Wirt-Architektur) spezifizieren, indem Sie
-eine oder beide der Optionen B<--host-arch> oder B<--host-type> verwenden
-(andernfalls wird die Variable B<DEB_HOST_ARCH> verwandt, falls sie gesetzt
-und B<--force> nicht angegeben ist). Der Standardwert wird über einen
-externen Aufruf an B<gcc>(1) ermittelt oder ist identisch mit der
-Bauarchitektur, falls sowohl B<CC> als auch GCC nicht verfügbar sind. Einer
-von B<--host-arch> oder B<--host-type> ist ausreichend, der Wert des anderen
-wird auf einen brauchbaren Wert gesetzt. Tatsächlich ist es oft besser, nur
-einen der beiden anzugeben, da B<dpkg-architecture> Sie warnen wird, falls
-Ihre Wahl nicht mit dem Standardwert übereinstimmt.
+Sie können die Host-Architektur (Wirt-Architektur) spezifizieren, indem Sie eine oder beide der Optionen B<--host-arch> oder B<--host-type> verwenden (andernfalls wird die Variable B<DEB_HOST_ARCH> verwandt, falls sie gesetzt und B<--force> nicht angegeben ist). Der Standardwert wird über einen externen Aufruf an B<gcc>(1) ermittelt oder ist identisch mit der Bauarchitektur, falls sowohl B<CC> als auch GCC nicht verfügbar sind. Einer von B<--host-arch> oder B<--host-type> ist ausreichend, der Wert des anderen wird auf einen brauchbaren Wert gesetzt. Tatsächlich ist es oft besser, nur einen der beiden anzugeben, da B<dpkg-architecture> Sie warnen wird, falls Ihre Wahl nicht mit dem Standardwert übereinstimmt.
 
 =head1 BEFEHLE
 
@@ -47,24 +34,15 @@ Ihre Wahl nicht mit dem Standardwert übereinstimmt.
 
 =item B<-l>, B<--list>
 
-Zeigt die Umgebungsvariablen, eine pro Zeile, in dem Format
-I<VARIABLE=Wert>. Dies ist die Standardaktion.
+Zeigt die Umgebungsvariablen, eine pro Zeile, in dem Format I<VARIABLE=Wert>. Dies ist die Standardaktion.
 
 =item B<-e>, B<--equal> I<Architektur>
 
-Überprüft auf Gleichheit der Architekturen (seit Dpkg 1.13.13). Es prüft die
-aktuelle oder angegebene Debian-Host-Architektur mit I<Architektur> auf
-Gleichheit. Diese Aktion expandiert nicht die Architektur-Platzhalter
-(Wildcards). Der Befehl beendet sich mit einem Exit-Status von 0, falls eine
-Übereinstimmung besteht, andernfalls mit 1.
+Überprüft auf Gleichheit der Architekturen (seit Dpkg 1.13.13). Es prüft die aktuelle oder angegebene Debian-Host-Architektur mit I<Architektur> auf Gleichheit. Diese Aktion expandiert nicht die Architektur-Platzhalter (Wildcards). Der Befehl beendet sich mit einem Exit-Status von 0, falls eine Übereinstimmung besteht, andernfalls mit 1.
 
 =item B<-i>, B<--is> I<Architektur-Platzhalter>
 
-Überprüft auf Gleichheit der Architekturen (seit Dpkg 1.13.13). Es prüft die
-aktuelle oder angegebene Debian-Host-Architektur mit
-I<Architektur-Platzhalter>, nachdem dieser zu einem Architektur-Platzhalter
-expandiert wurde und prüft, ob sie passen. Der Befehl beendet sich mit einem
-Exit-Status von 0, falls eine Übereinstimmung besteht, andernfalls mit 1.
+Überprüft auf Gleichheit der Architekturen (seit Dpkg 1.13.13). Es prüft die aktuelle oder angegebene Debian-Host-Architektur mit I<Architektur-Platzhalter>, nachdem dieser zu einem Architektur-Platzhalter expandiert wurde und prüft, ob sie passen. Der Befehl beendet sich mit einem Exit-Status von 0, falls eine Übereinstimmung besteht, andernfalls mit 1.
 
 =item B<-q>, B<--query> I<Variablenname>
 
@@ -72,25 +50,19 @@ Zeigt den Wert einer einzelnen Variablen an.
 
 =item B<-s>, B<--print-set>
 
-Zeigt einen Export-Befehl. Dies kann dazu verwendet werden, um
-Umgebungsvariablen mittels der POSIX-Shell oder make B<eval> zu setzen,
-abhängig vom Ausgabeformat.
+Zeigt einen Export-Befehl. Dies kann dazu verwendet werden, um Umgebungsvariablen mittels der POSIX-Shell oder make B<eval> zu setzen, abhängig vom Ausgabeformat.
 
 =item B<-u>, B<--print-unset>
 
-Gibt ähnlich wie B<--print-set> einen Export-Befehl aus, der alle Variablen
-löscht.
+Gibt ähnlich wie B<--print-set> einen Export-Befehl aus, der alle Variablen löscht.
 
 =item B<-c>, B<--command> I<Befehlszeichenkette>
 
-Führt eine I<Befehlszeichenkette> in einer Umgebung aus, in der alle
-Variablen auf die festgelegten Werte gesetzt sind.
+Führt eine I<Befehlszeichenkette> in einer Umgebung aus, in der alle Variablen auf die festgelegten Werte gesetzt sind.
 
 =item B<-L>, B<--list-known>
 
-Gibt eine Liste von gültigen Architekturnamen aus. Möglicherweise durch eine
-oder mehrere der Abgleich-Optionen B<--match-wildcard>, B<--match-bits> oder
-B<--match-endian> eingeschränkt (seit Dpkg 1.17.14).
+Gibt eine Liste von gültigen Architekturnamen aus. Möglicherweise durch eine oder mehrere der Abgleich-Optionen B<--match-wildcard>, B<--match-bits> oder B<--match-endian> eingeschränkt (seit Dpkg 1.17.14).
 
 =item B<-?>, B<--help>
 
@@ -124,33 +96,23 @@ Setzt den Ziel-GNU-Systemtyp (seit Dpkg 1.17.14).
 
 =item B<-W>, B<--match-wildcard> I<Architektur-Platzhalter>
 
-Begrenzt die mit B<--list-known> aufgeführten Architekturen auf solche, die
-auf den angegebenen Architektur-Platzhalter passen (seit Dpkg 1.17.14).
+Begrenzt die mit B<--list-known> aufgeführten Architekturen auf solche, die auf den angegebenen Architektur-Platzhalter passen (seit Dpkg 1.17.14).
 
 =item B<-B>, B<--match-bits> I<Architektur-Bits>
 
-Begrenzt die mit B<--list-known> aufgeführten Architekturen auf solche mit
-den angegebenen CPU-Bits (seit Dpkg 1.17.14). Entweder B<32> oder B<64>.
+Begrenzt die mit B<--list-known> aufgeführten Architekturen auf solche mit den angegebenen CPU-Bits (seit Dpkg 1.17.14). Entweder B<32> oder B<64>.
 
 =item B<-E>, B<--match-endian> I<Architektur-Bytereihenfolge>
 
-Begrenzt die mit B<--list-known> aufgeführten Architekturen auf solche mit
-der angegebenen Bytereihenfolge (seit Dpkg 1.17.14). Entweder B<little> oder
-B<big>.
+Begrenzt die mit B<--list-known> aufgeführten Architekturen auf solche mit der angegebenen Bytereihenfolge (seit Dpkg 1.17.14). Entweder B<little> oder B<big>.
 
 =item B<--print-format> I<Format>
 
-Setzt das Ausgabeformat für B<--print-set> und B<--print-unset> (seit Dpkg
-1.20.6), auf entweder B<shell> (Vorgabe) oder B<make>.
+Setzt das Ausgabeformat für B<--print-set> und B<--print-unset> (seit Dpkg 1.20.6), auf entweder B<shell> (Vorgabe) oder B<make>.
 
 =item B<-f>, B<--force>
 
-Existierende Umgebungsvariablen mit dem gleichen Namen wie vom Skript
-verwendet werden nicht überschrieben (d.h. sie werden von
-B<dpkg-architecture> verwendet), es sei denn, die „force“-Markierung ist
-gesetzt. Dies erlaubt es dem Benutzer, einen Wert zu überschreiben, selbst
-wenn der Aufruf von B<dpkg-architecture> tief in einem anderen Skript
-versteckt ist (beispielsweise B<dpkg-buildpackage>(1)).
+Existierende Umgebungsvariablen mit dem gleichen Namen wie vom Skript verwendet werden nicht überschrieben (d.h. sie werden von B<dpkg-architecture> verwendet), es sei denn, die „force“-Markierung ist gesetzt. Dies erlaubt es dem Benutzer, einen Wert zu überschreiben, selbst wenn der Aufruf von B<dpkg-architecture> tief in einem anderen Skript versteckt ist (beispielsweise B<dpkg-buildpackage>(1)).
 
 =back
 
@@ -168,32 +130,19 @@ Die Maschine, für die das Paket gebaut ist.
 
 =item Ziel-Maschine
 
-Die Maschine, für die der Compiler baut. Dies wird nur beim Bau einer
-Cross-Toolchain und zum Bau von Code für die Ziel-Architektur benötigt. Die
-Cross-Toolchain wird auf der Bauarchitektur gebaut und läuft dann auf der
-Host-Architektur.
+Die Maschine, für die der Compiler baut oder dem Emulator, für den Code ausgeführt wird. Dies wird nur beim Bau einer Cross-Toolchain (oder einem Emulator) und zum Bau von Code für die Ziel-Architektur benötigt. Die Cross-Toolchain wird auf der Bauarchitektur gebaut (oder emuliert ausgeführt) und läuft dann auf der Host-Architektur.
 
 =item Debian-Architektur
 
-Die Debian-Architektur-Zeichenkette, die den binären Baum im FTP-Archiv
-spezifiziert. Beispiele: i386, sparc, hurd-i386.
+Die Debian-Architektur-Zeichenkette, die den binären Baum im FTP-Archiv spezifiziert. Beispiele: i386, sparc, hurd-i386.
 
 =item Debian-Architekturtupel
 
-Ein Debian-Architekturtupel ist eine vollqualifizierte Architektur mit allen
-Komponenten ausgeschrieben. Dies unterscheidet sich von der
-Debian-Architektur zumindest in der Weise, dass das I<ABI> nicht eingebettet
-ist. Das aktuelle Tupel hat die Form I<ABI>-I<Libc>-I<OS>-I<CPU>. Beispiele:
-base-gnu-linux-amd64, eabihf-musl-linux-arm.
+Ein Debian-Architekturtupel ist eine vollqualifizierte Architektur mit allen Komponenten ausgeschrieben. Dies unterscheidet sich von der Debian-Architektur zumindest in der Weise, dass das I<ABI> nicht eingebettet ist. Das aktuelle Tupel hat die Form I<ABI>-I<Libc>-I<OS>-I<CPU>. Beispiele: base-gnu-linux-amd64, eabihf-musl-linux-arm.
 
 =item Debian-Architektur-Platzhalter
 
-Ein Debian-Architektur-Platzhalter ist eine spezielle
-Architektur-Zeichenkette, die auf jede reale Architektur, die ein Teil davon
-ist, passt. Die allgemeine Form ist ein Debian-Architektur-Tupel mit vier
-oder weniger Elementen und bei dem mindestens eines B<any> ist. Fehlende
-Elemente des Tupels werden implizit als B<any> vorangestellt und daher sind
-die folgenden Tupel äquivalent:
+Ein Debian-Architektur-Platzhalter ist eine spezielle Architektur-Zeichenkette, die auf jede reale Architektur, die ein Teil davon ist, passt. Die allgemeine Form ist ein Debian-Architektur-Tupel mit vier oder weniger Elementen und bei dem mindestens eines B<any> ist. Fehlende Elemente des Tupels werden implizit als B<any> vorangestellt und daher sind die folgenden Tupel äquivalent:
 
 =over 
 
@@ -209,27 +158,17 @@ Beispiele: linux-any, any-i386, hurd-any, eabi-any-any-arm, musl-any-any.
 
 =item GNU-Systemtyp
 
-Eine Architekturspezifikationszeichenkette besteht aus zwei, durch einen
-Bindestrich getrennten Teilen: CPU und System. Beispiele: i586-linux-gnu,
-sparc-linux-gnu, i686-gnu, x86_64-netbsd.
+Eine Architekturspezifikationszeichenkette besteht aus zwei, durch einen Bindestrich getrennten Teilen: CPU und System. Beispiele: i586-linux-gnu, sparc-linux-gnu, i686-gnu, x86_64-netbsd.
 
 =item Multiarch-Tripel
 
-Der bereinigte GNU-Systemtyp; wird für Dateipfade verwandt. Dieses Tripel
-ändert sich auch nicht, wenn das zugrundeliegende ISA erhöht wird, so dass
-die daraus resultierenden Pfade dauerhaft stabil bleiben. Derzeit ist der
-einzige Unterschied zum GNU-Sytemtyp, dass der CPU-Anteil für i386-basierte
-Systeme immer „i386“ lautet. Beispiele: i386-linux-gnu,
-x86_64-linux-gnu. Beispielpfade: /lib/powerpc64le-linux-gnu/,
-/usr/lib/i386-kfreebsd-gnu/.
+Der bereinigte GNU-Systemtyp; wird für Dateipfade verwandt. Dieses Tripel ändert sich auch nicht, wenn das zugrundeliegende ISA erhöht wird, so dass die daraus resultierenden Pfade dauerhaft stabil bleiben. Derzeit ist der einzige Unterschied zum GNU-Sytemtyp, dass der CPU-Anteil für i386-basierte Systeme immer „i386“ lautet. Beispiele: i386-linux-gnu, x86_64-linux-gnu. Beispielpfade: /lib/powerpc64le-linux-gnu/, /usr/lib/i386-kfreebsd-gnu/.
 
 =back
 
 =head1 VARIABLEN
 
-Die folgenden Variablen werden von der Umgebung gelesen (außer B<--force>
-wurde angegeben) und durch B<dpkg-architecture> gesetzt (siehe den Abschnitt
-B<AUSDRÜCKE> für eine Beschreibung des Benennungsschemas):
+Die folgenden Variablen werden von der Umgebung gelesen (außer B<--force> wurde angegeben) und durch B<dpkg-architecture> gesetzt (siehe den Abschnitt B<AUSDRÜCKE> für eine Beschreibung des Benennungsschemas):
 
 =over 
 
@@ -275,8 +214,7 @@ Der GNU-Systemtyp der Baumaschine.
 
 =item B<DEB_BUILD_MULTIARCH>
 
-Der klargestellte GNU-Systemtyp der Baumaschine, der für Dateisystempfade
-benutzt wird.
+Der klargestellte GNU-Systemtyp der Baumaschine, der für Dateisystempfade benutzt wird.
 
 =item B<DEB_HOST_ARCH>
 
@@ -320,8 +258,7 @@ Der GNU-Systemtyp der Host-Maschine.
 
 =item B<DEB_HOST_MULTIARCH>
 
-Der klargestellte GNU-Systemtyp der Host-Maschine, wird für Dateisystempfade
-benutzt. (Seit Dpkg 1.16.0).
+Der klargestellte GNU-Systemtyp der Host-Maschine, wird für Dateisystempfade benutzt. (Seit Dpkg 1.16.0).
 
 =item B<DEB_TARGET_ARCH>
 
@@ -365,8 +302,7 @@ Der GNU-Systemtyp der Ziel-Maschine. (Seit Dpkg 1.17.14).
 
 =item B<DEB_TARGET_MULTIARCH>
 
-Der klargestellte GNU-Systemtyp der Ziel-Maschine, wird für Dateisystempfade
-benutzt. (Seit Dpkg 1.17.14).
+Der klargestellte GNU-Systemtyp der Ziel-Maschine, wird für Dateisystempfade benutzt. (Seit Dpkg 1.17.14).
 
 =back
 
@@ -374,34 +310,25 @@ benutzt. (Seit Dpkg 1.17.14).
 
 =head2 Architekturtabellen
 
-Alle diese Dateien müssen vorhanden sein, damit B<dpkg-architecture>
-funktioniert. Ihr Ort kann zur Laufzeit mit der Umgebungsvariable
-B<DPKG_DATADIR> überschrieben werden. Diese Tabellen enthalten in der ersten
-Zeile ein Format-B<Version>s-Pseudofeld, um ihre Version zu kennzeichnen, so
-dass Auswerteprogramme prüfen können, ob sie es verstehen. Beispiel: „#
-Version=1.0“.
+Alle diese Dateien müssen vorhanden sein, damit B<dpkg-architecture> funktioniert. Ihr Ort kann zur Laufzeit mit der Umgebungsvariable B<DPKG_DATADIR> überschrieben werden. Diese Tabellen enthalten in der ersten Zeile ein Format-B<Version>s-Pseudofeld, um ihre Version zu kennzeichnen, so dass Auswerteprogramme prüfen können, ob sie es verstehen. Beispiel: „# Version=1.0“.
 
 =over 
 
 =item I<%PKGDATADIR%/cputable>
 
-Tabelle der bekannten CPU-Namen und Abbildungen auf ihre
-GNU-Namen. Formatversion 1.0 (seit Dpkg 1.13.2).
+Tabelle der bekannten CPU-Namen und Abbildungen auf ihre GNU-Namen. Formatversion 1.0 (seit Dpkg 1.13.2).
 
 =item I<%PKGDATADIR%/ostable>
 
-Tabelle der bekannten Betriebssystemnamen und Abbildungen auf ihre
-GNU-Namen. Formatversion 2.0 (seit Dpkg 1.18.11).
+Tabelle der bekannten Betriebssystemnamen und Abbildungen auf ihre GNU-Namen. Formatversion 2.0 (seit Dpkg 1.18.11).
 
 =item I<%PKGDATADIR%/tupletable>
 
-Abbildung zwischen den Debian-Architektur-Tupeln und den
-Debian-Architekturnamen. Formatversion 1.0 (seit Dpkg 1.18.11).
+Abbildung zwischen den Debian-Architektur-Tupeln und den Debian-Architekturnamen. Formatversion 1.0 (seit Dpkg 1.18.11).
 
 =item I<%PKGDATADIR%/abitable>
 
-Tabelle von Debian-Architektur-ABI-Attributs-Hinwegsetzung. Formatversion
-2.0 (seit Dpkg 1.18.11).
+Tabelle von Debian-Architektur-ABI-Attributs-Hinwegsetzung. Formatversion 2.0 (seit Dpkg 1.18.11).
 
 =back
 
@@ -411,15 +338,13 @@ Tabelle von Debian-Architektur-ABI-Attributs-Hinwegsetzung. Formatversion
 
 =item I<%PKGDATADIR%/architecture.mk>
 
-Make-Steuerdateischnipsel, das alle Variablen, die B<dpkg-architecture>
-ausgibt, korrekt setzt und exportiert (seit Dpkg 1.16.1).
+Make-Steuerdateischnipsel, das alle Variablen, die B<dpkg-architecture> ausgibt, korrekt setzt und exportiert (seit Dpkg 1.16.1).
 
 =back
 
 =head1 BEISPIELE
 
-B<dpkg-buildpackage> akzeptiert die Option B<-a> und gibt diese an
-B<dpkg-architecture> weiter. Weitere Beispiele:
+B<dpkg-buildpackage> akzeptiert die Option B<-a> und gibt diese an B<dpkg-architecture> weiter. Weitere Beispiele:
 
 =over 
 
@@ -429,8 +354,7 @@ B<dpkg-architecture> weiter. Weitere Beispiele:
 
 =back
 
-Überprüfen, ob die aktuelle oder angegebene Host-Architektur identisch zu
-einer Architektur ist:
+Überprüfen, ob die aktuelle oder angegebene Host-Architektur identisch zu einer Architektur ist:
 
 =over 
 
@@ -440,8 +364,7 @@ einer Architektur ist:
 
 =back
 
-Überprüfen, ob die aktuelle oder angegebene Host-Architektur ein
-Linux-System ist:
+Überprüfen, ob die aktuelle oder angegebene Host-Architektur ein Linux-System ist:
 
 =over 
 
@@ -453,13 +376,7 @@ Linux-System ist:
 
 =head2 Verwendung in debian/rules
 
-Die Umgebungsvariablen, die von B<dpkg-architecture> gesetzt werden, werden
-an I<debian/rules> als Make-Variablen weitergegeben (lesen Sie hierzu die
-Make-Dokumentation). Allerdings sollten Sie sich nicht auf diese verlassen,
-da damit der manuelle Aufruf des Skripts verhindert wird. Stattdessen
-sollten Sie sie immer mittels B<dpkg-architecture> mit der Option B<-q>
-initialisieren. Hier sind einige Beispiele, die auch zeigen, wie Sie die
-Cross-Kompilierungs-Unterstützung in Ihrem Paket verbessern können:
+Die Umgebungsvariablen, die von B<dpkg-architecture> gesetzt werden, werden an I<debian/rules> als Make-Variablen weitergegeben (lesen Sie hierzu die Make-Dokumentation). Allerdings sollten Sie sich nicht auf diese verlassen, da damit der manuelle Aufruf des Skripts verhindert wird. Stattdessen sollten Sie sie immer mittels B<dpkg-architecture> mit der Option B<-q> initialisieren. Hier sind einige Beispiele, die auch zeigen, wie Sie die Cross-Kompilierungs-Unterstützung in Ihrem Paket verbessern können:
 
 Ermitteln des GNU-Systemtyps und dessen Weiterleitung an ./configure:
 
@@ -491,11 +408,9 @@ Etwas nur für eine bestimmte Architektur erledigen:
 
 =back
 
-oder, falls Sie nur den CPU- oder OS-Typ überprüfen müssen, verwenden Sie
-die Variablen B<DEB_HOST_ARCH_CPU> oder B<DEB_HOST_ARCH_OS>.
+oder, falls Sie nur den CPU- oder OS-Typ überprüfen müssen, verwenden Sie die Variablen B<DEB_HOST_ARCH_CPU> oder B<DEB_HOST_ARCH_OS>.
 
-Um alle Variablen, die B<dpkg-architecture> bereitstellen kann, korrekt zu
-setzen, können Sie auch extern ein Make-Steuerdateischnipsel verwenden:
+Um alle Variablen, die B<dpkg-architecture> bereitstellen kann, korrekt zu setzen, können Sie auch extern ein Make-Steuerdateischnipsel verwenden:
 
 =over 
 
@@ -507,8 +422,7 @@ setzen, können Sie auch extern ein Make-Steuerdateischnipsel verwenden:
 
 =back
 
-Auf jeden Fall sollten Sie niemals B<dpkg --print-architecture> verwenden,
-um die Architekturinformationen während eines Paketbaus zu erhalten.
+Auf jeden Fall sollten Sie niemals B<dpkg --print-architecture> verwenden, um die Architekturinformationen während eines Paketbaus zu erhalten.
 
 =head1 UMGEBUNG
 
@@ -516,21 +430,15 @@ um die Architekturinformationen während eines Paketbaus zu erhalten.
 
 =item B<DPKG_DATADIR>
 
-Falls dies gesetzt ist, wird es als Datenverzeichnis von B<dpkg> verwandt,
-in dem sich die Architekturtabellen befinden (seit Dpkg
-1.14.17). Standardmäßig „%PKGDATADIR%“.
+Falls dies gesetzt ist, wird es als Datenverzeichnis von B<dpkg> verwandt, in dem sich die Architekturtabellen befinden (seit Dpkg 1.14.17). Standardmäßig „%PKGDATADIR%“.
 
 =item B<DPKG_COLORS>
 
-Setzt den Farbmodus (seit Dpkg 1.18.5). Die derzeit unterstützten Werte
-sind: B<auto> (Vorgabe), B<always> und B<never>.
+Setzt den Farbmodus (seit Dpkg 1.18.5). Die derzeit unterstützten Werte sind: B<auto> (Vorgabe), B<always> und B<never>.
 
 =item B<DPKG_NLS>
 
-Falls dies gesetzt ist, wird es zur Entscheidung, ob Native Language
-Support, auch als Unterstützung für Internationalisierung (oder i18n)
-bekannt, aktiviert wird (seit Dpkg 1.19.0). Die akzeptierten Werte sind:
-B<0> und B<1> (Vorgabe).
+Falls dies gesetzt ist, wird es zur Entscheidung, ob Native Language Support, auch als Unterstützung für Internationalisierung (oder i18n) bekannt, aktiviert wird (seit Dpkg 1.19.0). Die akzeptierten Werte sind: B<0> und B<1> (Vorgabe).
 
 =back
 
@@ -545,7 +453,7 @@ B<dpkg-buildpackage>(1).
 
 =head1 ÜBERSETZUNG
 
-Die deutsche Übersetzung wurde 2004, 2006-2020 von Helge Kreutzmann
+Die deutsche Übersetzung wurde 2004, 2006-2023 von Helge Kreutzmann
 <debian@helgefjell.de>, 2007 von Florian Rehnisch <eixman@gmx.de> und
 2008 von Sven Joachim <svenjoac@gmx.de>
 angefertigt. Diese Übersetzung ist Freie Dokumentation; lesen Sie die

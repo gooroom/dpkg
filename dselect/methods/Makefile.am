@@ -3,53 +3,54 @@
 methodsdir = $(pkglibexecdir)/methods
 
 nobase_dist_methods_DATA = \
-	disk/names \
-	disk/desc.mounted \
+	file/names \
+	file/desc.file \
 	ftp/names \
 	ftp/desc.ftp \
-	multicd/names \
-	multicd/desc.multi_cd \
-	$(nil)
+	media/names \
+	media/desc.media \
+	# EOL
 
 nobase_methods_SCRIPTS = \
+	file/install \
+	file/setup \
+	file/update \
+	ftp/install \
 	ftp/setup \
 	ftp/update \
-	ftp/install \
-	$(nil)
-
-nobase_dist_methods_SCRIPTS = \
-	disk/setup \
-	disk/update \
-	disk/install \
-	multicd/setup \
-	multicd/update \
-	multicd/install
+	media/install \
+	media/setup \
+	media/update \
+	# EOL
 
 perllibdir = $(PERL_LIBDIR)
-nobase_dist_perllib_DATA = Dselect/Ftp.pm
+nobase_dist_perllib_DATA = \
+	Dselect/Ftp.pm \
+	# EOL
 
 EXTRA_DIST = \
+	file/setup.sh \
+	file/update.sh \
+	file/install.sh \
 	ftp/setup.pl \
 	ftp/update.pl \
 	ftp/install.pl \
-	multicd/README.multicd
+	media/setup.sh \
+	media/update.sh \
+	media/install.sh \
+	media/README.media \
+	# EOL
 
 CLEANFILES = \
 	$(nobase_methods_SCRIPTS) \
-	$(nil)
+	# EOL
 
-do_perl_subst = $(AM_V_GEN) sed \
-	-e "s:^\#![[:space:]]*/usr/bin/perl:\#!$(PERL):"
+SUFFIXES =
 
-SUFFIXES = .pl
-
-.pl:
-	@test -d `dirname $@` || $(MKDIR_P) `dirname $@`
-	$(do_perl_subst) <$< >$@
-	$(AM_V_at) chmod +x $@
+include $(top_srcdir)/build-aux/subst.am
 
 install-data-local:
 	$(MKDIR_P) $(DESTDIR)$(admindir)/methods/mnt
-	$(MKDIR_P) $(DESTDIR)$(admindir)/methods/disk
+	$(MKDIR_P) $(DESTDIR)$(admindir)/methods/file
 	$(MKDIR_P) $(DESTDIR)$(admindir)/methods/ftp
-	$(MKDIR_P) $(DESTDIR)$(admindir)/methods/multicd
+	$(MKDIR_P) $(DESTDIR)$(admindir)/methods/media

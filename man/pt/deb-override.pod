@@ -22,14 +22,9 @@ B<override>
 
 =head1 DESCRIÇÃO
 
-Enquanto a maioria da informação acerca de uma pacote pode ser encontrada no
-ficheiro de controle, alguma é gerida centralmente pelos czars da
-distribuição em vez de pelo maintainer de modo a oferecer alguma
-consistência global. Esta informação encontra-se no ficheiro de sobreposição
-(override).
+Enquanto a maioria da informação acerca de uma pacote pode ser encontrada no ficheiro de controle, alguma é gerida centralmente pelos czars da distribuição em vez de pelo maintainer de modo a oferecer alguma consistência global. Esta informação encontra-se no ficheiro de sobreposição (override).
 
-O ficheiro override tem um formato simples de delimitação por espaços em
-branco. São permitidos comentários (denotados com um B<#>).
+O ficheiro override tem um formato simples de delimitação por espaços em branco. São permitidos comentários (denotados com um B<#>).
 
 =over 
 
@@ -37,19 +32,13 @@ I<package> I<priority> I<section> [I<maintainer-info>]
 
 =back
 
-I<package> é o nome do pacote. As entradas no ficheiro de sobreposição para
-pacotes não encontrados na árvore de pacotes binários são ignoradas.
+I<package> é o nome do pacote. As entradas no ficheiro de sobreposição para pacotes não encontrados na árvore de pacotes binários são ignoradas.
 
-I<priority> e I<section> correspondem a campos de controle respectivos
-disponíveis no .deb. Os valores permitidos são específicos para cada arquivo
-de distribuição.
+I<priority> e I<section> correspondem a campos de controle respectivos disponíveis no .deb. Os valores permitidos são específicos para cada arquivo de distribuição.
 
-I<maintainer-info>, se presente, pode ser o nome de um responsável por uma
-sobreposição incondicional, ou então I<old-maintainer> B<=E<gt>>
-I<new-maintainer> para executar a substituição.
+I<maintainer-info>, se presente, pode ser o nome de um responsável por uma sobreposição incondicional, ou então I<old-maintainer> B<=E<gt>> I<new-maintainer> para executar a substituição.
 
-Os ficheiros de sobreposição usados para criar as listas de Pacotes oficiais
-podem ser encontradas no directório I<indices> em qualquer mirror Debian.
+Os ficheiros de sobreposição usados para criar as listas de Pacotes oficiais podem ser encontradas no directório I<indices> em qualquer mirror Debian.
 
 =head1 VEJA TAMBÉM
 

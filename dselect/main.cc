@@ -54,6 +54,7 @@
 #include <dpkg/dpkg.h>
 #include <dpkg/dpkg-db.h>
 #include <dpkg/options.h>
+#include <dpkg/fsys.h>
 
 #include "dselect.h"
 #include "bindings.h"
@@ -62,8 +63,6 @@
 static const char printforhelp[] = N_("Type dselect --help for help.");
 
 bool expertmode = false;
-
-static const char *admindir = ADMINDIR;
 
 static keybindings packagelistbindings(packagelist_kinterps,packagelist_korgbindings);
 
@@ -187,11 +186,13 @@ usage(const struct cmdinfo *ci, const char *value)
   printf(_(
 "Options:\n"
 "      --admindir <directory>       Use <directory> instead of %s.\n"
+"      --instdir <directory>        Use <directory> instead of %s.\n"
+"      --root <directory>           Use <directory> instead of %s.\n"
 "      --expert                     Turn on expert mode.\n"
 "  -D, --debug <file>               Turn on debugging, send output to <file>.\n"
 "      --color <color-spec>         Configure screen colors.\n"
 "      --colour <color-spec>        Ditto.\n"
-), ADMINDIR);
+), ADMINDIR, "/", "/");
 
   printf(_(
 "  -?, --help                       Show this help message.\n"
@@ -311,7 +312,9 @@ extern "C" {
 } /* End of extern "C" */
 
 static const struct cmdinfo cmdinfos[]= {
-  { "admindir",     0,  1, nullptr,  &admindir, nullptr      },
+  { "admindir",     0,  1, nullptr,  nullptr,   set_admindir, 1 },
+  { "instdir",      0,  1, nullptr,  nullptr,   set_instdir, 1 },
+  { "root",         0,  1, nullptr,  nullptr,   set_root, 1  },
   { "debug",       'D', 1, nullptr,  nullptr,   set_debug    },
   { "expert",      'E', 0, nullptr,  nullptr,   set_expert   },
   { "help",        '?', 0, nullptr,  nullptr,   usage        },
@@ -370,7 +373,7 @@ urqresult urq_list(void) {
 }
 
 static void
-dme(int i, int so)
+display_menu_entry(int i, int so)
 {
   const menuentry *me= &menuentries[i];
 
@@ -406,7 +409,7 @@ refreshmenu(void)
   attrset(A_NORMAL);
   const struct menuentry *mep; int i;
   for (mep=menuentries, i=0; mep->option && mep->menuent; mep++, i++)
-    dme(i,0);
+    display_menu_entry(i, 0);
 
   attrset(A_BOLD);
   addstr(_("\n\n"
@@ -431,25 +434,39 @@ urqresult urq_menu(void) {
   int entries, c;
   entries= refreshmenu();
   int cursor=0;
-  dme(0,1);
+  display_menu_entry(0, 1);
   for (;;) {
     refresh();
-    do
+    do {
       c= getch();
-    while (c == ERR && errno == EINTR);
+      if (c == KEY_RESIZE) {
+        refreshmenu();
+        display_menu_entry(cursor, 1);
+        continue;
+      }
+    } while (c == ERR && errno == EINTR);
     if (c==ERR)  {
       if(errno != 0)
         ohshite(_("failed to getch in main menu"));
       else {
-        clearok(stdscr,TRUE); clear(); refreshmenu(); dme(cursor,1);
+        clearok(stdscr, TRUE);
+        clear();
+        refreshmenu();
+        display_menu_entry(cursor, 1);
       }
     }
 
     if (c == CTRL('n') || c == KEY_DOWN || c == ' ' || c == 'j') {
-      dme(cursor,0); cursor++; cursor %= entries; dme(cursor,1);
+      display_menu_entry(cursor, 0);
+      cursor++;
+      cursor %= entries;
+      display_menu_entry(cursor, 1);
     } else if (c == CTRL('p') || c == KEY_UP || c == CTRL('h') ||
                c==KEY_BACKSPACE || c==KEY_DC || c=='k') {
-      dme(cursor,0); cursor+= entries-1; cursor %= entries; dme(cursor,1);
+      display_menu_entry(cursor, 0);
+      cursor += entries - 1;
+      cursor %= entries;
+      display_menu_entry(cursor, 1);
     } else if (c=='\n' || c=='\r' || c==KEY_ENTER) {
       clear(); refresh();
 
@@ -465,13 +482,19 @@ urqresult urq_menu(void) {
       default:
         internerr("unknown menufn %d", res);
       }
-      refreshmenu(); dme(cursor,1);
+      refreshmenu();
+      display_menu_entry(cursor, 1);
     } else if (c == CTRL('l')) {
-      clearok(stdscr,TRUE); clear(); refreshmenu(); dme(cursor,1);
+      clearok(stdscr, TRUE);
+      clear();
+      refreshmenu();
+      display_menu_entry(cursor, 1);
     } else if (isdigit(c)) {
       char buf[2]; buf[0]=c; buf[1]=0; c=atoi(buf);
       if (c < entries) {
-        dme(cursor,0); cursor=c; dme(cursor,1);
+        display_menu_entry(cursor, 0);
+        cursor = c;
+        display_menu_entry(cursor, 1);
       } else {
         beep();
       }
@@ -481,7 +504,9 @@ urqresult urq_menu(void) {
       while (i < entries && gettext(menuentries[i].key)[0] != c)
         i++;
       if (i < entries) {
-        dme(cursor,0); cursor=i; dme(cursor,1);
+        display_menu_entry(cursor, 0);
+        cursor = i;
+        display_menu_entry(cursor, 1);
       } else {
         beep();
       }
@@ -514,7 +539,7 @@ main(int, const char *const *argv)
   dpkg_options_load(DSELECT, cmdinfos);
   dpkg_options_parse(&argv, cmdinfos, printforhelp);
 
-  admindir = dpkg_db_set_dir(admindir);
+  debug(dbg_general, "root=%s admindir=%s", dpkg_fsys_get_dir(), dpkg_db_get_dir());
 
   if (*argv) {
     const char *a;

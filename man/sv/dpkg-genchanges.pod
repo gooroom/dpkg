@@ -22,9 +22,7 @@ B<dpkg-genchanges> [I<flagga>...]
 
 =head1 BESKRIVNING
 
-B<dpkg-genchanges> läser information från ett uppackat och byggt
-Debiankällkodsträd och från de filer det har genererat, och genererar en
-styrfil för insändning till Debian (B<.changes>-fil).
+B<dpkg-genchanges> läser information från ett uppackat och byggt Debiankällkodsträd och från de filer det har genererat, och genererar en styrfil för insändning till Debian (B<.changes>-fil).
 
 =head1 FLAGGOR
 
@@ -32,8 +30,7 @@ styrfil för insändning till Debian (B<.changes>-fil).
 
 =item B<--build=>I<typ>
 
-Anger bygg-I<type> från en kommaavdelad lista med komponenter (sedan dpkg
-1.18.5).
+Anger bygg-I<type> från en kommaavdelad lista med komponenter (sedan dpkg 1.18.5).
 
 Tillåtna värden är:
 
@@ -53,13 +50,11 @@ Sänd in arkitekturoberoende binärpaket.
 
 =item B<binary>
 
-Sänd in arkitekturberoende och -oberoende binärpaket. Detta är ett alias för
-B<any,all>.
+Sänd in arkitekturberoende och -oberoende binärpaket. Detta är ett alias för B<any,all>.
 
 =item B<full>
 
-Sänd in allt. Det här är ett alias för B<source,any,all> och är detsamma som
-standardläget om inga byggflaggor anges.
+Sänd in allt. Det här är ett alias för B<source,any,all> och är detsamma som standardläget om inga byggflaggor anges.
 
 =back
 
@@ -89,18 +84,13 @@ Motsvarar B<--build=source>.
 
 =back
 
-Flaggorna B<-s>I<x> styr huruvida det ursprungliga källkodsarkivet ska
-inkluderas i insändningen om källkod genereras (dvs. B<-b> eller B<-B> inte
-har använts).
+Flaggorna B<-s>I<x> styr huruvida det ursprungliga källkodsarkivet ska inkluderas i insändningen om källkod genereras (dvs. B<-b> eller B<-B> inte har använts).
 
 =over 
 
 =item B<-si>
 
-Som standard, eller om den anges, kommer originalkällkoden endast att
-inkluderas om uppströmsversionsnumret (versionsnumret utan epok och utan
-Debianuppdateringsnummer) skiljer sig från uppströmsversionsnumret i
-föregående ändringsloggspost.
+Som standard, eller om den anges, kommer originalkällkoden endast att inkluderas om uppströmsversionsnumret (versionsnumret utan epok och utan Debianuppdateringsnummer) skiljer sig från uppströmsversionsnumret i föregående ändringsloggspost.
 
 =item B<-sa>
 
@@ -112,40 +102,27 @@ Bifogar inte originalkällkoden, utan enbart differensfilen.
 
 =item B<-v>I<version>
 
-Använder information från ändringsloggen för alla versioner som är strikt
-senare än I<version>.
+Använder information från ändringsloggen för alla versioner som är strikt senare än I<version>.
 
 =item B<-C>I<ändringsbeskrivning>
 
-Läs beskrivningen av ändringarna från filen I<ändringsbeskrivning> istället
-för att använda information från källkodsträdets changelog-fil.
+Läs beskrivningen av ändringarna från filen I<ändringsbeskrivning> istället för att använda information från källkodsträdets changelog-fil.
 
 =item B<-m>I<paketansvarige-adress>
 
-Använd I<paketansvarige-adress> som namn och e-postadress till ansvarig för
-detta paket, istället för att använda informationen från källkodsträdets
-control-fil.
+Använd I<paketansvarige-adress> som namn och e-postadress till ansvarig för detta paket, istället för att använda informationen från källkodsträdets control-fil.
 
 =item B<-e>I<paketansvarige-adress>
 
-Använd I<paketansvarige-adress> som namn och e-postadress till ansvarig för
-denna insändning, istället för att använda informationen från
-källkodsträdets changelog-fil.
+Använd I<paketansvarige-adress> som namn och e-postadress till ansvarig för denna insändning, istället för att använda informationen från källkodsträdets changelog-fil.
 
 =item B<-V>I<namn>B<=>I<värde>
 
-Ställer in en utdatasubstitueringsvariabel. Se B<deb-substvars>(5) för en
-beskrivning av utdatasubstituering.
+Ställer in en utdatasubstitueringsvariabel. Se B<deb-substvars>(5) för en beskrivning av utdatasubstituering.
 
 =item B<-T>I<substvars-fil>
 
-Läs substitutionsvariabler från I<substvars-fil>; standard är
-B<debian/substvars>. Ingen variabelsubstitution utförs på något av fälten i
-utdata, bortsett från innehållet som extraheras från binärpaketets
-B<Description>-fält (sedan dpkg 1.19.0), men om den speciella variabeln
-I<Format> anges kommer den överstyra fältet med samma namn. Flaggan kan
-användas flera gånger för att läsa substitutionsvariabler från flera filer
-(sedan dpkg 1.15.6).
+Läs substitutionsvariabler från I<substvars-fil>; standard är B<debian/substvars>. Ingen variabelsubstitution utförs på något av fälten i utdata, bortsett från innehållet som extraheras från binärpaketets B<Description>-fält (sedan dpkg 1.19.0), men om den speciella variabeln I<Format> anges kommer den överstyra fältet med samma namn. Flaggan kan användas flera gånger för att läsa substitutionsvariabler från flera filer (sedan dpkg 1.15.6).
 
 =item B<-D>I<fält>B<=>I<värde>
 
@@ -157,40 +134,31 @@ Ta bort ett fält ur den genererade control-filen.
 
 =item B<-c>I<control-fil>
 
-Anger huvudkällkodsstyrfilen som information ska läsas från. Standardvärdet
-är B<debian/control>.
+Anger huvudkällkodsstyrfilen som information ska läsas från. Standardvärdet är B<debian/control>.
 
 =item B<-l>I<ändringsloggfil>
 
-Anger ändringsloggfilen som information ska läsas från. Standardvärdet är
-B<debian/changelog>.
+Anger ändringsloggfilen som information ska läsas från. Standardvärdet är B<debian/changelog>.
 
 =item B<-f>I<fillistfil>
 
-Läser listan över filer som ska sändas in härifrån, istället för att använda
-B<debian/files>.
+Läser listan över filer som ska sändas in härifrån, istället för att använda B<debian/files>.
 
 =item B<-F>I<ändringsloggformat>
 
-Anger format på ändringsloggen. Se B<dpkg-parsechangelog>(1) för information
-om alternativa format.
+Anger format på ändringsloggen. Se B<dpkg-parsechangelog>(1) för information om alternativa format.
 
 =item B<-u>I<insändningskatalog>
 
-Se efter filer som ska sändas in i I<insändningskatalog> istället för B<..>
-(B<dpkg-genchanges> måste kunna se dessa filer så att det kan lägga in deras
-storlekar och kontrollsummor i B<.changes>-filen).
+Se efter filer som ska sändas in i I<insändningskatalog> istället för B<..> (B<dpkg-genchanges> måste kunna se dessa filer så att det kan lägga in deras storlekar och kontrollsummor i B<.changes>-filen).
 
 =item B<-q>
 
-B<dpkg-genchanges> kommer normalt att generera informativa meddelanden på
-standard fel, till exempel om hur många pakets källkodsfiler sänds in. B<-q>
-undertrycker dessa meddelanden.
+B<dpkg-genchanges> kommer normalt att generera informativa meddelanden på standard fel, till exempel om hur många pakets källkodsfiler sänds in. B<-q> undertrycker dessa meddelanden.
 
 =item B<-O>[I<filnamn>]
 
-Skriv ändringsfilen på standard ut (förval) eller till I<filnamn> om anges
-(sedan dpkg 1.18.5).
+Skriv ändringsfilen på standard ut (förval) eller till I<filnamn> om anges (sedan dpkg 1.18.5).
 
 =item B<-?>, B<--help>
 
@@ -208,14 +176,11 @@ Visar version och avslutar.
 
 =item B<DPKG_COLORS>
 
-Väljer färgläge (sedan dpkg 1.18.5). För närvarande godtas följande värden:
-B<auto> (förval), B<always> och B<never>.
+Väljer färgläge (sedan dpkg 1.18.5). För närvarande godtas följande värden: B<auto> (förval), B<always> och B<never>.
 
 =item B<DPKG_NLS>
 
-Om satt, används för att bestämma om lokalt språkstöd ska aktiveras, även
-känt som internationaliseringsstöd (eller i18n) (sedan dpkg
-1.19.0). Tillåtna värden är: B<0> och B<1> (förval).
+Om satt, används för att bestämma om lokalt språkstöd ska aktiveras, även känt som internationaliseringsstöd (eller i18n) (sedan dpkg 1.19.0). Tillåtna värden är: B<0> och B<1> (förval).
 
 =back
 
@@ -225,15 +190,13 @@ känt som internationaliseringsstöd (eller i18n) (sedan dpkg
 
 =item B<debian/files>
 
-Listan över genererade filer som är en del av den insändning som
-förbereds. B<dpkg-genchanges> läser data här när B<.changes>-filen skapas.
+Listan över genererade filer som är en del av den insändning som förbereds. B<dpkg-genchanges> läser data här när B<.changes>-filen skapas.
 
 =back
 
 =head1 SE ÄVEN
 
-B<deb-substvars>(5), B<deb-src-control>(5), B<deb-src-files>(5),
-B<deb-changelog>(5), B<deb-changes>(5).
+B<deb-substvars>(5), B<deb-src-control>(5), B<deb-src-files>(5), B<deb-changelog>(5), B<deb-changes>(5).
 
 
 =head1 ÖVERSÄTTNING

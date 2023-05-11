@@ -22,14 +22,7 @@ B<dpkg-name> [I<flagga>...] [B<-->] I<fil>...
 
 =head1 BESKRIVNING
 
-Manualsidan dokumenterar programmet B<dpkg-name>, vilket tillhandahåller ett
-enkelt sätt att byta namn på B<Debian>paket till deras fullständiga
-paketnamn. Ett fullständigt paketnamn består av
-I<paket>B<_>I<version>B<_>I<arkitektur>B<.>I<pakettyp> och anges av
-control-filen i paketet. I<Version>-delen av filnamnet består av
-uppströmsversionsinformation och kan eventuellt följas av ett bindestreck
-och revisionsinformationen. I<Pakettyp>-delen kommer från fältet
-I<package-type> om det finns, annars B<deb>.
+Manualsidan dokumenterar programmet B<dpkg-name>, vilket tillhandahåller ett enkelt sätt att byta namn på B<Debian>paket till deras fullständiga paketnamn. Ett fullständigt paketnamn består av I<paket>B<_>I<version>B<_>I<arkitektur>B<.>I<pakettyp> och anges av control-filen i paketet. I<Version>-delen av filnamnet består av uppströmsversionsinformation och kan eventuellt följas av ett bindestreck och revisionsinformationen. I<Pakettyp>-delen kommer från fältet I<package-type> om det finns, annars B<deb>.
 
 =head1 FLAGGOR
 
@@ -45,27 +38,17 @@ Skapa en symbolisk länk istället för att flytta.
 
 =item B<-o>, B<--overwrite>
 
-Befintliga filer kommer att skrivas över om de har samma namn som
-destinationsfilnamnet.
+Befintliga filer kommer att skrivas över om de har samma namn som destinationsfilnamnet.
 
 =item B<-s>, B<--subdir> [I<katalog>]
 
-Filerna kommer att flyttas till en underkatalog. Om katalogen i argumentet
-existerar kommer filerna att flyttas in i den katalogen, om inte kommer
-namnet på målkatalogen att hämtas från sektionsfältet i styrdelen av
-paketet. Målkatalogen kommer vara
-”unstable/binary-I<arkitekur>I<sektion>”. Om sektionen inte hittas i
-styrfilen antas ”no-section”, och i så fall, samt för sektionerna ”non-free”
-och ”contrib”, är målkatalogen
-”I<sektion>/binary-I<arkitektur>”. Sektionsfältet krävs inte, så flera paket
-hamnar i katalogen ”no-section”.
+Filerna kommer att flyttas till en underkatalog. Om katalogen i argumentet existerar kommer filerna att flyttas in i den katalogen, om inte kommer namnet på målkatalogen att hämtas från sektionsfältet i styrdelen av paketet. Målkatalogen kommer vara ”unstable/binary-I<arkitekur>I<sektion>”. Om sektionen inte hittas i styrfilen antas ”no-section”, och i så fall, samt för sektionerna ”non-free” och ”contrib”, är målkatalogen ”I<sektion>/binary-I<arkitektur>”. Sektionsfältet krävs inte, så flera paket hamnar i katalogen ”no-section”.
 
 B<Varning:> I<Använd den här flaggan med tillförsikt, den kan vara rörig.>
 
 =item B<-c>, B<--create-dir>
 
-Flaggan kan användas tillsammans med B<-s>-flaggan. Om en målkatalog inte
-existerar kommer den att skapas automatiskt. 
+Flaggan kan användas tillsammans med B<-s>-flaggan. Om en målkatalog inte existerar kommer den att skapas automatiskt. 
 
 B<Varning:> I<Använd denna flagga med tillförsikt.>
 
@@ -85,24 +68,17 @@ Visar version och avslutar.
 
 =item B<DPKG_COLORS>
 
-Väljer färgläge (sedan dpkg 1.18.5). För närvarande godtas följande värden:
-B<auto> (förval), B<always> och B<never>.
+Väljer färgläge (sedan dpkg 1.18.5). För närvarande godtas följande värden: B<auto> (förval), B<always> och B<never>.
 
 =item B<DPKG_NLS>
 
-Om satt, används för att bestämma om lokalt språkstöd ska aktiveras, även
-känt som internationaliseringsstöd (eller i18n) (sedan dpkg
-1.19.0). Tillåtna värden är: B<0> och B<1> (förval).
+Om satt, används för att bestämma om lokalt språkstöd ska aktiveras, även känt som internationaliseringsstöd (eller i18n) (sedan dpkg 1.19.0). Tillåtna värden är: B<0> och B<1> (förval).
 
 =back
 
 =head1 PROGRAMFEL
 
-Vissa paket följer inte namnstrukturen
-I<paket>B<_>I<version>B<_>I<arkitektur>B<.deb>. Paket vars namn ändrats med
-B<dpkg-name> kommer följa denna struktur. Normalt påverkar detta inte hur
-B<dselect>(1)/B<dpkg>(1) installerar paket, men vissa andra
-installationsverktyg kan vara beroende av denna namngivningsstruktur.
+Vissa paket följer inte namnstrukturen I<paket>B<_>I<version>B<_>I<arkitektur>B<.deb>. Paket vars namn ändrats med B<dpkg-name> kommer följa denna struktur. Normalt påverkar detta inte hur B<dselect>(1)/B<dpkg>(1) installerar paket, men vissa andra installationsverktyg kan vara beroende av denna namngivningsstruktur.
 
 =head1 EXEMPEL
 
@@ -110,20 +86,15 @@ installationsverktyg kan vara beroende av denna namngivningsstruktur.
 
 =item B<dpkg-name bar-foo.deb>
 
-Filen B<bar-foo.deb> kommer att få det nya namnet bar-foo_1.0-2_i386.deb
-eller något liknande (beroende på vilken information som hittas i styrdelen
-av B<bar-foo.deb>).
+Filen B<bar-foo.deb> kommer att få det nya namnet bar-foo_1.0-2_i386.deb eller något liknande (beroende på vilken information som hittas i styrdelen av B<bar-foo.deb>).
 
 =item B<find /root/debian/ -name '*.deb' | xargs -n 1 dpkg-name -a>
 
-Alla filer med ändelsen B<deb> i katalogen /root/debian och dess
-underkataloger kommer att få sina namn ersatta med B<dpkg-name>, om så
-behövs, till namn utan arkitekturinformation.
+Alla filer med ändelsen B<deb> i katalogen /root/debian och dess underkataloger kommer att få sina namn ersatta med B<dpkg-name>, om så behövs, till namn utan arkitekturinformation.
 
 =item B<find -name '*.deb' | xargs -n 1 dpkg-name -a -o -s -c>
 
-B<Gör inte så här.> Ditt arkiv kommer att röras till helt och hållet
-eftersom många paket inte har någon sektionsinformation. B<Gör inte så här.>
+B<Gör inte så här.> Ditt arkiv kommer att röras till helt och hållet eftersom många paket inte har någon sektionsinformation. B<Gör inte så här.>
 
 =item B<dpkg-deb --build debian-tmp && dpkg-name -o -s .. debian-tmp.deb>
 
@@ -133,8 +104,7 @@ Kan användas när nya paket byggs.
 
 =head1 SE ÄVEN
 
-B<deb>(5), B<deb-control>(5), B<dpkg>(1), B<dpkg-deb>(1), B<find>(1),
-B<xargs>(1).
+B<deb>(5), B<deb-control>(5), B<dpkg>(1), B<dpkg-deb>(1), B<find>(1), B<xargs>(1).
 
 
 =head1 ÖVERSÄTTNING

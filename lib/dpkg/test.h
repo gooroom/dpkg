@@ -33,6 +33,8 @@
 #define TEST_MAIN_DTOR pop_error_context(ehflag_normaltidy)
 #endif
 
+DPKG_BEGIN_DECLS
+
 /**
  * @defgroup dpkg_test Test suite support
  * @ingroup dpkg-internal
@@ -62,7 +64,7 @@ test_alloc(void *ptr, const char *reason)
 	test_alloc((ptr), "cannot allocate memory for " #ptr " in " __FILE__ ":" test_stringify(__LINE__))
 
 #define test_try(jmp) \
-	push_error_context_jump(&(jmp), NULL, "test try"); \
+	push_error_context_jump(&(jmp), DPKG_NULL, "test try"); \
 	if (!setjmp((jmp)))
 #define test_catch \
 	else
@@ -85,7 +87,7 @@ static inline bool
 test_is_verbose(void)
 {
 	const char *verbose = getenv("TEST_VERBOSE");
-	return verbose != NULL && strcmp(verbose, "1") == 0;
+	return verbose != DPKG_NULL && strcmp(verbose, "1") == 0;
 }
 
 #ifndef TEST_OMIT_VARIABLES
@@ -154,6 +156,8 @@ static const char *test_skip_reason;
 	} while (0)
 
 /** @} */
+
+DPKG_END_DECLS
 
 #define TEST_ENTRY(name) \
 static void name(void); \

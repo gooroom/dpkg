@@ -22,11 +22,7 @@ B<debian/shlibs>, B<debian/>I<binary-name>B<.shlibs>, B<DEBIAN/shlibs>
 
 =head1 BESCHREIBUNG
 
-B<shlibs>-Dateien bilden Laufzeitbibliotheknamen und -versionen (I<SONAMEs>)
-auf Abhängigkeiten ab, die für eine Paket-B<control>-Datei geeignet sind. Es
-gibt einen Eintrag pro Zeile. Leerzeilen sind B<nicht> erlaubt. Zeilen, die
-mit B<#> beginnen, werden als Kommentarzeilen betrachtet und ignoriert. Alle
-anderen Zeilen müssen dem nachfolgenden Format folgen:
+B<shlibs>-Dateien bilden Laufzeitbibliotheknamen und -versionen (I<SONAMEs>) auf Abhängigkeiten ab, die für eine Paket-B<control>-Datei geeignet sind. Es gibt einen Eintrag pro Zeile. Leerzeilen sind B<nicht> erlaubt. Zeilen, die mit B<#> beginnen, werden als Kommentarzeilen betrachtet und ignoriert. Alle anderen Zeilen müssen dem nachfolgenden Format folgen:
 
 =over 
 
@@ -34,12 +30,9 @@ anderen Zeilen müssen dem nachfolgenden Format folgen:
 
 =back
 
-Die Felder I<Bibliothek> und I<Version> werden durch Leerraumzeichen
-begrenzt, das Feld I<Abhängigkeiten> geht aber bis zum Ende der Zeile. Das
-Feld I<Typ> ist optional und wird normalerweise nicht benötigt.
+Die Felder I<Bibliothek> und I<Version> werden durch Leerraumzeichen begrenzt, das Feld I<Abhängigkeiten> geht aber bis zum Ende der Zeile. Das Feld I<Typ> ist optional und wird normalerweise nicht benötigt.
 
-Das Feld I<dependencies> hat die gleiche Syntax wie das Feld B<Depends> in
-einer binären B<control>-Datei, siehe B<deb-control>(5).
+Das Feld I<dependencies> hat die gleiche Syntax wie das Feld B<Depends> in einer binären B<control>-Datei, siehe B<deb-control>(5).
 
 =head1 SONAME-FORMATE
 
@@ -63,9 +56,7 @@ wobei I<Name> normalerweise B<lib> vorangestellt wird.
 
 =head1 BEISPIELE
 
-Die B<shlibs>-Datei für ein typisches Bibliothekspaket namens I<libcrunch1>,
-das eine Bibliothek mit dem SONAME I<libcrunch.so.1> bereitstellt, könnte
-wie folgt lauten:
+Die B<shlibs>-Datei für ein typisches Bibliothekspaket namens I<libcrunch1>, das eine Bibliothek mit dem SONAME I<libcrunch.so.1> bereitstellt, könnte wie folgt lauten:
 
 =over 
 
@@ -73,10 +64,7 @@ wie folgt lauten:
 
 =back
 
-I<Abhängigkeiten> muss die neuste Version des Pakets erwähnen, das neue
-Symbole zu der Bibliothek hinzugefügt hat: im obigen Beispiel wurden neue
-Symbole zu Version 1.2 von I<libcrunch> hinzugefügt. Dies ist nicht der
-einzige Grund, dass Abhängigkeiten enger gefasst werden müssen.
+I<Abhängigkeiten> muss die neuste Version des Pakets erwähnen, das neue Symbole zu der Bibliothek hinzugefügt hat: im obigen Beispiel wurden neue Symbole zu Version 1.2 von I<libcrunch> hinzugefügt. Dies ist nicht der einzige Grund, dass Abhängigkeiten enger gefasst werden müssen.
 
 =head1 SIEHE AUCH
 
@@ -85,7 +73,7 @@ B<deb-control>(5), B<dpkg-shlibdeps>(1), B<deb-symbols>(5).
 
 =head1 ÜBERSETZUNG
 
-Die deutsche Übersetzung wurde 2004, 2006-2020 von Helge Kreutzmann
+Die deutsche Übersetzung wurde 2004, 2006-2023 von Helge Kreutzmann
 <debian@helgefjell.de>, 2007 von Florian Rehnisch <eixman@gmx.de> und
 2008 von Sven Joachim <svenjoac@gmx.de>
 angefertigt. Diese Übersetzung ist Freie Dokumentation; lesen Sie die

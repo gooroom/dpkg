@@ -22,36 +22,23 @@ I<nazwa_pliku>B<.deb>
 
 =head1 OPIS
 
-Format B<.deb> jest formatem binarnego pakietu Debiana. Ta strona
-podręcznika opisuje B<stary> format, używany przed wersją 0.93
-Debiana. Szczegóły nowego formatu można znaleźć w B<deb>(5).
+Format B<.deb> jest formatem binarnego pakietu Debiana. Ta strona podręcznika opisuje B<stary> format, używany przed wersją 0.93 Debiana. Szczegóły nowego formatu można znaleźć w B<deb>(5).
 
 =head1 FORMAT
 
-Plik składa się z dwu linii informacji o formacie jako tekst ASCII, po
-których następują dwa połączone pliki ustar spakowane gzipem.
+Plik składa się z dwu linii informacji o formacie jako tekst ASCII, po których następują dwa połączone pliki ustar spakowane gzipem.
 
-Pierwszą linią jest numer wersji formatu, wyrównany do 8 cyfr. Dla starego
-formatu numer ten wynosi B<0.939000>.
+Pierwszą linią jest numer wersji formatu, wyrównany do 8 cyfr. Dla starego formatu numer ten wynosi B<0.939000>.
 
-W drugiej linii jest zapisana liczba dziesiętna (bez początkowych zer)
-podające długość pierwszego zgzipowanego pliku tar.
+W drugiej linii jest zapisana liczba dziesiętna (bez początkowych zer) podające długość pierwszego zgzipowanego pliku tar.
 
 Każda z tych linii jest zakończona pojedynczym znakiem nowej linii.
 
-Pierwszy plik tar zawiera informacje kontrolne, jako serię zwyczajnych
-plików. Zawsze musi być obecny plik B<control> zawierający główne informacje
-kontrolne.
+Pierwszy plik tar zawiera informacje kontrolne, jako serię zwyczajnych plików. Zawsze musi być obecny plik B<control> zawierający główne informacje kontrolne.
 
-In some very old archives, the files in the control tarfile may optionally
-be in a B<DEBIAN> subdirectory. In that case, the B<DEBIAN> subdirectory
-will be in the control tarfile too, and the control tarfile will have only
-files in that directory. Optionally the control tarfile may contain an entry
-for ‘B<.>’, that is, the current directory.
+In some very old archives, the files in the control tarfile may optionally be in a B<DEBIAN> subdirectory. In that case, the B<DEBIAN> subdirectory will be in the control tarfile too, and the control tarfile will have only files in that directory. Optionally the control tarfile may contain an entry for ‘B<.>’, that is, the current directory.
 
-Drugim skompresowanym archiwum tar jest archiwum systemu plików, zawierające
-nazwy ścieżek relatywne do głównego katalogu systemu, na którym będą
-instalowane. Nazwy te nie zaczynają się od ukośników.
+Drugim skompresowanym archiwum tar jest archiwum systemu plików, zawierające nazwy ścieżek relatywne do głównego katalogu systemu, na którym będą instalowane. Nazwy te nie zaczynają się od ukośników.
 
 =head1 ZOBACZ TAKŻE
 

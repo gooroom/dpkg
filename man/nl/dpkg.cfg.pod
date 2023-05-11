@@ -18,12 +18,7 @@ dpkg.cfg - configuratiebestand voor dpkg
 
 =head1 BESCHRIJVING
 
-Dit bestand bevat standaardopties voor dpkg. Elke regel bevat één enkele
-optie, die exact hetzelfde is als een normale commandoregeloptie voor dpkg,
-behalve dat de koppeltekens vooraan hier niet gebruikt
-worden. Aanhalingstekens die rond optiewaarden staan, worden
-verwijderd. Commentaar kan toegevoegd worden door de regel met een hekje
-(‘B<#>’) te laten starten.
+Dit bestand bevat standaardopties voor dpkg. Elke regel bevat één enkele optie, die exact hetzelfde is als een normale commandoregeloptie voor dpkg, behalve dat de koppeltekens vooraan hier niet gebruikt worden. Aanhalingstekens die rond optiewaarden staan, worden verwijderd. Commentaar kan toegevoegd worden door de regel met een hekje (‘B<#>’) te laten starten.
 
 =head1 BESTANDEN
 

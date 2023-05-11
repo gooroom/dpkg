@@ -33,7 +33,8 @@ my @files = Test::Dpkg::all_perl_files();
 
 plan tests => scalar @files;
 
-set_spell_cmd('aspell list --encoding UTF-8 -l en_US -p /dev/null');
+my @aspell_opts = qw(--encoding UTF-8 --lang en_US --personal /dev/null);
+set_spell_cmd("aspell list @aspell_opts");
 add_stopwords(<DATA>);
 
 for my $file (@files) {
@@ -42,6 +43,7 @@ for my $file (@files) {
 
 __DATA__
 CVS
+Devuan
 DSC
 Dpkg
 IPC
@@ -50,6 +52,7 @@ OpenPGP
 RCS
 XDG
 archqual
+backport
 buildinfo
 bzip2
 canonicalized
@@ -66,8 +69,10 @@ dpkg-buildpackage
 dpkg-checkbuilddeps
 dpkg-dev
 dpkg-genbuildinfo
+dpkg-genchanges
 dpkg-gencontrol
 dpkg-parsechangelog
+dpkg-mergechangelog
 dsc
 dup'ed
 env

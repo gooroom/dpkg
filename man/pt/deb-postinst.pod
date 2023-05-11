@@ -22,9 +22,7 @@ B<DEBIAN/postinst>
 
 =head1 DESCRIÇÃO
 
-Um pacote pode executar várias acções de pós-instalação via scripts do
-maintainer, ao incluir um ficheiro executável I<postinst> no seu arquivo de
-controle (isto é, I<DEBIAN/postinst>( durante a criação do pacote.
+Um pacote pode executar várias acções de pós-instalação via scripts do maintainer, ao incluir um ficheiro executável I<postinst> no seu arquivo de controle (isto é, I<DEBIAN/postinst>( durante a criação do pacote.
 
 O script pode ser chamado nos seguintes modos:
 
@@ -36,26 +34,25 @@ Após o pacote ter sido instalado.
 
 =item I<postinst> B<triggered> "I<trigger-name...>"
 
-Após o pacote ser despoletado. A lista de I<trigger-name>s separados por
-espaços é passada como segundo argumento.
+Após o pacote ser despoletado. A lista de I<trigger-name>s separados por espaços é passada como segundo argumento.
 
 =item I<old-postinst> B<abort-upgrade> I<new-version>
 
-Se I<prerm> falhar durante actualização ou falhar numa actualização falhada.
+Se I<prerm> falhar durante B<upgrade> ou falhar num B<failed-upgrade>.
 
 =item I<old-postinst> B<abort-remove>
 
-Se I<prerm> falhar durante a remoção.
+Se I<prerm> falhar durante B<remove>.
 
-=item I<postinst> B<abort-deconfigure in-favour> I<new-package new-version>
+=item I<postinst> B<abort-deconfigure> B<in-favour> I<new-package> I<new-version>
 
-=item S< >[ B<removing> I<old-package old-version> ]
+=item S< >[ B<removing> I<old-package> I<old-version> ]
 
-Se I<prerm> falhar durante a desconfiguração de um pacote
+Se I<prerm> falhar durante B<deconfigure in-favour> de um pacote
 
-=item I<postinst> B<abort-remove in-favour> I<new-package new-version>
+=item I<postinst> B<abort-remove> B<in-favour> I<new-package> I<new-version>
 
-Se I<prerm> falhar durante substituição devido a conflito.
+Se I<prerm> falhar durante B<remove in-favour> para substituição devido a conflito.
 
 =back
 

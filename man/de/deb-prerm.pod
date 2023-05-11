@@ -22,10 +22,7 @@ B<DEBIAN/prerm>
 
 =head1 BESCHREIBUNG
 
-Ein Paket kann eine Reihe von Präentfernungsaktionen mittels seiner
-Betreuerskripte durchführen, indem es eine ausführbare Datei I<prerm> in
-seinem Steuerarchiv (d.h. I<DEBIAN/prerm> während der Paketerstellung)
-hinzunimmt.
+Ein Paket kann eine Reihe von Präentfernungsaktionen mittels seiner Betreuerskripte durchführen, indem es eine ausführbare Datei I<prerm> in seinem Steuerarchiv (d.h. I<DEBIAN/prerm> während der Paketerstellung) hinzunimmt.
 
 Das Skript kann in den folgenden Weisen aufgerufen werden:
 
@@ -39,18 +36,19 @@ Bevor das Paket entfernt wird.
 
 Vor einem Upgrade.
 
-=item I<new-prerm> B<failed-upgrade> I<alte_Version neue_Version>
+=item I<new-prerm> B<failed-upgrade> I<alte_Version> I<neue_Version>
 
 Falls das obige B<upgrade> fehlschlägt.
 
-=item I<prerm> B<deconfigure in-favour> I<neues_Paket neue_Version>
+Die I<neue_Version> wird erst seit Dpkg 1.18.5 übergeben.
 
-=item S< >[ B<removing> I<altes_Paket alte_Version> ]
+=item I<prerm> B<deconfigure> B<in-favour> I<neues_Paket> I<neue_Version>
 
-Bevor ein Paket dekonfiguriert wurde, während eine Abhängigkeit aufgrund
-eines Konflikts ersetzt wird.
+=item S< >[ B<removing> I<altes_Paket> I<alte_Version> ]
 
-=item I<prerm> B<remove in-favour> I<neues_Paket neue_Version>
+Bevor ein Paket dekonfiguriert wurde, während eine Abhängigkeit aufgrund eines Konflikts ersetzt wird.
+
+=item I<prerm> B<remove> B<in-favour> I<neues_Paket> I<neue_Version>
 
 Bevor das Paket aufgrund eines Konflikts ersetzt wird.
 
@@ -63,7 +61,7 @@ B<dpkg>(1).
 
 =head1 ÜBERSETZUNG
 
-Die deutsche Übersetzung wurde 2004, 2006-2020 von Helge Kreutzmann
+Die deutsche Übersetzung wurde 2004, 2006-2023 von Helge Kreutzmann
 <debian@helgefjell.de>, 2007 von Florian Rehnisch <eixman@gmx.de> und
 2008 von Sven Joachim <svenjoac@gmx.de>
 angefertigt. Diese Übersetzung ist Freie Dokumentation; lesen Sie die

@@ -22,13 +22,9 @@ B<override>
 
 =head1 DESCRIÇÃO
 
-Enquanto a maioria da informação acerca de um pacote binário/fonte pode ser
-encontrada no ficheiro control/.dsc, toda ela pode ser sobreposta quando ele
-é exportado para ficheiros Packages/Sources. O ficheiro override extra
-contém essas sobreposições.
+Enquanto a maioria da informação acerca de um pacote binário/fonte pode ser encontrada no ficheiro control/.dsc, toda ela pode ser sobreposta quando ele é exportado para ficheiros Packages/Sources. O ficheiro override extra contém essas sobreposições.
 
-O ficheiro override extra tem um formato simples de delimitação por espaços
-em branco. São permitidos comentários (denotados com um B<#>).
+O ficheiro override extra tem um formato simples de delimitação por espaços em branco. São permitidos comentários (denotados com um B<#>).
 
 =over 
 
@@ -40,12 +36,9 @@ I<package> é o nome do pacote binário/fonte.
 
 I<field-name> é o nome do campo que é sobreposto.
 
-I<value> é o valor a colocar no campo. Pode conter espaços pois pois a linha
-é dividida em não mais do que 3 colunas quando é analisada.
+I<value> é o valor a colocar no campo. Pode conter espaços pois pois a linha é dividida em não mais do que 3 colunas quando é analisada.
 
-Os ficheiros de extra sobreposição usados para criar as listas Packages
-oficiais pode ser encontrados no directório I<indices> em qualquer mirror de
-Debian.
+Os ficheiros de extra sobreposição usados para criar as listas Packages oficiais pode ser encontrados no directório I<indices> em qualquer mirror de Debian.
 
 =head1 VEJA TAMBÉM
 

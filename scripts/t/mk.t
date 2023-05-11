@@ -16,7 +16,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 use Test::Dpkg qw(:paths);
 
 use File::Spec::Functions qw(rel2abs);
@@ -46,11 +46,13 @@ $ENV{PATH} = "$srcdir/t/mock-bin:$ENV{PATH}";
 $ENV{DEB_BUILD_PATH} = rel2abs($datadir);
 
 sub test_makefile {
-    my $makefile = shift;
+    my ($makefile, $desc) = @_;
+
+    $desc //= 'default';
 
     spawn(exec => [ $Dpkg::PROGMAKE, '-C', $datadir, '-f', $makefile ],
           wait_child => 1, nocheck => 1);
-    ok($? == 0, "makefile $makefile computes all values correctly");
+    ok($? == 0, "makefile $makefile computes all values correctly ($desc)");
 }
 
 sub cmd_get_vars {
@@ -72,11 +74,15 @@ sub cmd_get_vars {
 
 my %arch = cmd_get_vars($ENV{PERL}, "$srcdir/dpkg-architecture.pl", '-f');
 
-delete $ENV{$_} foreach keys %arch;
-$ENV{"TEST_$_"} = $arch{$_} foreach keys %arch;
-test_makefile('architecture.mk');
-$ENV{$_} = $arch{$_} foreach keys %arch;
-test_makefile('architecture.mk');
+while (my ($k, $v) = each %arch) {
+    delete $ENV{$k};
+    $ENV{"TEST_$k"} = $v;
+}
+test_makefile('architecture.mk', 'without envvars');
+while (my ($k, $v) = each %arch) {
+    $ENV{$k} = $v;
+}
+test_makefile('architecture.mk', 'with envvars');
 
 $ENV{DEB_BUILD_OPTIONS} = 'parallel=16';
 $ENV{TEST_DEB_BUILD_OPTION_PARALLEL} = '16';
@@ -86,8 +92,10 @@ delete $ENV{TEST_DEB_BUILD_OPTION_PARALLEL};
 
 my %buildflag = cmd_get_vars($ENV{PERL}, "$srcdir/dpkg-buildflags.pl");
 
-delete $ENV{$_} foreach keys %buildflag;
-$ENV{"TEST_$_"} = $buildflag{$_} foreach keys %buildflag;
+while (my ($var, $flags) = each %buildflag) {
+    delete $ENV{$var};
+    $ENV{"TEST_$var"} = $flags;
+}
 test_makefile('buildflags.mk');
 
 my %buildtools = (
@@ -98,8 +106,8 @@ my %buildtools = (
     OBJC => 'gcc',
     OBJCXX => 'g++',
     GCJ => 'gcj',
-    F77 => 'f77',
-    FC => 'f77',
+    F77 => 'gfortran',
+    FC => 'gfortran',
     LD => 'ld',
     STRIP => 'strip',
     OBJCOPY => 'objcopy',
@@ -110,18 +118,18 @@ my %buildtools = (
     PKG_CONFIG => 'pkg-config',
 );
 
-foreach my $tool (keys %buildtools) {
-    delete $ENV{$tool};
-    $ENV{"TEST_$tool"} = "$ENV{DEB_HOST_GNU_TYPE}-$buildtools{$tool}";
-    delete $ENV{"${tool}_FOR_BUILD"};
-    $ENV{"TEST_${tool}_FOR_BUILD"} = "$ENV{DEB_BUILD_GNU_TYPE}-$buildtools{$tool}";
+while (my ($var, $tool) = each %buildtools) {
+    delete $ENV{$var};
+    $ENV{"TEST_$var"} = "$ENV{DEB_HOST_GNU_TYPE}-$tool";
+    delete $ENV{"${var}_FOR_BUILD"};
+    $ENV{"TEST_${var}_FOR_BUILD"} = "$ENV{DEB_BUILD_GNU_TYPE}-$tool";
 }
-test_makefile('buildtools.mk');
+test_makefile('buildtools.mk', 'without envvars');
 
 $ENV{DEB_BUILD_OPTIONS} = 'nostrip';
 $ENV{TEST_STRIP} = ':';
 $ENV{TEST_STRIP_FOR_BUILD} = ':';
-test_makefile('buildtools.mk');
+test_makefile('buildtools.mk', 'with envvars');
 delete $ENV{DEB_BUILD_OPTIONS};
 
 foreach my $tool (keys %buildtools) {
@@ -129,6 +137,14 @@ foreach my $tool (keys %buildtools) {
     delete $ENV{"${tool}_FOR_BUILD"};
 }
 
+delete $ENV{SOURCE_DATE_EPOCH};
+# Timestamp in seconds since the epoch from date in test debian/changelog
+# entry: «Tue, 04 Aug 2015 16:13:50 +0200».
+$ENV{TEST_SOURCE_DATE_EPOCH} = 1438697630;
+test_makefile('pkg-info.mk');
+
+$ENV{SOURCE_DATE_EPOCH} = 100;
+$ENV{TEST_SOURCE_DATE_EPOCH} = 100;
 test_makefile('pkg-info.mk');
 
 test_makefile('vendor.mk');

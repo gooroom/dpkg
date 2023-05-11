@@ -22,9 +22,7 @@ B<DEBIAN/prerm>
 
 =head1 BESKRIVNING
 
-Ett paket kan utföra flera åtgärder före borttagning via utvecklarskript,
-genom att ta med en körbar fil I<prerm> i sitt styrarkiv
-(dvs. I<DEBIAN/prerm> när paketet skapas).
+Ett paket kan utföra flera åtgärder före borttagning via utvecklarskript, genom att ta med en körbar fil I<prerm> i sitt styrarkiv (dvs. I<DEBIAN/prerm> när paketet skapas).
 
 Skriptet kan anropas på följande sätt:
 
@@ -38,18 +36,19 @@ Innan paketet tas bort.
 
 Före en uppgradering.
 
-=item I<ny-prerm> B<failed-upgrade> I<gammal-version ny-version>
+=item I<ny-prerm> B<failed-upgrade> I<gammal-version> i<ny-version>
 
 Om ovanstående B<upgrade> misslyckas.
 
-=item I<prerm> B<deconfigure in-favour> I<nytt-paket ny-version>
+I<ny-version> sänds endast sedan dpkg 1.18.5.
 
-=item S< >[ B<removing> I<gammalt-paket ny-version> ]
+=item I<prerm> B<deconfigure> b<in-favour> I<nytt-paket> i<ny-version>
 
-Innan paketet avkonfigureras medan ett beroende ersätts på grund av
-konflikt.
+=item S< >[ B<removing> I<gammalt-paket> I<ny-version> ]
 
-=item I<prerm> B<remove in-favour> I<nytt-paket ny-version>
+Innan paketet avkonfigureras medan ett beroende ersätts på grund av konflikt.
+
+=item I<prerm> B<remove> b<in-favour> I<nytt-paket> i<ny-version>
 
 Innan paketet ersätts på grund av konflikt.
 

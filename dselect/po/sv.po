@@ -1,14 +1,14 @@
 # Swedish translation of dpkg
-# Copyright © 1999-2021 Software in the Public Interest
+# Copyright © 1999-2022 Software in the Public Interest
 # Daniel Nylander <po@danielnylander.se>, 2006.
 # Peter Krefting <peter@softwolves.pp.se>, 1999-2022.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: dselect 1.17.22\n"
+"Project-Id-Version: dselect 1.21.5\n"
 "Report-Msgid-Bugs-To: debian-dpkg@lists.debian.org\n"
-"POT-Creation-Date: 2022-09-01 03:37+0000\n"
-"PO-Revision-Date: 2022-01-15 22:11+0100\n"
+"POT-Creation-Date: 2023-05-11 02:03+0000\n"
+"PO-Revision-Date: 2022-03-28 23:00+0200\n"
 "Last-Translator: Peter Krefting <peter@softwolves.pp.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -52,40 +52,8 @@ msgid "error reading keyboard in help"
 msgstr "fel vid läsning av tangentbordet i hjälpfunktionen"
 
 #: dselect/baselist.cc
-msgid "ioctl(TIOCGWINSZ) failed"
-msgstr "ioctl(TIOCGWINSZ) misslyckades"
-
-#: dselect/baselist.cc
-msgid "doupdate in SIGWINCH handler failed"
-msgstr "doupdate misslyckades i hanterare för fönsterändring"
-
-#: dselect/baselist.cc
-msgid "failed to restore old SIGWINCH sigact"
-msgstr "kunde inte återställa tidigare fönsteruppdateringshanterare"
-
-#: dselect/baselist.cc
-msgid "failed to restore old signal mask"
-msgstr "kunde inte återställa gammal signalmask"
-
-#: dselect/baselist.cc
-msgid "failed to unblock SIGWINCH"
-msgstr "kunde inte avblockera fönsteruppdatering"
-
-#: dselect/baselist.cc
-msgid "failed to block SIGWINCH"
-msgstr "kunde inte blockera fönsterändring"
-
-#: dselect/baselist.cc
-msgid "failed to get old signal mask"
-msgstr "kunde inte hämta gammal signalmask"
-
-#: dselect/baselist.cc
-msgid "failed to get old SIGWINCH sigact"
-msgstr "kunde inte hämta tidigare fönsteruppdateringshanterare"
-
-#: dselect/baselist.cc
-msgid "failed to set new SIGWINCH sigact"
-msgstr "kunde inte sätta ny fönsteruppdateringshanterare"
+msgid "cannot update screen after window resize"
+msgstr "kan inte uppdatera skärm efter storleksändring av fönster"
 
 #: dselect/baselist.cc
 msgid "failed to allocate colour pair"
@@ -633,8 +601,8 @@ msgstr ""
 "  av paketet), eller information om konflikter och beroenden som gäller det\n"
 "  aktuella pektet (i underlistor där konflikter/beroenden hanteras).\n"
 "\n"
-"  Använd \"i\"-tangenten för att cykla genom de olika visningslägena, och \"I"
-"\"\n"
+"  Använd \"i\"-tangenten för att cykla genom de olika visningslägena, och "
+"\"I\"\n"
 "  för att gömma informationsvisningen, eller utöka den till att använda "
 "nästan\n"
 "  hela skärmen.\n"
@@ -862,6 +830,8 @@ msgstr "Åtgärder:\n"
 msgid ""
 "Options:\n"
 "      --admindir <directory>       Use <directory> instead of %s.\n"
+"      --instdir <directory>        Use <directory> instead of %s.\n"
+"      --root <directory>           Use <directory> instead of %s.\n"
 "      --expert                     Turn on expert mode.\n"
 "  -D, --debug <file>               Turn on debugging, send output to "
 "<file>.\n"
@@ -870,6 +840,8 @@ msgid ""
 msgstr ""
 "Flaggor:\n"
 "      --admindir <katalog>         Använd <katalog> istället för %s.\n"
+"      --instdir <katalog>          Använd <katalog> istället för %s.\n"
+"      --root <katalog>             Använd <katalog> istället för %s.\n"
 "      --expert                     Slå på expertläget.\n"
 "  -D, --debug <fil>                Slå på felsökning, skicka utskrift till "
 "<fil>.\n"
@@ -1631,6 +1603,33 @@ msgstr "%s %s paket i avdelning %s"
 #, c-format
 msgid "%-*s %s%s%s;  %s (was: %s).  %s"
 msgstr "%-*s %s%s%s;  %s (var: %s).  %s"
+
+#~ msgid "ioctl(TIOCGWINSZ) failed"
+#~ msgstr "ioctl(TIOCGWINSZ) misslyckades"
+
+#~ msgid "doupdate in SIGWINCH handler failed"
+#~ msgstr "doupdate misslyckades i hanterare för fönsterändring"
+
+#~ msgid "failed to restore old SIGWINCH sigact"
+#~ msgstr "kunde inte återställa tidigare fönsteruppdateringshanterare"
+
+#~ msgid "failed to restore old signal mask"
+#~ msgstr "kunde inte återställa gammal signalmask"
+
+#~ msgid "failed to unblock SIGWINCH"
+#~ msgstr "kunde inte avblockera fönsteruppdatering"
+
+#~ msgid "failed to block SIGWINCH"
+#~ msgstr "kunde inte blockera fönsterändring"
+
+#~ msgid "failed to get old signal mask"
+#~ msgstr "kunde inte hämta gammal signalmask"
+
+#~ msgid "failed to get old SIGWINCH sigact"
+#~ msgstr "kunde inte hämta tidigare fönsteruppdateringshanterare"
+
+#~ msgid "failed to set new SIGWINCH sigact"
+#~ msgstr "kunde inte sätta ny fönsteruppdateringshanterare"
 
 #~ msgid ""
 #~ "\n"

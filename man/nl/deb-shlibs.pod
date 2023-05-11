@@ -22,11 +22,7 @@ B<debian/shlibs>, B<debian/>I<binaire-naam>B<.shlibs>, B<DEBIAN/shlibs>
 
 =head1 BESCHRIJVING
 
-B<shlibs>-bestanden zetten namen en versies (I<sonames>) van gedeelde
-bibliotheken om naar vereisten die bruikbaar zijn voor een control-bestand
-van een pakket. Elke regel bevat één element. Lege regels zijn B<niet>
-toegestaan. Regels die beginnen met het teken B<#> worden als commentaar
-aanzien en genegeerd. Alle andere regels moeten de volgende indeling hebben:
+B<shlibs>-bestanden zetten namen en versies (I<SONAMEs>) van gedeelde bibliotheken om naar vereisten die bruikbaar zijn voor een control-bestand van een pakket. Elke regel bevat één element. Lege regels zijn B<niet> toegestaan. Regels die beginnen met het teken B<#> worden als commentaar aanzien en genegeerd. Alle andere regels moeten de volgende indeling hebben:
 
 =over 
 
@@ -34,12 +30,9 @@ aanzien en genegeerd. Alle andere regels moeten de volgende indeling hebben:
 
 =back
 
-De velden I<bibliotheek> en I<versie> worden door witruimte van elkaar
-gescheiden, maar het veld I<vereisten> loopt door tot het einde van de
-regel. Het veld I<type> is facultatief en meestal niet nodig.
+De velden I<bibliotheek> en I<versie> worden door witruimte van elkaar gescheiden, maar het veld I<vereisten> loopt door tot het einde van de regel. Het veld I<type> is facultatief en meestal niet nodig.
 
-Het veld I<vereisten> heeft dezelfde syntaxis als het veld B<Depends> in het
-control-bestand van een binair pakket, zie B<deb-control>(5).
+Het veld I<vereisten> heeft dezelfde syntaxis als het veld B<Depends> in het control-bestand van een binair pakket, zie B<deb-control>(5).
 
 =head1 SONAME-INDELINGEN
 
@@ -63,9 +56,7 @@ waarbij I<naam> gewoonlijk voorafgegaan wordt door B<lib>.
 
 =head1 VOORBEELDEN
 
-Het B<shlibs>-bestand voor een typisch bibliotheekpakket met als naam
-I<libcrunch1> dat één bibliotheek levert met als SONAME I<libcrunch.so.1>,
-kan er als volgt uitzien
+Het B<shlibs>-bestand voor een typisch bibliotheekpakket met als naam I<libcrunch1> dat één bibliotheek levert met als SONAME I<libcrunch.so.1>, kan er als volgt uitzien
 
 =over 
 
@@ -73,11 +64,7 @@ kan er als volgt uitzien
 
 =back
 
-De I<vereisten> moeten de meest recente versie vermelden van het pakket dat
-nieuwe symbolen toevoegde aan de bibliotheek. In het bovenstaande voorbeeld
-werden nieuwe symbolen toegevoegd in versie 1.2 van I<libcrunch>. Dit is
-niet de enige reden waarom het kan zijn dat vereisten scherper gesteld
-moeten worden.
+De I<vereisten> moeten de meest recente versie vermelden van het pakket dat nieuwe symbolen toevoegde aan de bibliotheek. In het bovenstaande voorbeeld werden nieuwe symbolen toegevoegd in versie 1.2 van I<libcrunch>. Dit is niet de enige reden waarom het kan zijn dat vereisten scherper gesteld moeten worden.
 
 =head1 ZIE OOK
 

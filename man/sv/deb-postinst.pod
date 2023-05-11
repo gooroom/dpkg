@@ -22,9 +22,7 @@ B<DEBIAN/postinst>
 
 =head1 BESKRIVNING
 
-Ett paket kan utföra flera åtgärder efter installation via utvecklarskript,
-genom att ta med en körbar fil I<postinst> i sitt styrarkiv
-(dvs. I<DEBIAN/postinst> när paketet skapas).
+Ett paket kan utföra flera åtgärder efter installation via utvecklarskript, genom att ta med en körbar fil I<postinst> i sitt styrarkiv (dvs. I<DEBIAN/postinst> när paketet skapas).
 
 Skriptet kan anropas på följande sätt:
 
@@ -36,27 +34,25 @@ Efter att paketet installerats.
 
 =item I<postinst> B<triggered> "I<utlösarnamn...>"
 
-Efter att paketet utlösts. Listan över blankstegsavdelade I<utlösarnamn>
-sänds med som det andra argumentet.
+Efter att paketet utlösts. Listan över blankstegsavdelade I<utlösarnamn> sänds med som det andra argumentet.
 
 =item I<gammal-postinst> B<abort-upgrade> I<ny-version>
 
-Om I<prerm> misslyckas vid uppgradering eller misslyckas vid en misslyckad
-uppgradering.
+Om I<prerm> misslyckas vid B<upgrade> (uppgradering) eller misslyckas vid B<failed-upgrade> (misslyckad uppgradering).
 
 =item I<gammal-postinst> B<abort-remove>
 
-Om I<prerm> misslyckas vid borttagning.
+Om I<prerm> misslyckas vid B<remove> (borttagning).
 
-=item I<postinst> B<abort-deconfigure in-favour> I<nytt-paket ny-version>
+=item I<postinst> B<abort-deconfigure> B<in-favour> I<nytt-paket> I<ny-version>
 
-=item S< >[ B<removing> I<gammalt-paket ny-version> ]
+=item S< >[ B<removing> I<gammalt-paket> I<ny-version> ]
 
-Om I<prerm> misslyckas vid avkonfigurering av ett paket.
+Om I<prerm> misslyckas vid B<deconfigure in-favour> (avkonfigurering till fördel för) ett paket.
 
-=item I<postinst> B<abort-remove in-favour> I<nytt-paket ny-version>
+=item I<postinst> B<abort-remove> B<in-favour> I<nytt-paket> I<ny-version>
 
-Om I<prerm> misslyckas vid ersättning på grund av konflikt.
+Om I<prerm> misslyckas vid B<remove in-favour> (borttagning till fördel för) ersättning på grund av konflikt.
 
 =back
 

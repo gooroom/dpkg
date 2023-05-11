@@ -120,16 +120,19 @@ and B<--showformat> for a way to configure the output format.
 =item B<-W>, B<--show> [I<package-name-pattern>...]
 
 Just like the B<--list> option this will list all packages matching
-the given pattern. However the output can be customized using the
+the given patterns. However the output can be customized using the
 B<--showformat> option.
-The default output format gives one line per matching package, each line
-having the name (extended with the architecture qualifier for
-B<Multi-Arch> B<same> packages) and installed version of the package,
+
+The default output format gives one line per matching package,
+each line consisting of the package name and its installed version,
 separated by a tab.
+The package name will be architecture qualified for packages with a
+B<Multi-Arch> field with the value B<same> or with a foreign architecture,
+which is an architecture that is neither the native one nor B<all>.
 
 =item B<-s>, B<--status> [I<package-name>...]
 
-Report status of specified package. This just displays the entry in
+Report status of specified packages. This just displays the entry in
 the installed package status database.
 If no I<package-name> is specified it will display all package entries
 in the status database (since dpkg 1.19.1).
@@ -140,10 +143,22 @@ on the argument list.
 =item B<-L>, B<--listfiles> I<package-name>...
 
 List files installed to your system from I<package-name>. When multiple
-I<package-name> are listed, the requested lists of files are separated
+I<package-name>s are listed, the requested lists of files are separated
 by an empty line, with the same order as specified on the argument list.
-However, note that files created by package-specific installation-scripts
-are not listed.
+
+Each file diversion is printed on its own line after its diverted file,
+prefixed with one of the following localized strings:
+
+Z<>
+  locally diverted to: I<diverted-to>
+  package diverts others to: I<diverted-to>
+  diverted by I<pkg> to: I<diverted-to>
+
+Hint: When machine parsing the output, it is customary to set the locale to
+B<C.UTF-8> to get reproducible results.
+
+This command will not list extra files created by maintainer scripts,
+nor will it list alternatives.
 
 =item B<--control-list> I<package-name>
 
@@ -173,7 +188,7 @@ for that, this command will not get removed.
 
 =item B<-S>, B<--search> I<filename-search-pattern>...
 
-Search for packages that own files corresponding to the given pattern.
+Search for packages that own files corresponding to the given patterns.
 Standard shell wildcard characters can be used in the pattern, where
 asterisk (B<*>) and question mark (B<?>) will match a slash,
 and backslash (B<\>) will be used as an escape character.
@@ -188,6 +203,29 @@ handled like a glob pattern, otherwise any trailing ‘B</>’ or
 
 This command will not list extra files created by maintainer scripts,
 nor will it list alternatives.
+
+The output format consists of one line per matching pattern, with a list
+of packages owning the pathname separated by a comma (U+002C ‘B<,>’) and
+a space (U+0020 ‘B< >’), followed by a colon (U+003A ‘B<:>’) and a space,
+followed by the pathname. As in:
+
+  pkgname1, pkgname2: pathname1
+  pkgname3: pathname2
+
+File diversions are printed with the following localized strings:
+
+Z<>
+  diversion by I<pkgname> from: I<diverted-from>
+  diversion by I<pkgname> to: I<diverted-to>
+
+or for local diversions:
+
+Z<>
+  local diversion from: I<diverted-from>
+  local diversion to: I<diverted-to>
+
+Hint: When machine parsing the output, it is customary to set the locale to
+B<C.UTF-8> to get reproducible results.
 
 =item B<-p>, B<--print-avail> [I<package-name>...]
 
@@ -221,6 +259,11 @@ Show the version and exit.
 
 Change the location of the B<dpkg> database. The default location is
 I<%ADMINDIR%>.
+
+=item B<--root=>I<directory>
+
+Set the root directory to I<directory>, which sets the administrative
+directory to «I<directory>%ADMINDIR%» (since dpkg 1.21.0).
 
 =item B<--load-avail>
 
@@ -345,8 +388,9 @@ fields in control files):
 It contains the binary package name with a possible architecture qualifier
 like “libc6:amd64” (since dpkg 1.16.2).
 An architecture qualifier will be present to make the package name unambiguous,
-for example if the package has a B<Multi-Arch> field with a value of
-B<same> or the package is of a foreign architecture.
+for packages with a B<Multi-Arch> field with the value B<same> or
+with a foreign architecture, which is an architecture that is neither
+the native one nor B<all>.
 
 =item B<binary:Synopsis>
 
@@ -463,10 +507,21 @@ If B<SHELL> is not set, «B<sh>» will be used instead.
 The B<DPKG_PAGER> overrides the B<PAGER> environment variable
 (since dpkg 1.19.2).
 
+=item B<DPKG_ROOT>
+
+If set and the B<--root> option has not been specified, it will
+be used as the filesystem root directory (since dpkg 1.21.0).
+
 =item B<DPKG_ADMINDIR>
 
 If set and the B<--admindir> option has not been specified, it will
 be used as the B<dpkg> data directory.
+
+=item B<DPKG_DEBUG>
+
+Sets the debug mask (since dpkg 1.21.10) from an octal value.
+The currently accepted flags are described in the B<dpkg --debug> option,
+but not all these flags might have an effect on this program.
 
 =item B<DPKG_COLORS>
 

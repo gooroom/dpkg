@@ -18,36 +18,19 @@ dpkg-scansources - Crée des fichiers d'index de sources
 
 =head1 SYNOPSIS
 
-B<dpkg-scansources> [I<option>...] I<rep-de-binaires> [I<fichier-override>
-[I<préfixe-chemin>]] B<E<gt>> I<Sources>
+B<dpkg-scansources> [I<option>...] I<rep-de-binaires> [I<fichier-override> [I<préfixe-chemin>]] B<E<gt>> I<Sources>
 
 =head1 DESCRIPTION
 
-B<dpkg-scansources> recherche des fichiers I<.dsc> dans le répertoire
-I<rep-de-binaires> indiqué. Ces fichiers sont utilisés pour créer un index
-de sources Debian, qui est envoyé sur la sortie standard.
+B<dpkg-scansources> recherche des fichiers I<.dsc> dans le répertoire I<rep-de-binaires> indiqué. Ces fichiers sont utilisés pour créer un index de sources Debian, qui est envoyé sur la sortie standard.
 
-The I<override-file>, if given, is used to set priorities in the resulting
-index records and to override the maintainer field given in the I<.dsc>
-files.  The file can be compressed (since dpkg 1.15.5).  See
-B<deb-override>(5)  for the format of this file.
+Le I<fichier-override>, s'il est indiqué, est utilisé pour fixer les priorités dans les paragraphes de l'index créé et pour modifier le responsable donné par les fichiers I<.dsc> (depuis S<dpkg 1.15.5).> Consultez B<deb-override>(5) pour plus de détails sur le format de ce fichier.
 
-B<Note:> Since the override file is indexed by binary, not source packages,
-there's a bit of a problem here. The current implementation uses the highest
-priority of all the binary packages produced by a I<.dsc> file for the
-priority of the source package, and the override entry for the first binary
-package listed in the I<.dsc> file to modify maintainer information. This
-might change.
+S<B<Note :>> comme le fichier override est indexé par paquet binaire et non pas par paquet source, cela pose un léger problème. L'implémentation actuelle utilise la priorité la plus élevée des paquets produits par un fichier I<.dsc> comme priorité du paquet source, et l'entrée du fichier override du premier paquet binaire listé dans le fichier I<.dsc> pour modifier l'information sur le responsable. Cela pourra changer.
 
-Le I<préfixe-chemin>, s'il est indiqué, est ajouté au début du champ
-Directory S<(« répertoire »)> dans l'index des sources généré. C'est, en règle
-générale, utilisé pour que le champ Directory contienne un chemin depuis la
-racine de l'archive Debian.
+Le I<préfixe-chemin>, s'il est indiqué, est ajouté au début du champ Directory S<(« répertoire »)> dans l'index des sources généré. C'est, en règle générale, utilisé pour que le champ Directory contienne un chemin depuis la racine de l'archive Debian.
 
-B<Note:> If you want to access the generated Sources file with B<apt>(8)
-you will probably need to compress the file with B<gzip>(1)  (generating a
-Sources.gz file).  B<apt>(8)  ignores uncompressed Sources files except on
-local access (i.e.  B<file://> sources).
+S<B<Note> :> Si vous voulez accéder au fichier Sources généré avec B<apt>(8), vous devrez probablement compresser ce fichier avec B<gzip>(1) (pour créer un fichier Sources.gz). B<apt>(8) ignore les fichiers Sources non compressés sauf pour les accès locaux (c'est-à-dire les sources B<file://>).
 
 =head1 OPTIONS
 
@@ -55,27 +38,17 @@ local access (i.e.  B<file://> sources).
 
 =item B<-n>, B<--no-sort>
 
-Ne trie pas les entrées de l'index. Elles sont d'habitude triées en fonction
-du nom du paquet source.
+Ne trie pas les paragraphes de l'index. Ils sont d'habitude triés en fonction du nom du paquet source.
 
 =item B<-e>, B<--extra-override> I<fichier>
 
-Examine I<fichier> à la recherche S<d'« overrides »> supplémentaires (depuis
-S<dpkg 1.15.4 ;> ce fichier peut être compressé depuis S<dpkg 1.15.5).> Voir
-B<deb-extra-override>(5) pour plus d'information sur le format utilisé.
+Examine I<fichier> à la recherche S<d'« overrides »> supplémentaires (depuis dpkg 1.15.4 ; ce fichier peut être compressé depuis S<dpkg 1.15.5).> Voir B<deb-extra-override>(5) pour plus d'information sur le format utilisé.
 
 =item B<-s>, B<--source-override> I<fichier>
 
-Utilise I<fichier> comme fichier override des sources (ce fichier peut être
-compressé depuis S<dpkg 1.15.5).> La valeur par défaut est le nom du fichier
-override indiqué auquel est ajoutée l'extension I<.src>.
+Utilise I<fichier> comme fichier override des sources (ce fichier peut être compressé depuis S<dpkg 1.15.5).> La valeur par défaut est le nom du fichier override indiqué auquel est ajoutée l'extension I<.src>.
 
-Le format des fichiers override des sources est différent des fichiers
-override des binaires. Il ne contient que deux champs séparés par des
-espaces, le premier indique le paquet source et le second, la section. Les
-lignes blanches et les lignes de commentaire sont ignorées comme à
-l'habitude. Si un paquet apparaît dans chaque fichier, le fichier des
-sources est prioritaire pour fixer la section.
+Le format des fichiers override des sources est différent des fichiers override des binaires. Il ne contient que deux champs séparés par des espaces, le premier indique le paquet source et le second, la section. Les lignes blanches et les lignes de commentaire sont ignorées comme à l'habitude. Si un paquet apparaît dans chaque fichier, le fichier des sources est prioritaire pour fixer la section.
 
 =item B<--debug>
 
@@ -83,11 +56,11 @@ Active le débogage.
 
 =item B<--help>
 
-Affiche un message d'aide puis quitte.
+Afficher un message d'aide puis quitter.
 
 =item B<--version>
 
-Affiche le numéro de version puis quitte.
+Afficher le numéro de version puis quitter.
 
 =back
 
@@ -97,15 +70,11 @@ Affiche le numéro de version puis quitte.
 
 =item B<DPKG_COLORS>
 
-Définit le mode de couleur (depuis S<dpkg 1.18.5).> Les valeurs actuellement
-acceptées sont B<auto> (par défaut), B<always> et B<never>.
+Définit le mode de couleur (depuis S<dpkg 1.18.5).> Les valeurs actuellement acceptées sont B<auto> (par défaut), B<always> et B<never>.
 
 =item B<DPKG_NLS>
 
-Si cette variable est définie, elle sera utilisée pour décider l'activation
-de la prise en charge des langues (NLS S<– Native> Language Support), connu
-aussi comme la gestion de l'internationalisation (ou i18n) (depuis
-S<dpkg 1.19.0).> Les valeurs permises S<sont :> B<0> et B<1> (par défaut).
+Si cette variable est définie, elle sera utilisée pour décider l'activation de la prise en charge des langues (NLS – Native Language Support), connu aussi comme la gestion de l'internationalisation (ou i18n) (depuis S<dpkg 1.19.0).> Les valeurs permises S<sont :> B<0> et B<1> (par défaut).
 
 =back
 

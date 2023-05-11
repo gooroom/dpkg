@@ -14,8 +14,7 @@ If the PO get lost, keeping this translation up-to-date will be harder.
 
 =head1 NAAM
 
-dpkg-fsys-usrunmess - maakt de puinhoop ongedaan van een via aliassen
-samengevoegde map /usr
+dpkg-fsys-usrunmess - maakt de puinhoop ongedaan van een via aliassen samengevoegde map /usr
 
 =head1 OVERZICHT
 
@@ -23,11 +22,9 @@ B<dpkg-fsys-usrunmess> [I<optie>...]
 
 =head1 BESCHRIJVING
 
-B<dpkg-fsys-usrunmess> is een hulpmiddel om bestandssystemen te repareren
-die opnieuw werden geïnstalleerd met recente installatieprogramma's met
-ongelukkige standaardinstellingen of die overgeschakeld waren naar de
-defecte inrichting van een via aliassen samengevoegde map /usr, wat B<niet>
-wordt ondersteund door dpkg. Zie de dpkg-FAQ.
+B<dpkg-fsys-usrunmess> is een hulpmiddel om bestandssystemen te repareren die opnieuw werden geïnstalleerd met recente installatieprogramma's met ongelukkige standaardinstellingen of die overgeschakeld waren naar de defecte inrichting van een via aliassen samengevoegde map /usr, wat B<niet> wordt ondersteund door dpkg. Zie de dpkg-FAQ.
+
+B<Opmerking>: Binnen Debian heeft zijn technisch comité beslist dat in de release volgend op bookworm de indeling met een niet-samengevoegde /usr niet langer zal worden ondersteund, en dus zullen sommige van zijn pakketbeheerders misschien geen problemen meer oplossen of doelbewust ondersteuning voor een niet-samengevoegde /usr verwijderen. U zult dus zelf een beslissing moeten nemen en uw keuze maken.
 
 Het programma voert de volgende algemene acties uit:
 
@@ -35,8 +32,7 @@ Het programma voert de volgende algemene acties uit:
 
 =item *
 
-Controleren of een omschakeling van het systeem nodig is en anders niets
-doen,
+Controleren of een omschakeling van het systeem nodig is en anders niets doen,
 
 =item *
 
@@ -44,18 +40,23 @@ De consistentie van de dpkg-database controleren en anders afbreken.
 
 =item *
 
+Een regressiepreventiepakket genereren en installeren indien erom gevraagd wordt aan de commandoregel of anders aan de prompt.
+
+=item *
+
 De lijst met bestanden en alternatieven die moeten worden hersteld, ophalen.
 
 =item *
 
-Onder F</.Usrunmess> een schaduwhiërarchie creëren, door symbolische
-koppelingen voor de mappen te maken of harde koppelingen voor de bestanden
-of deze te kopiëren indien nodig.
+Zoeken naar niet-bijgehouden kernelmodulebestanden die ook moeten worden verplaatst.
 
 =item *
 
-Om bevestiging vragen vooraleer verder te gaan, indien daarom gevraagd werd
-aan de commandoregel.
+Onder F</.Usrunmess> een schaduwhiërarchie creëren, door symbolische koppelingen voor de mappen te maken of harde koppelingen voor de bestanden of deze te kopiëren indien nodig.
+
+=item *
+
+Om bevestiging vragen vooraleer verder te gaan, indien daarom gevraagd werd aan de commandoregel.
 
 =item *
 
@@ -63,21 +64,15 @@ De dpkg-databank vergrendelen.
 
 =item *
 
-Alle pakketten als half-geconfigureerd markeren om het uitvoeren af te
-dwingen van scripts van de onderhouder welke mogelijk bepaalde bestanden
-opnieuw moeten aanmaken.
+Alle pakketten als half-geconfigureerd markeren om het uitvoeren af te dwingen van scripts van de onderhouder welke mogelijk bepaalde bestanden opnieuw moeten aanmaken.
 
 =item *
 
-De mappen waarvoor een alias gemaakt was vervangen door de mappen uit de
-schaduwhiërarche, door een back-up te maken van de oude mappen met
-symbolische koppeling en daarover de mappen uit de schaduwhiërarche te
-hernoemen.
+De mappen waarvoor een alias gemaakt was vervangen door de mappen uit de schaduwhiërarche, door een back-up te maken van de oude mappen met symbolische koppeling en daarover de mappen uit de schaduwhiërarche te hernoemen.
 
 =item *
 
-Indien nodig de MAC-informatie voor mappen en symbolische koppelingen
-opnieuw labelen.
+Indien nodig de MAC-informatie voor mappen en symbolische koppelingen opnieuw labelen.
 
 =item *
 
@@ -85,13 +80,11 @@ De back-up van de symbolische koppelingen verwijderen.
 
 =item *
 
-Oude verplaatste objecten verwijderen, maar het verwijderen van mappen
-uitstellen.
+Oude verplaatste objecten verwijderen, maar het verwijderen van mappen uitstellen.
 
 =item *
 
-Oude mappen waarvan de verwijdering uitgesteld werd, verwijderen als er door
-dpkg-query niet naar wordt verwezen.
+Oude mappen waarvan de verwijdering uitgesteld werd, verwijderen als er door dpkg-query niet naar wordt verwezen.
 
 =item *
 
@@ -99,8 +92,7 @@ De basisschaduwmap verwijderen.
 
 =item *
 
-Register a B<policy-rc.d> to disallow service actions, which means that
-services might need to be restarted afterwards, ideally via a reboot.
+Een B<policy-rc.d> registreren om niet toe te staan dat serviceacties uitgevoerd worden, wat betekent dat diensten daarna mogelijk opnieuw moeten worden gestart, idealiter via een herstart.
 
 =item *
 
@@ -108,24 +100,15 @@ Alle pakketten opnieuw configureren.
 
 =item *
 
-Unregister the B<policy-rc.d> and restore the alternatives state.
+De registratie van B<policy-rc.d> ongedaan maken en de toestand van alternatives herstellen.
 
 =back
 
-B<Opmerking>: Als je het programma uitvoert vanuit bepaalde shells, zoals L
-<bash (1)> of L <zsh (1)>, moet u na het uitvoeren van het programma
-mogelijk de shell vragen om alle herinnerde uitvoerbare locaties te vergeten
-met bijvoorbeeld C<hash -r>.
+B<Opmerking>: Als je het programma uitvoert vanuit bepaalde shells, zoals L <bash (1)> of L <zsh (1)>, moet u na het uitvoeren van het programma mogelijk de shell vragen om alle herinnerde uitvoerbare locaties te vergeten met bijvoorbeeld C<hash -r>.
 
-B<Note>: Some directories might linger after the migration in case they
-contain untracked files. A list is printed once the script has finished for
-further investigation.
+B<Opmerking>: Sommige mappen kunnen na de migratie achterblijven omdat ze niet-gevolgde bestanden bevatten. Zodra het script klaar is wordt een lijst afgedrukt voor verder onderzoek.
 
-B<Waarschuwing>: Merk op dat er een kans bestaat dat deze bewerking het
-systeem onbruikbaar of kapot maakt in geval van een plotselinge crash of een
-herstart, een onverwachte toestand van het systeem of mogelijke bugs in het
-script. Wees voorbereid met herstelmedia en overweeg om van tevoren back-ups
-te maken.
+B<Waarschuwing>: Merk op dat er een kans bestaat dat deze bewerking het systeem onbruikbaar of kapot maakt in geval van een plotselinge crash of een herstart, een onverwachte toestand van het systeem of mogelijke bugs in het script. Wees voorbereid met herstelmedia en overweeg om van tevoren back-ups te maken.
 
 =head1 OPTIES
 
@@ -133,16 +116,21 @@ te maken.
 
 =item B<-p>, B<--prompt>
 
-Om bevestiging vragen op het punt waarop geen terugkeer meer mogelijk is,
-zodat de debug-uitvoer en de schaduwhiërarchie beoordeeld kunnen worden
-vooraleer er verder gegaan wordt.
+Om bevestiging vragen op het punt waarop geen terugkeer meer mogelijk is, zodat de debug-uitvoer en de schaduwhiërarchie beoordeeld kunnen worden vooraleer er verder gegaan wordt.
+
+=item B<--prevention>
+
+=item B<--no-prevention>
+
+Schakelt het genereren en installeren op het systeem van een regressiepreventiepakket in of uit. Als er geen optie is opgegeven, wordt de vraag gesteld welke actie er moet worden ondernomen.
+
+Het gegenereerde pakket bevat het veld B<Protected> dat is ingesteld op B<yes> om te voorkomen dat het pakket per ongeluk wordt verwijderd.
 
 =item B<-n>, B<--no-act>
 
 =item B<--dry-run>
 
-Deze optie schakelt de droogloopmodus in, waarbij geen destructieve actie
-plaatsvindt, maar alleen het voorbereidende gedeelte uitgevoerd wordt.
+Deze optie schakelt de droogloopmodus in, waarbij geen destructieve actie plaatsvindt, maar alleen het voorbereidende gedeelte uitgevoerd wordt.
 
 =item B<-?>, B<--help>
 
@@ -166,5 +154,5 @@ Deze instelling bepaalt of de droogloopmodus moet worden geactiveerd.
 
 =head1 ZIE OOK
 
-L<https://wiki.debian.org/Teams/Dpkg/FAQ#Q:_Does_dpkg_support_merged-.2Fusr-via-aliased-dirs.3F>.
+L<https://wiki.debian.org/Teams/Dpkg/FAQ#broken-usrmerge>.
 

@@ -24,8 +24,9 @@ use File::Compare;
 use File::Path qw(make_path);
 use File::Copy;
 
+use Dpkg::File;
 use Dpkg::IPC;
-use Dpkg::Build::Types;
+use Dpkg::BuildTypes;
 use Dpkg::Substvars;
 
 test_needs_command('fakeroot');
@@ -127,9 +128,7 @@ sub gen_from_tmpl
 {
     my ($pathname, $tmpl, $substvars) = @_;
 
-    open my $fh, '>', $pathname or die;
-    print { $fh } $substvars->substvars($tmpl);
-    close $fh or die;
+    file_dump($pathname, $substvars->substvars($tmpl));
 }
 
 sub gen_source
@@ -186,6 +185,7 @@ sub test_build
 
     chdir $dirname;
     spawn(exec => [ $ENV{PERL}, "$srcdir/dpkg-buildpackage.pl",
+                    "--admindir=$datadir/dpkgdb",
                     '--host-arch=amd64',
                     '--ignore-builtin-builddeps',
                     '--unsigned-source', '--unsigned-changes',

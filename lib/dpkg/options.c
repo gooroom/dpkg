@@ -218,6 +218,9 @@ dpkg_options_parse(const char *const **argvp, const struct cmdinfo *cmdinfos,
   const char *p, *value;
   int l;
 
+  if (**argvp == NULL)
+    badusage(_("missing program name in argv[0]"));
+
   printforhelp = help_str;
 
   ++(*argvp);
@@ -318,4 +321,6 @@ setaction(const struct cmdinfo *cip, const char *value)
              option_short(cip->oshort), cip->olong,
              option_short(cipaction->oshort), cipaction->olong);
   cipaction = cip;
+  if (cip && cip->takesvalue == 2 && cip->sassignto)
+    *cipaction->sassignto = value;
 }

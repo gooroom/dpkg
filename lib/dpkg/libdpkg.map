@@ -68,8 +68,10 @@ LIBDPKG_PRIVATE {
 
 	debug_set_output;
 	debug_set_mask;
+	debug_parse_mask;
 	debug_has_flag;
 	debug;
+	dpkg_debug_init;
 
 	# Generic cleanup
 	cu_closepipe;
@@ -116,6 +118,7 @@ LIBDPKG_PRIVATE {
 	varbuf_dup_char;
 	varbuf_map_char;
 	varbuf_add_buf;
+	varbuf_add_dir;
 	varbuf_get_str;
 	varbuf_end_str;
 	varbuf_printf;
@@ -123,6 +126,8 @@ LIBDPKG_PRIVATE {
 	varbuf_detach;
 	varbuf_snapshot;
 	varbuf_rollback;
+	varbuf_rollback_len;
+	varbuf_rollback_start;
 	varbuf_destroy;
 	varbuf_free;
 
@@ -153,6 +158,7 @@ LIBDPKG_PRIVATE {
 	treewalk_close;
 	treewalk;
 
+	file_is_exec;
 	file_copy_perms;
 	file_show;
 	file_slurp;
@@ -202,6 +208,10 @@ LIBDPKG_PRIVATE {
 
 	setcloexec;
 
+	# Memory information
+	meminfo_get_available_from_file;
+	meminfo_get_available;
+
 	# Compression support
 	compressor_find_by_name;
 	compressor_find_by_extension;
@@ -231,6 +241,9 @@ LIBDPKG_PRIVATE {
 	cipaction;		# XXX variable, do not export
 	setaction;
 	setobsolete;
+	set_instdir;
+	set_admindir;
+	set_root;
 
 	# General logging
 	log_file;		# XXX variable, do not export
@@ -343,6 +356,7 @@ LIBDPKG_PRIVATE {
 	pkg_hash_iter_next_set;
 	pkg_hash_iter_next_pkg;
 	pkg_hash_iter_free;
+	pkg_hash_report;
 
 	# Package field handling
 	booleaninfos;		# XXX variable, do not export
@@ -352,7 +366,9 @@ LIBDPKG_PRIVATE {
 
 	# Package field format handling
 	pkg_format_parse;
+	pkg_format_print;
 	pkg_format_show;
+	pkg_format_needs_db_fsys;
 	pkg_format_free;
 
 	# Package specifiers
@@ -378,15 +394,15 @@ LIBDPKG_PRIVATE {
 	wantinfos;		# XXX variable, do not export
 	varbuf_add_arbfield;
 	varbufdependency;
-	varbufrecord;
-	writerecord;
+	varbuf_stanza;
+	write_stanza;
 	parsedb_new;
 	parsedb_open;
 	parsedb_load;
 	parsedb_parse;
 	parsedb_close;
 	parsedb;
-	writedb_records;
+	writedb_stanzas;
 	writedb;
 
 	dpkg_db_set_dir;

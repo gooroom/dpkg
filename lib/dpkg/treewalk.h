@@ -15,7 +15,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 #ifndef LIBDPKG_TREEWALK_H
@@ -56,7 +56,7 @@ struct treewalk_funcs {
 
 struct treeroot *
 treewalk_open(const char *rootdir, enum treewalk_options options,
-              struct treewalk_funcs *funcs);
+              const struct treewalk_funcs *funcs);
 struct treenode *
 treewalk_node(struct treeroot *tree);
 struct treenode *

@@ -18,11 +18,7 @@ dpkg.cfg - Fichier de configuration de dpkg
 
 =head1 DESCRIPTION
 
-Ce fichier liste les options appliquées par défaut à dpkg. Chaque ligne
-contient une seule option, écrite exactement comme sur la ligne de commande
-mais sans les tirets initiaux, inutilisés. Les guillemets autour des valeurs
-d'options sont supprimés. Les commentaires sont autorisés en faisant
-commencer la ligne par un caractère S<(« B<#> »).>
+Ce fichier liste les options appliquées par défaut à dpkg. Chaque ligne contient une seule option, écrite exactement comme sur la ligne de commande mais sans les tirets initiaux, inutilisés. Les guillemets autour des valeurs d'options sont supprimés. Les commentaires sont autorisés en faisant commencer la ligne par un caractère S<(« B<#> »).>
 
 =head1 FICHIERS
 

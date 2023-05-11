@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: dpkg 1.20.12\n"
+"Project-Id-Version: dpkg 1.21.22\n"
 "Report-Msgid-Bugs-To: debian-dpkg@lists.debian.org\n"
-"POT-Creation-Date: 2022-09-01 03:37+0000\n"
+"POT-Creation-Date: 2023-05-11 02:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -48,39 +48,7 @@ msgid "error reading keyboard in help"
 msgstr ""
 
 #: dselect/baselist.cc
-msgid "ioctl(TIOCGWINSZ) failed"
-msgstr ""
-
-#: dselect/baselist.cc
-msgid "doupdate in SIGWINCH handler failed"
-msgstr ""
-
-#: dselect/baselist.cc
-msgid "failed to restore old SIGWINCH sigact"
-msgstr ""
-
-#: dselect/baselist.cc
-msgid "failed to restore old signal mask"
-msgstr ""
-
-#: dselect/baselist.cc
-msgid "failed to unblock SIGWINCH"
-msgstr ""
-
-#: dselect/baselist.cc
-msgid "failed to block SIGWINCH"
-msgstr ""
-
-#: dselect/baselist.cc
-msgid "failed to get old signal mask"
-msgstr ""
-
-#: dselect/baselist.cc
-msgid "failed to get old SIGWINCH sigact"
-msgstr ""
-
-#: dselect/baselist.cc
-msgid "failed to set new SIGWINCH sigact"
+msgid "cannot update screen after window resize"
 msgstr ""
 
 #: dselect/baselist.cc
@@ -659,6 +627,8 @@ msgstr ""
 msgid ""
 "Options:\n"
 "      --admindir <directory>       Use <directory> instead of %s.\n"
+"      --instdir <directory>        Use <directory> instead of %s.\n"
+"      --root <directory>           Use <directory> instead of %s.\n"
 "      --expert                     Turn on expert mode.\n"
 "  -D, --debug <file>               Turn on debugging, send output to "
 "<file>.\n"

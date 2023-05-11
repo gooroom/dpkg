@@ -56,7 +56,6 @@ use Dpkg::Vendor qw(run_vendor_hook);
 textdomain('dpkg-dev');
 
 my $controlfile;
-my $changelogfile;
 my $changelogformat;
 
 my $build_format;
@@ -161,17 +160,23 @@ while (@options) {
 	usageerr(g_('%s is not a compression level'), $comp_level)
 	    unless compression_is_valid_level($comp_level);
 	compression_set_default_level($comp_level);
+    } elsif (m/^--threads-max=(.*)$/) {
+        my $threads = $1;
+        $options{comp_threads} = $threads;
+        compression_set_threads($threads);
     } elsif (m/^-c(.*)$/) {
         $controlfile = $1;
     } elsif (m/^-l(.*)$/) {
-        $changelogfile = $1;
+        $options{changelog_file} = $1;
     } elsif (m/^-F([0-9a-z]+)$/) {
         $changelogformat = $1;
     } elsif (m/^-D([^\=:]+)[=:](.*)$/s) {
         $override{$1} = $2;
     } elsif (m/^-U([^\=:]+)$/) {
         $remove{$1} = 1;
-    } elsif (m/^-(?:i|-diff-ignore(?:$|=))(.*)$/) {
+    } elsif (m/^--diff-ignore$/) {
+        $options{diff_ignore_regex} = $diff_ignore_regex;
+    } elsif (m/^-(?:i|-diff-ignore=)(.*)$/) {
         $options{diff_ignore_regex} = $1 ? $1 : $diff_ignore_regex;
     } elsif (m/^--extend-diff-ignore=(.+)$/) {
 	$diff_ignore_regex .= "|$1";
@@ -225,13 +230,11 @@ unless (defined($options{opmode})) {
 }
 
 if ($options{opmode} =~ /^(build|print-format|(before|after)-build|commit)$/) {
-
     $options{ARGV} = \@ARGV;
-
-    $changelogfile ||= "$dir/debian/changelog";
+    $options{changelog_file} ||= "$dir/debian/changelog";
     $controlfile ||= "$dir/debian/control";
 
-    my %ch_options = (file => $changelogfile);
+    my %ch_options = (file => $options{changelog_file});
     $ch_options{changelogformat} = $changelogformat if $changelogformat;
     my $changelog = changelog_parse(%ch_options);
     my $control = Dpkg::Control::Info->new($controlfile);
@@ -297,7 +300,7 @@ if ($options{opmode} =~ /^(build|print-format|(before|after)-build|commit)$/) {
 	my $sect = $pkg->{'Section'} || $src_sect;
 	my $prio = $pkg->{'Priority'} || $src_prio;
 	my $type = $pkg->{'Package-Type'} ||
-	        $pkg->get_custom_field('Package-Type') || 'deb';
+            $pkg->get_custom_field('Package-Type') || 'deb';
         my $arch = $pkg->{'Architecture'};
         my $profile = $pkg->{'Build-Profiles'};
 
@@ -440,9 +443,7 @@ if ($options{opmode} =~ /^(build|print-format|(before|after)-build|commit)$/) {
 		       override => \%override,
 		       substvars => $substvars);
     exit(0);
-
 } elsif ($options{opmode} eq 'extract') {
-
     # Check command line
     unless (scalar(@ARGV)) {
         usageerr(g_('--%s needs at least one argument, the .dsc'),
@@ -557,12 +558,12 @@ sub setopmode {
 
 sub print_option {
     my $opt = shift;
-    my $help;
 
+    my $help = gettext($opt->{help});
     if (length $opt->{name} > 25) {
-        $help .= sprintf "  %-25s\n%s%s.\n", $opt->{name}, ' ' x 27, $opt->{help};
+        return sprintf "  %-25s\n%s%s.\n", $opt->{name}, ' ' x 27, $help;
     } else {
-        $help .= sprintf "  %-25s%s.\n", $opt->{name}, $opt->{help};
+        return sprintf "  %-25s%s.\n", $opt->{name}, $help;
     }
 }
 
@@ -653,6 +654,8 @@ sub usage {
     get_format_help()
     . "\n" . g_(
 'General options:
+      --threads-max=<threads>
+                           use at most <threads> with compressor.
   -q                       quiet mode.
   -?, --help               show this help message.
       --version            show the version.')

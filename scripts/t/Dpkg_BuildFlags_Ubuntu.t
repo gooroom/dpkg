@@ -16,7 +16,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 16;
+use Test::More tests => 21;
 
 BEGIN {
     use_ok('Dpkg::BuildFlags');
@@ -33,6 +33,24 @@ sub test_optflag
     }
 }
 
+sub test_ltoflag
+{
+    my $bf = shift;
+
+    # Test the LTO flags enabled by default on some arches.
+    ok($bf->get('LDFLAGS') =~ m/-flto=auto -ffat-lto-objects/,
+        "LDFLAGS contains LTO flags on $ENV{DEB_HOST_ARCH}");
+}
+
+sub test_no_ltoflag
+{
+    my $bf = shift;
+
+    # Test the LTO flags not being enabled.
+    ok($bf->get('LDFLAGS') !~ m/-flto=auto -ffat-lto-objects/,
+        "LDFLAGS does not contain LTO flags on $ENV{DEB_HOST_ARCH}");
+}
+
 my $bf;
 
 # Force loading the Dpkg::Vendor::Ubuntu module.
@@ -43,6 +61,7 @@ $ENV{DEB_HOST_ARCH} = 'amd64';
 $bf = Dpkg::BuildFlags->new();
 
 test_optflag($bf, '-O2');
+test_ltoflag($bf);
 
 # Test the overlaid Ubuntu-specific linker flag.
 ok($bf->get('LDFLAGS') =~ m/-Wl,-Bsymbolic-functions/,
@@ -53,5 +72,23 @@ $ENV{DEB_HOST_ARCH} = 'ppc64el';
 $bf = Dpkg::BuildFlags->new();
 
 test_optflag($bf, '-O3');
+test_ltoflag($bf);
+
+# Test the optimization flag not enabled for riscv64.
+$ENV{DEB_HOST_ARCH} = 'riscv64';
+$bf = Dpkg::BuildFlags->new();
+
+test_no_ltoflag($bf);
+
+# Test the optimization flag override by DEB_BUILD_MAINT_OPTIONS.
+$ENV{DEB_BUILD_MAINT_OPTIONS} = 'optimize=+lto';
+$bf = Dpkg::BuildFlags->new();
+
+test_ltoflag($bf);
+
+$ENV{DEB_HOST_ARCH} = 'amd64';
+$ENV{DEB_BUILD_MAINT_OPTIONS} = 'optimize=-lto';
+$bf = Dpkg::BuildFlags->new();
+test_no_ltoflag($bf);
 
 1;

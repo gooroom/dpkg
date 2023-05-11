@@ -22,11 +22,7 @@ B<debian/shlibs>, B<debian/>I<binary-name>B<.shlibs>, B<DEBIAN/shlibs>
 
 =head1 DESCRIÇÃO
 
-Ficheiros B<shlibs> mapeiam nomes de bibliotecas partilhadas e versões
-(I<SONAMEs>) para dependências apropriados para um ficheiro de controle de
-pacote. Existe uma entrada por linha. Linhas vazias B<não> são
-permitidas. Linha começadas com um caractere B<#> são consideradas
-comentários, e são ignoradas. Todas as outras linhas têm de ter o formato
+Ficheiros B<shlibs> mapeiam nomes de bibliotecas partilhadas e versões (I<SONAMEs>) para dependências apropriados para um ficheiro de controle de pacote. Existe uma entrada por linha. Linhas vazias B<não> são permitidas. Linha começadas com um caractere B<#> são consideradas comentários, e são ignoradas. Todas as outras linhas têm de ter o formato
 
 =over 
 
@@ -34,12 +30,9 @@ comentários, e são ignoradas. Todas as outras linhas têm de ter o formato
 
 =back
 
-Os campos I<library> e I<version> são delimitados por espaços em branco, mas
-o campo I<dependencies> estende-se até ao fim da linha. O campo I<type> é
-opcional e normalmente não necessário.
+Os campos I<library> e I<version> são delimitados por espaços em branco, mas o campo I<dependencies> estende-se até ao fim da linha. O campo I<type> é opcional e normalmente não necessário.
 
-O campo I<dependencies> tem a mesma sintaxe que o campo B<Depends> num
-ficheiro de control binário, veja B<deb-control>(5).
+O campo I<dependencies> tem a mesma sintaxe que o campo B<Depends> num ficheiro de control binário, veja B<deb-control>(5).
 
 =head1 FORMATOS DE SONAME
 
@@ -63,9 +56,7 @@ onde I<name> é geralmente prefixado por B<lib>.
 
 =head1 EXEMPLOS
 
-O ficheiro B<shlibs> para um pacote biblioteca típico, chamado
-I<libcrunch1>, que disponibiliza uma biblioteca cujo SONAME é
-I<libcrunch.so.1>, poderá ler-se
+O ficheiro B<shlibs> para um pacote biblioteca típico, chamado I<libcrunch1>, que disponibiliza uma biblioteca cujo SONAME é I<libcrunch.so.1>, poderá ler-se
 
 =over 
 
@@ -73,10 +64,7 @@ I<libcrunch.so.1>, poderá ler-se
 
 =back
 
-O I<dependencies> tem de mencionar a versão mais recente do pacote que
-adicionou novos símbolos à biblioteca: no exemplo em cima, foram adicionados
-novos símbolos à versão 1.2 de I<libcrunch>. Esta não é a única razão para
-que as dependências possam precisar de ser apertadas.
+O I<dependencies> tem de mencionar a versão mais recente do pacote que adicionou novos símbolos à biblioteca: no exemplo em cima, foram adicionados novos símbolos à versão 1.2 de I<libcrunch>. Esta não é a única razão para que as dependências possam precisar de ser apertadas.
 
 =head1 VEJA TAMBÉM
 

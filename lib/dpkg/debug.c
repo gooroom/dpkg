@@ -22,10 +22,13 @@
 #include <config.h>
 #include <compat.h>
 
+#include <errno.h>
 #include <stdarg.h>
+#include <stdlib.h>
 #include <stdio.h>
 
 #include <dpkg/dpkg.h>
+#include <dpkg/i18n.h>
 #include <dpkg/report.h>
 #include <dpkg/debug.h>
 
@@ -60,6 +63,28 @@ debug_set_mask(int mask)
 }
 
 /**
+ * Parse the debugging mask.
+ *
+ * The mask is parsed from the specified string and sets the global debugging
+ * mask. If there is any error while parsing a negative number is returned.
+ */
+int
+debug_parse_mask(const char *str)
+{
+	char *endp;
+	long mask;
+
+	errno = 0;
+	mask = strtol(str, &endp, 8);
+	if (str == endp || *endp || mask < 0 || errno == ERANGE)
+		return -1;
+
+	debug_set_mask(mask);
+
+	return mask;
+}
+
+/**
  * Check if a debugging flag is currently set on the debugging mask.
  */
 bool
@@ -87,4 +112,22 @@ debug(int flag, const char *fmt, ...)
 	vfprintf(debug_output, fmt, args);
 	va_end(args);
 	putc('\n', debug_output);
+}
+
+/**
+ * Initialize the debugging support.
+ */
+void
+dpkg_debug_init(void)
+{
+	const char envvar[] = "DPKG_DEBUG";
+	const char *env;
+
+	env = getenv(envvar);
+	if (env == NULL)
+		return;
+
+	if (debug_parse_mask(env) < 0)
+		warning(_("cannot parse debug mask from environment variable %s"),
+		        envvar);
 }

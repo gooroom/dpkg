@@ -22,21 +22,17 @@ B<%PKGCONFDIR%/origins/>I<filnamn>
 
 =head1 BESKRIVNING
 
-Filerna i B<%PKGCONFDIR%/origins> kan tillhandahålla information om olika
-återförsäljare som tillhandahåller Debianpaket.
+Filerna i B<%PKGCONFDIR%/origins> kan tillhandahålla information om olika återförsäljare som tillhandahåller Debianpaket.
 
-De innehåller ett antal fält, eller kommentarer när raden börjar med
-”B<#>”. Varje fält inleds med ett märke, till exempel B<Vendor> eller
-B<Parent>, följt av ett kolon och fältets innehåll. Fälten avdelas endast av
-fältmärken. Med andra ord kan fälten innehålla flera rader text, men
-verktygen slår ihop rader när fältets text behandlas.
+De innehåller ett antal fält, eller kommentarer när raden börjar med ”B<#>”. Varje fält inleds med ett märke, till exempel B<Vendor> eller B<Parent>, följt av ett kolon och fältets innehåll. Fälten avdelas endast av fältmärken. Med andra ord kan fälten innehålla flera rader text, men verktygen slår ihop rader när fältets text behandlas.
 
-Filen bör namnges i enlighet med återförsäljarens namn. Den vanliga
-konventionen är att namnge återförsäljarfilen genom att använda
-återförsäljarens namn skrivet med bara små bokstäver, men en viss variation
-tillåts. Nämligen att blanksteg ersätts med bindestreck (”B<->”) och filen
-kan ha samma blandning av små och stora bokstäver som fältet B<Vendor>,
-eller kan skrivas med bara stora bokstäver.
+Filen bör namnges i enlighet med återförsäljarens namn. Den vanliga konventionen är att namnge återförsäljarfilen genom att använda återförsäljarens namn skrivet med bara små bokstäver, men en viss variation tillåts.
+
+Nämligen (sedan dpkg 1.21.10), först att icke-alfanumeriska tecken (”B<[^A-Za-z0-9]>”) ersätts med bindestreck (”B<->”), varefter namnet som skapas kommer testas först med små bokstäver, som det är, göras om till små bokstäver med första bokstaven stor, och bara stora bokstäver.
+
+Dessutom, av historiska orskaer, kan namnet testas som det är utan att icke-alfanumeriska tecken ersätts, och därefter testas namnet först med små bokstäver, som det är, så med inledande stor bokstav och med stora bokstäver. Till sist kommer det att testas med att ersätta blanksteg med bindestreck (”B<->”), varefter namnet som skapas kommer testas först med små bokstäver, som det är, göras om till små bokstäver med första bokstaven stor, och bara stora bokstäver.
+
+Dessa bakåtkompatibla moduluppslagningar kommer dock att tas bort under utgivningscykeln för dpkg 1.22.x.
 
 =head1 FÄLT
 
@@ -52,14 +48,11 @@ Värdet på fältet bestämmer återförsäljarens URL.
 
 =item B<Bugs:> I<bugg-url>
 
-Värdet på fältet bestämmer typ och adress för felrapporteringssystemet som
-används av återförsäljaren. Det kan vara en mailto-URL eller en debbugs-URL
-(t.ex debbugs://bugs.debian.org/).
+Värdet på fältet bestämmer typ och adress för felrapporteringssystemet som används av återförsäljaren. Det kan vara en mailto-URL eller en debbugs-URL (t.ex debbugs://bugs.debian.org/).
 
 =item B<Parent:> I<återförsäljarnamn>
 
-Värdet på fältet bestämmer namnet på återförsäljaren som denna
-återförsäljare bygger vidare på.
+Värdet på fältet bestämmer namnet på återförsäljaren som denna återförsäljare bygger vidare på.
 
 =back
 

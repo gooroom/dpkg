@@ -14,8 +14,7 @@ If the PO get lost, keeping this translation up-to-date will be harder.
 
 =head1 NAAM
 
-dpkg-realpath - de opgezochte padnaam met ondersteuning voor DPKG_ROOT
-weergeven
+dpkg-realpath - de opgezochte padnaam met ondersteuning voor DPKG_ROOT weergeven
 
 =head1 OVERZICHT
 
@@ -23,18 +22,9 @@ B<dpkg-realpath> [I<optie>...] I<padnaam>
 
 =head1 BESCHRIJVING
 
-B<dpkg-realpath> is een hulpmiddel (sinds dpkg 1.20.1) om een padnaam op te
-zoeken, die rekening houdt met de L<dpkg (1)>-hoofdmap, ofwel impliciet
-vanuit de omgevingsvariabele B<DPKG_ROOT> of vanuit de commandoregelopties
-B<--root> of B<--instdir>, en een absolute I<padnaam> terugkeert, relatief
-ten opzichte van de hoofdmap. De hoofdmap mag niet aan de op te zoeken
-I<padnaam> voorafgaan.
+B<dpkg-realpath> is een hulpmiddel (sinds dpkg 1.20.1) om een padnaam op te zoeken, die rekening houdt met de L<dpkg (1)>-hoofdmap, ofwel impliciet vanuit de omgevingsvariabele B<DPKG_ROOT> of vanuit de commandoregelopties B<--root> of B<--instdir>, en een absolute I<padnaam> terugkeert, relatief ten opzichte van de hoofdmap. De hoofdmap mag niet aan de op te zoeken I<padnaam> voorafgaan.
 
-Dit is bedoeld om te worden gebruikt door andere B<dpkg>-hulpprogramma's of
-door scripts van beheerders in plaats van L<realpath(1)> of L<readlink(1)>
-te gebruiken om conforme padnamen te bekomen, aangezien deze laatste
-commando's geen dergelijke conformering ondersteunen ten opzichte van een
-andere hoofdmap dan F</>.
+Dit is bedoeld om te worden gebruikt door andere B<dpkg>-hulpprogramma's of door scripts van beheerders in plaats van L<realpath(1)> of L<readlink(1)> te gebruiken om conforme padnamen te bekomen, aangezien deze laatste commando's geen dergelijke conformering ondersteunen ten opzichte van een andere hoofdmap dan F</>.
 
 =head1 OPTIES
 
@@ -42,15 +32,13 @@ andere hoofdmap dan F</>.
 
 =item B<-z>, B<--zero>
 
-Een NULL-byte gebruiken om uitvoerregels te beëindigen in plaats van een
-regeleindeteken (sinds dpkg 1.20.6).
+Een NULL-byte gebruiken om uitvoerregels te beëindigen in plaats van een regeleindeteken (sinds dpkg 1.20.6).
 
 =item B<--instdir> I<map>
 
 =item B<--root> I<map>
 
-De hoofdmap instellen op I<map>, welke de hoofdmap is waartegen padnamen
-conform gemaakt worden. Staat standaard ingesteld op «B</>».
+De hoofdmap instellen op I<map>, welke de hoofdmap is waartegen padnamen conform gemaakt worden. Staat standaard ingesteld op «B</>» indien B<DPKG_ROOT> niet werd ingesteld.
 
 =item B<-?>, B<--help>
 
@@ -68,14 +56,11 @@ De versie tonen en afsluiten.
 
 =item B<DPKG_ROOT>
 
-Indien dit ingesteld is en de opties B<--instdir> of B<--root> niet
-opgegeven werden, zal dit gebruikt worden als de hoofdmap voor het
-bestandssysteem.
+Indien dit ingesteld is en de opties B<--instdir> of B<--root> niet opgegeven werden, zal dit gebruikt worden als de hoofdmap voor het bestandssysteem.
 
 =item B<DPKG_COLORS>
 
-Stelt de kleurmodus in. Waarden die momenteel gebruikt mogen worden zijn:
-B<auto> (standaard), B<always> en B<never>.
+Stelt de kleurmodus in. Waarden die momenteel gebruikt mogen worden zijn: B<auto> (standaard), B<always> en B<never>.
 
 =back
 

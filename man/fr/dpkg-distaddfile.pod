@@ -24,13 +24,9 @@ B<dpkg-distaddfile> [I<options>...] I<fichier section priorité>
 
 B<dpkg-distaddfile> ajoute une entrée pour un fichier dans B<debian/files>.
 
-Il prend trois arguments sans option, à savoir le nom du fichier, la section
-et la priorité, pour le fichier B<.changes>.
+Il prend trois arguments sans option, à savoir le nom du fichier, la section et la priorité, pour le fichier B<.changes>.
 
-Le nom du fichier sera indiqué relativement au répertoire dans lequel
-B<dpkg-genchanges> s'attend à trouver les fichiers, habituellement B<..>,
-plutôt que relativement au répertoire dans lequel est exécuté
-B<dpkg-distaddfile.>
+Le nom du fichier sera indiqué relativement au répertoire dans lequel B<dpkg-genchanges> s'attend à trouver les fichiers, habituellement B<..>, plutôt que relativement au répertoire dans lequel est exécuté B<dpkg-distaddfile.>
 
 =head1 OPTIONS
 
@@ -38,16 +34,15 @@ B<dpkg-distaddfile.>
 
 =item B<-f>I<fichier/liste-des-fichiers>
 
-Lit ou écrit la liste des fichiers qui doivent être envoyés vers l'archive
-dans ce fichier plutôt que dans le fichier B<debian/files>.
+Lit ou écrit la liste des fichiers qui doivent être envoyés vers l'archive dans ce fichier plutôt que dans le fichier B<debian/files>.
 
 =item B<-?>, B<--help>
 
-Affiche un message d'aide puis quitte.
+Afficher un message d'aide puis quitter.
 
 =item B<--version>
 
-Affiche le numéro de version puis quitte.
+Afficher le numéro de version puis quitter.
 
 =back
 
@@ -57,15 +52,11 @@ Affiche le numéro de version puis quitte.
 
 =item B<DPKG_COLORS>
 
-Définit le mode de couleur (depuis S<dpkg 1.18.5).> Les valeurs actuellement
-acceptées sont B<auto> (par défaut), B<always> et B<never>.
+Définit le mode de couleur (depuis S<dpkg 1.18.5).> Les valeurs actuellement acceptées sont B<auto> (par défaut), B<always> et B<never>.
 
 =item B<DPKG_NLS>
 
-Si cette variable est définie, elle sera utilisée pour décider l'activation
-de la prise en charge des langues (NLS S<– Native> Language Support), connu
-aussi comme la gestion de l'internationalisation (ou i18n) (depuis
-S<dpkg 1.19.0).> Les valeurs permises S<sont :> B<0> et B<1> (par défaut).
+Si cette variable est définie, elle sera utilisée pour décider l'activation de la prise en charge des langues (NLS – Native Language Support), connu aussi comme la gestion de l'internationalisation (ou i18n) (depuis S<dpkg 1.19.0).> Les valeurs permises S<sont :> B<0> et B<1> (par défaut).
 
 =back
 
@@ -75,9 +66,7 @@ S<dpkg 1.19.0).> Les valeurs permises S<sont :> B<0> et B<1> (par défaut).
 
 =item B<debian/files>
 
-La liste des fichiers créés qui seront installés sur le
-serveur. B<dpkg-distaddfile> peut être utilisé pour ajouter des fichiers
-supplémentaires.
+La liste des fichiers créés qui seront installés sur le serveur. B<dpkg-distaddfile> peut être utilisé pour ajouter des fichiers supplémentaires.
 
 =back
 

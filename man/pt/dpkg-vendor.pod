@@ -22,10 +22,7 @@ B<dpkg-vendor> [I<option>...] I<command>
 
 =head1 DESCRIÇÃO
 
-B<dpkg-vendor> é uma ferramenta para inquirir informação acerca dos
-fornecedores listados em
-B<%PKGCONFDIR%/origins>. B<%PKGCONFDIR%/origins/default> contém informação
-acerca do fornecedor actual.
+B<dpkg-vendor> é uma ferramenta para inquirir informação acerca dos fornecedores listados em B<%PKGCONFDIR%/origins>. B<%PKGCONFDIR%/origins/default> contém informação acerca do fornecedor actual.
 
 =head1 COMANDOS
 
@@ -33,19 +30,15 @@ acerca do fornecedor actual.
 
 =item B<--is> I<vendor>
 
-Termina com B<0> se o fornecedor actual for I<vendor>. Caso contrário,
-termina com B<1>.
+Termina com B<0> se o fornecedor actual for I<vendor>. Caso contrário, termina com B<1>.
 
 =item B<--derives-from> I<vendor>
 
-Termina com B<0> se o fornecedor actual da distribuição é um derivativo de
-I<vendor>, caso contrário termina com B<1>. Usa o campo B<Parent> para
-explorar todos os ancestrais do fornecedor actual.
+Termina com B<0> se o fornecedor actual da distribuição é um derivativo de I<vendor>, caso contrário termina com B<1>. Usa o campo B<Parent> para explorar todos os ancestrais do fornecedor actual.
 
 =item B<--query> I<field>
 
-Escreve na saída standard o valor do I<field> vendor-specific para o
-fornecedor actual.
+Escreve na saída standard o valor do I<field> vendor-specific para o fornecedor actual.
 
 =item B<--help>
 
@@ -63,8 +56,7 @@ Mostra a versão e termina.
 
 =item B<--vendor> I<vendor>
 
-Assume que o actual fornecedor é I<fornecedor> em vez de o descobrir com a
-variável de ambiente B<DEB_VENDOR> ou B<%PKGCONFDIR%/origins/default>.
+Assume que o actual fornecedor é I<fornecedor> em vez de o descobrir com a variável de ambiente B<DEB_VENDOR> ou B<%PKGCONFDIR%/origins/default>.
 
 =back
 
@@ -74,19 +66,15 @@ variável de ambiente B<DEB_VENDOR> ou B<%PKGCONFDIR%/origins/default>.
 
 =item B<DEB_VENDOR>
 
-Esta definição define o fornecedor actual. Se não definida, irá descobrir o
-fornecedor actual ao ler B<%PKGCONFDIR%/origins/default>.
+Esta definição define o fornecedor actual. Se não definida, irá descobrir o fornecedor actual ao ler B<%PKGCONFDIR%/origins/default>.
 
 =item B<DPKG_COLORS>
 
-Define o modo de cor (desde dpkg 1.18.5). Os valores actualmente aceites
-são: B<auto> (predefinido), B<always> e B<never>.
+Define o modo de cor (desde dpkg 1.18.5). Os valores actualmente aceites são: B<auto> (predefinido), B<always> e B<never>.
 
 =item B<DPKG_NLS>
 
-Se definida, será usada para decidir se deve activar o Suporte a Linguagem
-Nativa. Também como conhecido como suporte de internacionalização (ou i18n)
-(desde dpkg 1.19.0). Os valores aceites são B<0> e B<1> (predefinição).
+Se definida, será usada para decidir se deve activar o Suporte a Linguagem Nativa. Também como conhecido como suporte de internacionalização (ou i18n) (desde dpkg 1.19.0). Os valores aceites são B<0> e B<1> (predefinição).
 
 =back
 

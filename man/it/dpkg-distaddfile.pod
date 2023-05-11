@@ -22,16 +22,11 @@ B<dpkg-distaddfile> [I<opzione>...] I<nomefile sezione priorità>
 
 =head1 DESCRIZIONE
 
-B<dpkg-distaddfile> aggiunge una voce per un file specificato in
-B<debian/files>.
+B<dpkg-distaddfile> aggiunge una voce per un file specificato in B<debian/files>.
 
-Accetta tre argomenti non opzione: il nome del file e la sezione e priorità
-per il file B<.changes>.
+Accetta tre argomenti non opzione: il nome del file e la sezione e priorità per il file B<.changes>.
 
-Il nome del file deve essere specificato come relativo rispetto alla
-directory in cui B<dpkg-genchanges> si aspetta di trovare i file,
-solitamente B<..>, piuttosto che un nome di percorso relativo alla directory
-corrente quando viene eseguito B<dpkg-distaddfile>.
+Il nome del file deve essere specificato come relativo rispetto alla directory in cui B<dpkg-genchanges> si aspetta di trovare i file, solitamente B<..>, piuttosto che un nome di percorso relativo alla directory corrente quando viene eseguito B<dpkg-distaddfile>.
 
 =head1 OPZIONI
 
@@ -39,8 +34,7 @@ corrente quando viene eseguito B<dpkg-distaddfile>.
 
 =item B<-f>I<file-con-lista-file>
 
-Legge o scrive la lista di file da caricare qui, invece di usare
-B<debian/files>.
+Legge o scrive la lista di file da caricare qui, invece di usare B<debian/files>.
 
 =item B<-?>, B<--help>
 
@@ -58,14 +52,11 @@ Mostra la versione ed esce.
 
 =item B<DPKG_COLORS>
 
-Sets the color mode (since dpkg 1.18.5).  The currently accepted values are:
-B<auto> (default), B<always> and B<never>.
+Sets the color mode (since dpkg 1.18.5).  The currently accepted values are: B<auto> (default), B<always> and B<never>.
 
 =item B<DPKG_NLS>
 
-If set, it will be used to decide whether to activate Native Language
-Support, also known as internationalization (or i18n) support (since dpkg
-1.19.0).  The accepted values are: B<0> and B<1> (default).
+If set, it will be used to decide whether to activate Native Language Support, also known as internationalization (or i18n) support (since dpkg 1.19.0).  The accepted values are: B<0> and B<1> (default).
 
 =back
 
@@ -75,9 +66,7 @@ Support, also known as internationalization (or i18n) support (since dpkg
 
 =item B<debian/files>
 
-L'elenco dei file generati che fanno parte del caricamento in fase di
-preparazione. B<dpkg-distaddfile> può essere usato per aggiungere file
-addizionali.
+L'elenco dei file generati che fanno parte del caricamento in fase di preparazione. B<dpkg-distaddfile> può essere usato per aggiungere file addizionali.
 
 =back
 

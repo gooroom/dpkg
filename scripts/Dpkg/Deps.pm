@@ -45,6 +45,7 @@ All the deps_* functions are exported by default.
 
 use strict;
 use warnings;
+use feature qw(current_sub);
 
 our $VERSION = '1.07';
 our @EXPORT = qw(
@@ -238,12 +239,12 @@ this when parsing non-dependency fields like Conflicts.
 =item virtual (defaults to 0)
 
 If set to 1, allow only virtual package version relations, that is none,
-or “=”.
+or "=".
 This should be set whenever working with Provides fields.
 
 =item build_dep (defaults to 0)
 
-If set to 1, allow build-dep only arch qualifiers, that is “:native”.
+If set to 1, allow build-dep only arch qualifiers, that is ":native".
 This should be set whenever working with build-deps.
 
 =item tests_dep (defaults to 0)
@@ -295,6 +296,8 @@ sub deps_parse {
         tests_dep => $options{tests_dep},
     );
 
+    # Merge in a single-line
+    $dep_line =~ s/\s*[\r\n]\s*/ /g;
     # Strip trailing/leading spaces
     $dep_line =~ s/^\s+//;
     $dep_line =~ s/\s+$//;
@@ -366,15 +369,14 @@ Return the same value as the callback function.
 sub deps_iterate {
     my ($deps, $callback_func) = @_;
 
-    my $visitor_func;
-    $visitor_func = sub {
+    my $visitor_func = sub {
         foreach my $dep (@_) {
             return unless defined $dep;
 
             if ($dep->isa('Dpkg::Deps::Simple')) {
                 return unless $callback_func->($dep);
             } else {
-                return unless $visitor_func->($dep->get_deps());
+                return unless __SUB__->($dep->get_deps());
             }
         }
         return 1;

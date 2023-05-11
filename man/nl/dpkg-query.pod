@@ -22,8 +22,7 @@ B<dpkg-query> [I<optie>...] I<commando>
 
 =head1 BESCHRIJVING
 
-B<dpkg-query> is een gereedschap om informatie te tonen over pakketten die
-opgenomen zijn in de database van B<dpkg>.
+B<dpkg-query> is een gereedschap om informatie te tonen over pakketten die opgenomen zijn in de database van B<dpkg>.
 
 =head1 COMMANDO'S
 
@@ -31,17 +30,7 @@ opgenomen zijn in de database van B<dpkg>.
 
 =item B<-l>, B<--list> [I<pakketnaampatroon>...]
 
-Alle gekende pakketten opsommen die beantwoorden aan één of meer patronen,
-ongeacht hun toestand, met daarbij inbegrepen elk reëel of virtueel pakket
-dat in om het even welk veld over vereistenrelaties (zoals B<Breaks>,
-B<Enhances>, enz.) vermeld wordt. Indien geen I<pakketnaampatroon> opgegeven
-werd, alle pakketten uit I<%ADMINDIR%/status> opsommen, met uitzondering van
-die welke als niet-geïnstalleerd gemarkeerd staan (d.w.z. die welke eerder
-gewist werden). De normale shell-jokertekens mogen in I<pakketnaampatroon>
-gebruikt worden. Merk op dat u I<pakketnaampatroon> wellicht tussen
-aanhalingstekens zult moeten plaatsen om te voorkomen dat de shell aan
-bestandsnaamexpansie zou doen. Het volgende zal bijvoorbeeld een opsomming
-geven van alle pakketnamen die beginnen met "libc6":
+Alle gekende pakketten opsommen die beantwoorden aan één of meer patronen, ongeacht hun toestand, met daarbij inbegrepen elk reëel of virtueel pakket dat in om het even welk veld over vereistenrelaties (zoals B<Breaks>, B<Enhances>, enz.) vermeld wordt. Indien geen I<pakketnaampatroon> opgegeven werd, alle pakketten uit I<%ADMINDIR%/status> opsommen, met uitzondering van die welke als niet-geïnstalleerd gemarkeerd staan (d.w.z. die welke eerder gewist werden). De normale shell-jokertekens mogen in I<pakketnaampatroon> gebruikt worden. Merk op dat u I<pakketnaampatroon> wellicht tussen aanhalingstekens zult moeten plaatsen om te voorkomen dat de shell aan bestandsnaamexpansie zou doen. Het volgende zal bijvoorbeeld een opsomming geven van alle pakketnamen die beginnen met "libc6":
 
 =over 
 
@@ -49,8 +38,7 @@ geven van alle pakketnamen die beginnen met "libc6":
 
 =back
 
-De eerste drie kolommen van de uitvoer tonen de gewenste actie, de toestand
-van het pakket, en fouten, in die volgorde.
+De eerste drie kolommen van de uitvoer tonen de gewenste actie, de toestand van het pakket, en fouten, in die volgorde.
 
 Gewenste actie:
 
@@ -100,104 +88,81 @@ Foutvlaggen:
 
 =back
 
-Een toestand die aangeduid wordt met een hoofdletter of een foutletter
-wijzen erop dat het waarschijnlijk is dat het pakket ernstige problemen zal
-veroorzaken. Gelieve B<dpkg>(1) te raadplegen voor informatie over de
-bovenstaande toestanden en vlaggen.
+Een toestand die aangeduid wordt met een hoofdletter of een foutletter wijzen erop dat het waarschijnlijk is dat het pakket ernstige problemen zal veroorzaken. Gelieve B<dpkg>(1) te raadplegen voor informatie over de bovenstaande toestanden en vlaggen.
 
-De indeling van de uitvoer van deze optie kan niet geconfigureerd worden,
-maar varieert automatisch om te passen binnen de breedte van de terminal. Ze
-is bedoeld om door personen gelezen te worden, en kan niet gemakkelijk
-gelezen worden door een machine. Zie B<-W> (B<--show>) en B<--showformat>
-voor een manier om de indeling van de uitvoer te configureren.
+De indeling van de uitvoer van deze optie kan niet geconfigureerd worden, maar varieert automatisch om te passen binnen de breedte van de terminal. Ze is bedoeld om door personen gelezen te worden, en kan niet gemakkelijk gelezen worden door een machine. Zie B<-W> (B<--show>) en B<--showformat> voor een manier om de indeling van de uitvoer te configureren.
 
 =item B<-W>, B<--show> [I<pakketnaampatroon>...]
 
-Net zoals de optie B<--list> zal dit alle pakketten opsommen die met het
-opgegeven patroon overeenkomen. De uitvoer kan evenwel aangepast worden met
-behulp van de optie B<--showformat>. De standaardindeling van de uitvoer
-gebruikt één regel per pakket dat gevonden werd, waarbij elke regel de naam
-(uitgebreid met de architectuurkwalificatie voor pakketten van het type
-B<Multi-Arch> B<same>) en de geïnstalleerde versie van het pakket bevat,
-onderling gescheiden door een tab.
+Net als de optie B<--list> geeft deze optie een lijst van alle pakketten die overeenkomen met de opgegeven patronen. De uitvoer kan echter worden aangepast met de optie B<--showformat>.
+
+Het standaardformaat van de uitvoer is één regel per overeenstemmend pakket, waarbij elke regel bestaat uit de pakketnaam en zijn geïnstalleerde versie, gescheiden door een tab. De naam van het pakket zal een architectuurkwalificatie bevatten bij pakketten met een veld B<Multi-Arch> met de waarde B<same> of bij een vreemde architectuur, wat een architectuur is die niet de eigen architectuur is of niet B<all>.
 
 =item B<-s>, B<--status> [I<pakketnaam>...]
 
-Rapporteert over de status van het opgegeven pakket. Dit geeft gewoon het
-item weer uit de databank van de toestand van de geïnstalleerde
-bestanden. Indien geen I<pakketnaam> vermeld werd, worden alle items uit de
-databank met toestandsinformatie weergegeven (sinds dpkg 1.19.1). Als
-meerdere I<pakketnamen> vermeld werden, worden de opgevraagde items met
-toestandsinformatie van elkaar gescheiden door een lege regel en weergegeven
-in dezelfde volgorde als die van de argumentenlijst.
+Rapporteert over de status van opgegeven pakketten. Dit geeft gewoon het item weer uit de databank met de toestand van de geïnstalleerde bestanden. Indien geen I<pakketnaam> vermeld werd, worden alle items uit de databank met toestandsinformatie weergegeven (sinds dpkg 1.19.1). Als meerdere I<pakketnamen> vermeld werden, worden de opgevraagde items met toestandsinformatie van elkaar gescheiden door een lege regel en weergegeven in dezelfde volgorde als die van de argumentenlijst.
 
 =item B<-L>, B<--listfiles> I<pakketnaam>...
 
-De bestanden opsommen die uit I<pakketnaam> op uw systeem geïnstalleerd
-werden. Als meerdere I<pakketnamen> opgegeven werden, zullen de gevraagde
-opsommingen van bestanden van elkaar gescheiden worden door een lege regel
-en in dezelfde volgorde weergegeven worden als ze in de lijst met argumenten
-opgegeven werden. Merk nochtans op dat bestanden die aangemaakt worden door
-pakketspecifieke installatiescripts niet vermeld worden.
+De bestanden vermelden die uit I<pakketnaam> op uw systeem geïnstalleerd werden. Als meerdere I<pakketnamen> opgegeven werden, zullen de gevraagde vermeldingen van bestanden van elkaar gescheiden worden door een lege regel en in dezelfde volgorde weergegeven worden als ze in de lijst met argumenten opgegeven werden.
+
+Elke bestandsomleiding wordt afgedrukt op zijn eigen regel na het omgeleide bestand, voorafgegaan door een van de volgende gelokaliseerde tekenreeksen:
+
+Z<>
+  lokaal omgeleid naar: I<omgeleid-naar>
+  pakket leidt andere om naar: I<omgeleid-naar>
+  omgeleid door I<pkkt> naar: I<omgeleid-naar>
+
+Hint: wanneer de uitvoer machinaal wordt verwerkt, is het gebruikelijk om de landinstelling in te stellen op B<C.UTF-8> om reproduceerbare resultaten te krijgen.
+
+Dit commando geeft geen extra bestanden weer die door scripts van de pakketonderhouder aangemaakt werden en ook geen alternatieven.
 
 =item B<--control-list> I<pakketnaam>
 
-De controlebestanden opsommen die uit I<pakketnaam> op uw systeem
-geïnstalleerd werden (sinds dpkg 1.16.5). Die kunnen gebruikt worden als
-invoerargumenten voor B<--control-show>.
+De controlebestanden opsommen die uit I<pakketnaam> op uw systeem geïnstalleerd werden (sinds dpkg 1.16.5). Die kunnen gebruikt worden als invoerargumenten voor B<--control-show>.
 
 =item B<--control-show> I<pakketnaam> I<controlebestand>
 
-Het I<controlebestand> dat uit I<pakketnaam> op uw systeem geïnstalleerd
-werd, weergeven op de standaarduitvoer (sinds dpkg 1.16.5).
+Het I<controlebestand> dat uit I<pakketnaam> op uw systeem geïnstalleerd werd, weergeven op de standaarduitvoer (sinds dpkg 1.16.5).
 
 =item B<-c>, B<--control-path> I<pakketnaam> [I<controlebestand>]
 
-De paden van controlebestanden opsommen die uit I<pakketnaam> op uw systeem
-geïnstalleerd werden (sinds dpkg 1.15.4). Indien I<controlebestand>
-opgegeven werd, toon dan enkel het pad voor dat controlebestand als het
-bestaat.
+De paden van controlebestanden opsommen die uit I<pakketnaam> op uw systeem geïnstalleerd werden (sinds dpkg 1.15.4). Indien I<controlebestand> opgegeven werd, toon dan enkel het pad voor dat controlebestand als het bestaat.
 
-B<Waarschuwing>: dit commando wordt uitgefaseerd, omdat het rechtstreekse
-toegang verleent tot de interne database van dpkg. Gelieve in plaats daarvan
-over te schakelen op het gebruik van B<--control-list> en B<--control-show>
-in alle gevallen waarin deze commando's hetzelfde eindresultaat kunnen
-geven. Dit commando zal evenwel niet verwijderd worden zolang er nog
-minstens één geval is waarin dit commando nodig is (d.w.z. als een
-schadelijk postrm-script van een pakketonderhouder verwijderd moet worden)
-en zolang daarvoor geen goede oplossing bestaat.
+B<Waarschuwing>: dit commando wordt uitgefaseerd, omdat het rechtstreekse toegang verleent tot de interne database van dpkg. Gelieve in plaats daarvan over te schakelen op het gebruik van B<--control-list> en B<--control-show> in alle gevallen waarin deze commando's hetzelfde eindresultaat kunnen geven. Dit commando zal evenwel niet verwijderd worden zolang er nog minstens één geval is waarin dit commando nodig is (d.w.z. als een schadelijk postrm-script van een pakketonderhouder verwijderd moet worden) en zolang daarvoor geen goede oplossing bestaat.
 
 =item B<-S>, B<--search> I<zoekpatroon-bestandsnaam>...
 
-Pakketten zoeken die bestanden hebben die overeenkomen met het opgegeven
-patroon. Standaard shell-jokertekens kunnen in het patroon gebruikt worden,
-waarbij sterretje (B<*>) en vraagteken (B<?>) met een slash overeenkomen en
-backslash (B<\>) als een maskeerteken (escape-teken) gebruikt wordt.
+Pakketten zoeken die bestanden hebben die overeenkomen met het opgegeven patroon. Standaard shell-jokertekens kunnen in het patroon gebruikt worden, waarbij sterretje (B<*>) en vraagteken (B<?>) met een slash overeenkomen en backslash (B<\>) als een maskeerteken (escape-teken) gebruikt wordt.
 
-Wanneer het eerste teken in het I<zoekpatroon-bestandsnaam> niet een van de
-tekens ‘B<*[?/>’ is, dan zal het beschouwd worden als
-deeltekenreeksvergelijking en zal het impliciet geplaatst worden tussen
-‘B<*>’ (zoals in B<*>I<zoekpatroon-bestandsnaam>B<*>). Indien de
-daaropvolgende tekenreeks een van de tekens ‘B<*[?\>’ bevat, dan zal ze
-behandeld worden als een glob-patroon, anders zal een eventuele afsluitende
-‘B</>’ of ‘B</.>’ verwijderd worden en zal er een letterlijke padopzoeking
-uitgevoerd worden.
+Wanneer het eerste teken in het I<zoekpatroon-bestandsnaam> niet een van de tekens ‘B<*[?/>’ is, dan zal het beschouwd worden als deeltekenreeksvergelijking en zal het impliciet geplaatst worden tussen ‘B<*>’ (zoals in B<*>I<zoekpatroon-bestandsnaam>B<*>). Indien de daaropvolgende tekenreeks een van de tekens ‘B<*[?\>’ bevat, dan zal ze behandeld worden als een glob-patroon, anders zal een eventuele afsluitende ‘B</>’ of ‘B</.>’ verwijderd worden en zal er een letterlijke padopzoeking uitgevoerd worden.
 
-Dit commando geeft geen extra bestanden weer die door scripts van de
-pakketonderhouder aangemaakt werden en ook geen alternatieven.
+Dit commando geeft geen extra bestanden weer die door scripts van de pakketonderhouder aangemaakt werden en ook geen alternatieven.
+
+De opmaak van de uitvoer bestaat uit één regel per overeenkomend patroon, met een lijst van pakketten waarin de padnaam voorkomt, gescheiden door een komma (U+002C 'B<,>') en een spatie (U+0020 'B< >'), gevolgd door een dubbele punt (U+003A 'B<:>') en een spatie, gevolgd door de padnaam. Als in:
+
+  pkktnaam1, pkktnaam2: padnaam1
+  pkktnaam3: padnaam2
+
+Bestandsomleidingen worden afgedrukt met de volgende gelokaliseerde tekenreeksen:
+
+Z<>
+  omleiding door I<pkktnaam> van: I<omgeleid-van>
+  omleiding door I<pkktnaam> naar: I<omgeleid-naar>
+
+of voor lokale omleidingen:
+
+Z<>
+  lokale omleiding van: I<omgeleid-van>
+  lokale omleiding naar: I<omgeleid-naar>
+
+Hint: wanneer de uitvoer machinaal wordt verwerkt, is het gebruikelijk om de landinstelling in te stellen op B<C.UTF-8> om reproduceerbare resultaten te krijgen.
 
 =item B<-p>, B<--print-avail> [I<pakketnaam>...]
 
-Detailinformatie over pakketten tonen, zoals die in I<%ADMINDIR%/available>
-te vinden is. Als geen I<pakketnaam> opgegeven werd, worden alle items uit
-de databank I<available> weergegeven (sinds dpkg 1.19.1). Als meerdere
-I<pakketnamen> opgegeven worden, worden de gevraagde items uit I<available>
-onderling gescheiden door een lege regel en weergegeven in dezelfde volgorde
-als die van de argumentenlijst.
+Detailinformatie over pakketten tonen, zoals die in I<%ADMINDIR%/available> te vinden is. Als geen I<pakketnaam> opgegeven werd, worden alle items uit de databank I<available> weergegeven (sinds dpkg 1.19.1). Als meerdere I<pakketnamen> opgegeven worden, worden de gevraagde items uit I<available> onderling gescheiden door een lege regel en weergegeven in dezelfde volgorde als die van de argumentenlijst.
 
-Gebruikers van frontends die op APT gebaseerd zijn moeten in de plaats
-daarvan B<apt show> I<pakketnaam> gebruiken, aangezien het bestand
-I<available> enkel up-to-date gehouden wordt als men B<dselect> gebruikt.
+Gebruikers van frontends die op APT gebaseerd zijn moeten in de plaats daarvan B<apt show> I<pakketnaam> gebruiken, aangezien het bestand I<available> enkel up-to-date gehouden wordt als men B<dselect> gebruikt.
 
 =item B<-?>, B<--help>
 
@@ -215,26 +180,23 @@ De versie tonen en afsluiten.
 
 =item B<--admindir=>I<map>
 
-De locatie van de database van B<dpkg> wijzigen. De standaardlocatie is
-I<%ADMINDIR%>.
+De locatie van de database van B<dpkg> wijzigen. De standaardlocatie is I<%ADMINDIR%>.
+
+=item B<--root=>I<map>
+
+De hoofdmap instellen op I<map>, hetgeen de administratieve map instelt op «I<map>%ADMINDIR%» (sinds dpkg 1.21.0).
 
 =item B<--load-avail>
 
-Ook het bestand available laden bij het gebruik van de commando's B<--show>
-en B<--list>. Standaard doorzoeken die nu enkel het bestand status (sinds
-dpkg 1.16.2).
+Ook het bestand available laden bij het gebruik van de commando's B<--show> en B<--list>. Standaard doorzoeken die nu enkel het bestand status (sinds dpkg 1.16.2).
 
 =item B<--no-pager>
 
-Schakelt het gebruik van een pagineringsprogramma uit bij het weergeven van
-informatie (sinds dpkg 1.19.2).
+Schakelt het gebruik van een pagineringsprogramma uit bij het weergeven van informatie (sinds dpkg 1.19.2).
 
 =item B<-f>, B<--showformat=>I<indeling>
 
-Deze optie wordt gebruikt om op te geven in welke indeling B<--show> zijn
-uitvoer moet produceren (de korte optie sinds dpkg 1.13.1). De indeling is
-een tekenreeks die vorm geeft aan de uitvoer die voor elk opgesomd pakket
-gegenereerd wordt.
+Deze optie wordt gebruikt om op te geven in welke indeling B<--show> zijn uitvoer moet produceren (de korte optie sinds dpkg 1.13.1). De indeling is een tekenreeks die vorm geeft aan de uitvoer die voor elk opgesomd pakket gegenereerd wordt.
 
 In de indelingstekenreeks markeert “B<\>” een stuurcode:
 
@@ -248,17 +210,9 @@ In de indelingstekenreeks markeert “B<\>” een stuurcode:
 
 =back
 
-“B<\>” voor elk ander letterteken onderdrukt de eventuele bijzondere
-betekenis van dat navolgende teken, hetgeen van nut is voor “B<\>” en
-“B<$>”.
+“B<\>” voor elk ander letterteken onderdrukt de eventuele bijzondere betekenis van dat navolgende teken, hetgeen van nut is voor “B<\>” en “B<$>”.
 
-Pakketinformatie kan ingevoegd worden door variabeleverwijzingen naar
-pakketvelden toe te voegen met behulp van de syntaxis
-“B<${>I<veld>[B<;>I<breedte>]B<}>”. Velden worden rechts uitgelijnd
-weergegeven tenzij een negatieve breedte opgegeven werd. In dat geval wordt
-links uitgelijnd. De volgende I<veld>en worden herkend, maar zijn niet
-noodzakelijk aanwezig in het statusbestand (enkel interne velden en velden
-die in het binaire pakket opgeslagen worden komen er in terecht):
+Pakketinformatie kan ingevoegd worden door variabeleverwijzingen naar pakketvelden toe te voegen met behulp van de syntaxis “B<${>I<veld>[B<;>I<breedte>]B<}>”. Velden worden rechts uitgelijnd weergegeven tenzij een negatieve breedte opgegeven werd. In dat geval wordt links uitgelijnd. De volgende I<veld>en worden herkend, maar zijn niet noodzakelijk aanwezig in het statusbestand (enkel interne velden en velden die in het binaire pakket opgeslagen worden komen er in terecht):
 
 =over 
 
@@ -332,20 +286,13 @@ die in het binaire pakket opgeslagen worden komen er in terecht):
 
 =back
 
-De volgende velden zijn virtueel en worden door B<dpkg-query> gegenereerd
-uit waarden van andere velden (merk op dat zij namen hebben die niet conform
-de veldnamen in een controlebestand zijn):
+De volgende velden zijn virtueel en worden door B<dpkg-query> gegenereerd uit waarden van andere velden (merk op dat zij namen hebben die niet conform de veldnamen in een controlebestand zijn):
 
 =over 
 
 =item B<binary:Package>
 
-Het bevat de naam van het binaire pakket met eventueel een
-architectuurkwalificatie zoals “libc6:amd64” (sinds dpkg 1.16.2). Er zal een
-architectuurkwalificatie gebruikt worden om ervoor te zorgen dat de
-pakketnaam niet ambigu kan zijn, bijvoorbeeld als het pakket een veld
-B<Multi-Arch> met als waarde B<same> heeft of als het pakket bedoeld is voor
-een vreemde architectuur.
+Het bevat de naam van het binaire pakket met eventueel een architectuurkwalificatie zoals “libc6:amd64” (sinds dpkg 1.16.2). Er zal een architectuurkwalificatie gebruikt worden om ervoor te zorgen dat de pakketnaam niet ambigu kan zijn bij pakketten met een veld B<Multi-Arch> met de waarde B<same> of bij een vreemde architectuur, wat een architectuur is die niet de eigen architectuur is of niet B<all>.
 
 =item B<binary:Synopsis>
 
@@ -357,59 +304,43 @@ Dit is een alias voor B<binary:Synopsis> (sinds dpkg 1.16.2).
 
 =item B<db:Status-Abbrev>
 
-Het bevat de verkorte pakketstatus (als drie tekens), zoals “ii ” of “iHR”
-(sinds dpkg 1.16.2). Zie de beschrijving van het commando B<--list> voor
-bijkomende toelichting.
+Het bevat de verkorte pakketstatus (als drie tekens), zoals “ii ” of “iHR” (sinds dpkg 1.16.2). Zie de beschrijving van het commando B<--list> voor bijkomende toelichting.
 
 =item B<db:Status-Want>
 
-Het bevat de gewenste toestand van het pakket, onderdeel van het veld Status
-(sinds dpkg 1.17.11).
+Het bevat de gewenste toestand van het pakket, onderdeel van het veld Status (sinds dpkg 1.17.11).
 
 =item B<db:Status-Status>
 
-Het bevat de pakketstatus uitgedrukt in een woord, onderdeel van het veld
-Status (sinds dpkg 1.17.11).
+Het bevat de pakketstatus uitgedrukt in een woord, onderdeel van het veld Status (sinds dpkg 1.17.11).
 
 =item B<db:Status-Eflag>
 
-Het bevat de status-foutvlag van het pakket, onderdeel van het veld Status
-(sinds dpkg 1.17.11).
+Het bevat de status-foutvlag van het pakket, onderdeel van het veld Status (sinds dpkg 1.17.11).
 
 =item B<db-fsys:Files>
 
-Het bevat de door regeleinden gescheiden lijst van de elementen van het
-pakketbestandssysteem (sinds dpkg 1.19.3).
+Het bevat de door regeleinden gescheiden lijst van de elementen van het pakketbestandssysteem (sinds dpkg 1.19.3).
 
 =item B<db-fsys:Last-Modified>
 
-Het bevat de tijdsaanduiding in seconden van het laatste moment waarop de
-elementen van het pakketbestandssysteem gewijzigd werden (sinds dpkg
-1.19.3).
+Het bevat de tijdsaanduiding in seconden van het laatste moment waarop de elementen van het pakketbestandssysteem gewijzigd werden (sinds dpkg 1.19.3).
 
 =item B<source:Package>
 
-Het bevat de naam van het broncodepakket van dit binaire pakket (sinds dpkg
-1.16.2).
+Het bevat de naam van het broncodepakket van dit binaire pakket (sinds dpkg 1.16.2).
 
 =item B<source:Version>
 
-Het bevat het versienummer van het broncodepakket van dit binaire pakket
-(sinds dpkg 1.16.2).
+Het bevat het versienummer van het broncodepakket van dit binaire pakket (sinds dpkg 1.16.2).
 
 =item B<source:Upstream-Version>
 
-Het bevat het versienummer van de toeleveraarsbroncode voor dit binaire
-pakket (sinds dpkg 1.18.16).
+Het bevat het versienummer van de toeleveraarsbroncode voor dit binaire pakket (sinds dpkg 1.18.16).
 
 =back
 
-De standaard indelingstekenreeks is “B<${binary:Package}\t${Version}\n>”. In
-feite kunnen ook alle andere velden die in het statusbestand te vinden zijn
-(d.w.z. door de gebruiker gedefinieerde velden) opgevraagd worden. Zij
-zullen evenwel als zodanig weergegeven worden, zonder conversie of
-foutcontrole. Om de naam van de onderhouder van B<dpkg> en de geïnstalleerde
-versie te bekomen, kunt u het volgende commando uitvoeren:
+De standaard indelingstekenreeks is “B<${binary:Package}\t${Version}\n>”. In feite kunnen ook alle andere velden die in het statusbestand te vinden zijn (d.w.z. door de gebruiker gedefinieerde velden) opgevraagd worden. Zij zullen evenwel als zodanig weergegeven worden, zonder conversie of foutcontrole. Om de naam van de onderhouder van B<dpkg> en de geïnstalleerde versie te bekomen, kunt u het volgende commando uitvoeren:
 
 =over 
 
@@ -430,16 +361,11 @@ De gevraagde opzoeking werd succesvol uitgevoerd.
 
 =item B<1>
 
-De gevraagde opzoeking mislukte volledig of gedeeltelijk ten gevolge van het
-feit dat een bestand of een pakket niet gevonden werd (behalve bij
-B<--control-path>, B<--control-list> en B<--control-show> waarvoor dit soort
-fouten fataal is).
+De gevraagde opzoeking mislukte volledig of gedeeltelijk ten gevolge van het feit dat een bestand of een pakket niet gevonden werd (behalve bij B<--control-path>, B<--control-list> en B<--control-show> waarvoor dit soort fouten fataal is).
 
 =item B<2>
 
-Fatale of onherstelbare fout die te wijten is aan ongeldig gebruik van de
-commandoregel of aan interacties met het systeem, zoals het benaderen van de
-database, het toewijzen van geheugen, enz.
+Fatale of onherstelbare fout die te wijten is aan ongeldig gebruik van de commandoregel of aan interacties met het systeem, zoals het benaderen van de database, het toewijzen van geheugen, enz.
 
 =back
 
@@ -451,27 +377,29 @@ database, het toewijzen van geheugen, enz.
 
 =item B<SHELL>
 
-Stelt het uit te voeren programma in wanneer een commando via een shell
-voortgebracht wordt (sinds dpkg 1.19.2).
+Stelt het uit te voeren programma in wanneer een commando via een shell voortgebracht wordt (sinds dpkg 1.19.2).
 
 =item B<PAGER>
 
 =item B<DPKG_PAGER>
 
-Stelt het te gebruiken pagineringscommando in (sinds dpkg 1.19.1), hetwelk
-uitgevoerd zal worden met «B<$SHELL -c>». Indien B<SHELL> niet ingesteld is,
-zal «B<sh>» gebruikt worden. B<DPKG_PAGER> overschrijft de
-omgevingsvariabele B<PAGER> (sinds dpkg 1.19.2).
+Stelt het te gebruiken pagineringscommando in (sinds dpkg 1.19.1), hetwelk uitgevoerd zal worden met «B<$SHELL -c>». Indien B<SHELL> niet ingesteld is, zal «B<sh>» gebruikt worden. B<DPKG_PAGER> overschrijft de omgevingsvariabele B<PAGER> (sinds dpkg 1.19.2).
+
+=item B<DPKG_ROOT>
+
+Indien dit ingesteld is en de optie B<--root> niet opgegeven werd, zal dit gebruikt worden als de hoofdmap voor het bestandssysteem (sinds dpkg 1.21.0).
 
 =item B<DPKG_ADMINDIR>
 
-Indien dit ingesteld werd en de optie B<--admindir> niet gebruikt werd, zal
-dit gebruikt worden als de datamap voor B<dpkg>.
+Indien dit ingesteld werd en de optie B<--admindir> niet gebruikt werd, zal dit gebruikt worden als de datamap voor B<dpkg>.
+
+=item B<DPKG_DEBUG>
+
+Stelt het foutopsporingsmasker in (sinds dpkg 1.21.10) vanaf een octale waarde. De momenteel geaccepteerde vlaggen worden beschreven in de optie B<dpkg --debug>, maar mogelijk hebben niet al deze vlaggen effect op dit programma.
 
 =item B<DPKG_COLORS>
 
-Stelt de kleurmodus in (sinds dpkg 1.18.5). Waarden die momenteel gebruikt
-mogen worden zijn: B<auto> (standaard), B<always> en B<never>.
+Stelt de kleurmodus in (sinds dpkg 1.18.5). Waarden die momenteel gebruikt mogen worden zijn: B<auto> (standaard), B<always> en B<never>.
 
 =back
 
@@ -481,13 +409,7 @@ mogen worden zijn: B<auto> (standaard), B<always> en B<never>.
 
 =item B<LESS>
 
-Indien niet reeds ingesteld, wordt het als “B<-FRSXMQ>” gedefinieerd door
-B<dpkg-query> bij het voortbrengen van een pagineringsprogramma (sinds dpkg
-1.19.2). Om het standaardgedrag te wijzigen, kan deze variabele vooraf
-ingesteld worden op een andere waarde, inclusief op een lege tekenreeks,
-ofwel kunnen de variabelen B<PAGER> of B<DPKG_PAGER> ingesteld worden om
-specifieke opties uit te schakelen met «B<-+>», bijvoorbeeld
-B<DPKG_PAGER="less -+F">.
+Indien niet reeds ingesteld, wordt het als “B<-FRSXMQ>” gedefinieerd door B<dpkg-query> bij het voortbrengen van een pagineringsprogramma (sinds dpkg 1.19.2). Om het standaardgedrag te wijzigen, kan deze variabele vooraf ingesteld worden op een andere waarde, inclusief op een lege tekenreeks, ofwel kunnen de variabelen B<PAGER> of B<DPKG_PAGER> ingesteld worden om specifieke opties uit te schakelen met «B<-+>», bijvoorbeeld B<DPKG_PAGER="less -+F">.
 
 =back
 

@@ -21,13 +21,14 @@ use warnings;
 
 eval q{
     pop @INC if $INC[-1] eq '.';
-    use Net::FTP;
+
+    use Dpkg; # Dummy import to require the presence of Dpkg::*.
 };
 if ($@) {
-    warn "Please install the 'perl' package if you want to use the\n" .
-         "FTP access method of dselect.\n\n";
+    warn "Missing Dpkg modules required by the FTP access method.\n\n";
     exit 1;
 }
+
 use Dselect::Ftp;
 
 # deal with arguments
@@ -43,7 +44,7 @@ if ($option eq 'manual') {
 
 #Defaults
 my $arch = qx(dpkg --print-architecture);
-$arch='i386' if $?;
+$arch = 'i386' if $?;
 chomp $arch;
 
 my $logname = qx(whoami);
@@ -109,7 +110,6 @@ edit_config($methdir);
 my $ftp;
 sub download() {
  foreach (@{$CONFIG{site}}) {
-
     $ftp = do_connect(ftpsite => $_->[0],
                       ftpdir => $_->[1],
                       passive => $_->[3],
@@ -131,13 +131,13 @@ sub download() {
 
 	foreach my $line (@dirlst) {
 	    if($line =~ /Packages/) {
-		$got_pkgfile=1;
+		$got_pkgfile = 1;
 	    }
 	}
 	if( !$got_pkgfile) {
 	    print "Warning: Could not find a Packages file in $dir\n",
 	    "This may not be a problem if the directory is a symbolic link\n";
-	    $problem=1;
+	    $problem = 1;
 	}
     }
     print "Closing ftp connection...\n";

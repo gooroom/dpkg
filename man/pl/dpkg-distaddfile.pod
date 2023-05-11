@@ -24,13 +24,9 @@ B<dpkg-distaddfile> [I<opcja>...] I<plik sekcja priorytet>
 
 B<dpkg-distaddfile> dodaje wpis dotyczący podanego pliku do B<debian/files>.
 
-Pobiera trzy argumenty nie będące opcjami: nazwę pliku oraz sekcję i
-priorytet dla pliku B<.changes>.
+Pobiera trzy argumenty nie będące opcjami: nazwę pliku oraz sekcję i priorytet dla pliku B<.changes>.
 
-Nazwa pliku powinna być podana relatywnie w stosunku do katalogu, w którym
-B<dpkg-genchanges> będzie szukał plików, zazwyczaj jako B<..>, raczej niż
-być ścieżką relatywną do bieżącego katalogu, podczas działania
-B<dpkg-distaddfile>.
+Nazwa pliku powinna być podana relatywnie w stosunku do katalogu, w którym B<dpkg-genchanges> będzie szukał plików, zazwyczaj jako B<..>, raczej niż być ścieżką relatywną do bieżącego katalogu, podczas działania B<dpkg-distaddfile>.
 
 =head1 OPCJE
 
@@ -38,8 +34,7 @@ B<dpkg-distaddfile>.
 
 =item B<-f>I<plik-z-listą-plików>
 
-Czyta lub zapisuje listę plików wydania do pliku podanego jako argument tej
-opcji, zamiast do pliku B<debian/files>.
+Czyta lub zapisuje listę plików wydania do pliku podanego jako argument tej opcji, zamiast do pliku B<debian/files>.
 
 =item B<-?>, B<--help>
 
@@ -57,14 +52,11 @@ Wyświetla informację o wersji i pomyślnie kończy działanie.
 
 =item B<DPKG_COLORS>
 
-Sets the color mode (since dpkg 1.18.5).  The currently accepted values are:
-B<auto> (default), B<always> and B<never>.
+Sets the color mode (since dpkg 1.18.5).  The currently accepted values are: B<auto> (default), B<always> and B<never>.
 
 =item B<DPKG_NLS>
 
-If set, it will be used to decide whether to activate Native Language
-Support, also known as internationalization (or i18n) support (since dpkg
-1.19.0).  The accepted values are: B<0> and B<1> (default).
+If set, it will be used to decide whether to activate Native Language Support, also known as internationalization (or i18n) support (since dpkg 1.19.0).  The accepted values are: B<0> and B<1> (default).
 
 =back
 
@@ -74,8 +66,7 @@ Support, also known as internationalization (or i18n) support (since dpkg
 
 =item B<debian/files>
 
-Lista wygenerowanych plików, które są częścią przygotowywanego wydania. Aby
-dodać dodatkowe pliki, można użyć B<dpkg-distaddfile>.
+Lista wygenerowanych plików, które są częścią przygotowywanego wydania. Aby dodać dodatkowe pliki, można użyć B<dpkg-distaddfile>.
 
 =back
 

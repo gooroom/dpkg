@@ -22,14 +22,9 @@ B<debian/changelog>
 
 =head1 BESCHREIBUNG
 
-Änderungen in der paketierten Version eines Projekts werden in der
-Changelog-Datei I<debian/changelog> erläutert. Darunter fallen Änderungen,
-die am Quellpaket beim Paketieren vorgenommen wurden sowie andere Änderungen
-und Aktualisierungen am Paket.
+Änderungen in der paketierten Version eines Projekts werden in der Changelog-Datei I<debian/changelog> erläutert. Darunter fallen Änderungen, die am Quellpaket beim Paketieren vorgenommen wurden sowie andere Änderungen und Aktualisierungen am Paket.
 
-Das Format von I<debian/changelog> erlaubt den Paketbauwerkzeugen, die zu
-bauende Version des Pakets und andere, veröffentlichungsspezifische
-Information, zu ermitteln.
+Das Format von I<debian/changelog> erlaubt den Paketbauwerkzeugen, die zu bauende Version des Pakets und andere, veröffentlichungsspezifische Information, zu ermitteln.
 
 Das Format besteht aus einer Serie von Einträgen der folgenden Art:
 
@@ -43,58 +38,37 @@ Z<>
           [optionale leere Zeile(n), entfernt]
   -- I<Betreuername> <I<E-Mail-Adresse>>  I<Datum>
 
-I<Paket> und I<Version> sind der Quellpaketname und die Versionsnummer. Die
-Version wird durch runde Klammern U+00028 ‚B<(>’ und U+0029 ‚B<)>’ begrenzt.
+I<Paket> und I<Version> sind der Quellpaketname und die Versionsnummer. Die Version wird durch runde Klammern U+00028 ‚B<(>’ und U+0029 ‚B<)>’ begrenzt.
 
-I<Distributionen> listet eine oder mehrere durch Leerzeichen getrennte
-Distributionen auf, in die diese Version nach dem Upload installiert werden
-soll. Es wird in das Feld B<Distribution> in der I<.changes>-Datei
-kopiert. B<Distribution> muss durch ein Semikolon (U+003B ‚B<;>’)
-abgeschlossen werden.
+I<Distributionen> listet eine oder mehrere durch Leerzeichen getrennte Distributionen auf, in die diese Version nach dem Upload installiert werden soll. Es wird in das Feld B<Distribution> in der I<.changes>-Datei kopiert. B<Distribution> muss durch ein Semikolon (U+003B ‚B<;>’) abgeschlossen werden.
 
-I<Metadaten> listet eine oder mehrere durch Kommata getrennte
-I<Schlüssel>=I<Wert>-Objekte auf. Jeder Schlüssel darf nur Minus und
-alphanumerische Zeichen (Groß-/Kleinschreibung egal) enthalten, da diese auf
-B<deb822>(5)-Feldnamen abgebildet werden müssen. Die einzigen von B<dpkg>
-derzeit verstandenen I<Schlüsselwörter> sind B<urgency> und
-B<binary-only>. Der Wert von B<urgency> wird für das Feld B<Urgency> in der
-Datei I<.changes> für den Upload verwandt. B<binary-only> mit einem Wert von
-B<yes> wird verwandt, um anzuzeigen, dass dieser Changelog-Eintrag für einen
-rein-binären nicht-Betreuer-Upload (ein automatischer binärer Neubau, wo die
-einzige Änderung der Changelog-Eintrag darstellt) ist.
+I<Metadaten> listet eine oder mehrere durch Kommata getrennte I<Schlüssel>=I<Wert>-Objekte auf. Jeder Schlüssel darf nur Minus und alphanumerische Zeichen (Groß-/Kleinschreibung egal) enthalten, da diese auf B<deb822>(5)-Feldnamen abgebildet werden müssen. Die einzigen von B<dpkg> derzeit verstandenen I<Schlüsselwörter> sind B<urgency> und B<binary-only>. Der Wert von B<urgency> wird für das Feld B<Urgency> in der Datei I<.changes> für den Upload verwandt. B<binary-only> mit einem Wert von B<yes> wird verwandt, um anzuzeigen, dass dieser Changelog-Eintrag für einen rein-binären nicht-Betreuer-Upload (ein automatischer binärer Neubau, wo die einzige Änderung der Changelog-Eintrag darstellt) ist.
 
-Die Änderungsdetails können tatsächlich eine Reihe von Zeilen, die
-mindestens mit zwei Leerzeichen (U+0020 B<LEERZEICHEN>) beginnen, sein, aber
-üblicherweise beginnt jede Änderung mit einem Stern und einem trennenden
-Leerzeichen und Folgezeilen werden so eingerückt, dass sie bündig mit dem
-obigen Text formatiert sind. Leerzeilen können hier verwandt weden, um
-Gruppen von Änderungen, falls gewünscht, zu trennen.
+Die Änderungsdetails können tatsächlich eine Reihe von Zeilen, die mindestens mit zwei Leerzeichen (U+0020 B<LEERZEICHEN>) beginnen, sein, aber üblicherweise beginnt jede Änderung mit einem Stern und einem trennenden Leerzeichen und Folgezeilen werden so eingerückt, dass sie bündig mit dem obigen Text formatiert sind. Leerzeilen können hier verwandt weden, um Gruppen von Änderungen, falls gewünscht, zu trennen.
 
-Falls dieser Upload Fehler aus der Fehlerdatenbank behebt, können diese
-automatisch geschlossen werden, falls der Changlog bei der Aufnahme in das
-Distributionsarchiv die folgende Zeichenkette enthält:
+Falls dieser Upload Fehler aus der Fehlerdatenbank behebt, können diese automatisch geschlossen werden, falls der Changlog bei der Aufnahme in das Distributionsarchiv die folgende Zeichenkette enthält:
 
 =over 
 
-B<Closes: Bug#>I<nnnnn>
+B<Closes: #>I<nnnnn>
 
 =back
 
-in den Änderungsdetails auftaucht. Der genaue reguläre Perl-Ausdruck lautet
-B</closes:\s*(?:bug)?\#?\s?\d+(?:,\s*(?:bug)?\#?\s?\d+)*/i>). Diese
-Information wird über das Feld B<Closes> in der I<.changes>-Datei
-vermittelt.
+in den Details der Änderung, wobei B<#>I<nnnnn> die Fehlernummer ist. Der genaue reguläre Perl-Ausdruck lautet:
 
-Der im Changelog verwandte Name des Betreuers und die E-Mail-Adresse sollten
-die Details der Person sein, die diese Veröffentlichung des Pakets erstellt
-hat. Sie stimmen B<nicht> notwendigerweise mit denen des Hochladenden oder
-des normalen Paketbetreuers überein. Die Informationen werden von hier in
-das Feld B<Changed-By> in der I<.changes>-Datei kopiert und könnten dann
-später zum Versand der Bestätigung verwandt werden, wenn der Upload im
-Archiv der Distribution aufgenommen wurde.
+=over 
 
-Das I<Datum> hat das folgende Format (kompatibel zu und mit der gleichen
-Semantik von RFC2822 und RFC5322 bzw. der Ausgabe von „date -R“):
+B</closes:\s*(?:bug)?\#?\s?\d+(?:,\s*(?:bug)?\#?\s?\d+)*/i>
+
+=back
+
+Das bedeutet, die Zeichenkette sollte aus dem Wort B<closes:>, gefolgt von einer durch Kommata getrennten Liste von Fehlernummern bestehen. Fehlernummern kann das Wort B<bug> und/oder das Zeichen B<#> vorangestellt werden, wie in C<Closes: 42, bug#43, #44, bug 45>. Bei den Wörtern B<closes:> und B<bug> ist die Groß-/Kleinschreibung egal. Die Liste an Fehlernummern darf über mehrere Zeilen hinweg gehen.
+
+Diese Information wird über das Feld B<Closes> in der Datei I<.changes> übermittelt. Hierbei werden, abhängig von der Archivverwaltungssoftware, alle aufgeführten Fehlernummern automatisch geschlossen werden können.
+
+Der im Changelog verwandte Name des Betreuers und die E-Mail-Adresse sollten die Details der Person sein, die diese Veröffentlichung des Pakets erstellt hat. Sie stimmen B<nicht> notwendigerweise mit denen des Hochladenden oder des normalen Paketbetreuers überein. Die Informationen werden von hier in das Feld B<Changed-By> in der I<.changes>-Datei kopiert und könnten dann später zum Versand der Bestätigung verwandt werden, wenn der Upload im Archiv der Distribution aufgenommen wurde.
+
+Das I<Datum> hat das folgende Format (kompatibel zu und mit der gleichen Semantik von RFC2822 und RFC5322 bzw. der Ausgabe von „date -R“):
 
 =over 
 
@@ -108,18 +82,15 @@ Hierbei sind:
 
 =item I<Wochentag>
 
-Dieser ist einer aus: B<Mon>, B<Tue>, B<Wed>, B<Thu>, B<Fri>, B<Sat>,
-B<Sun>.
+Dieser ist einer aus: B<Mon>, B<Tue>, B<Wed>, B<Thu>, B<Fri>, B<Sat>, B<Sun>.
 
 =item I<tt>
 
-Dies ist der ein- oder zweistellige Tag des Monats (B<01>-B<31>), wobei die
-führende Null optional ist, aber normalerweise nicht weggelassen wird.
+Dies ist der ein- oder zweistellige Tag des Monats (B<01>-B<31>), wobei die führende Null optional ist, aber normalerweise nicht weggelassen wird.
 
 =item I<Monat>
 
-Dies ist einer aus: B<Jan>, B<Feb>, B<Mar>, B<Apr>, B<May>, B<Jun>, B<Jul>,
-B<Aug>, B<Sep>, B<Oct>, B<Nov>, B<Dec>.
+Dies ist einer aus: B<Jan>, B<Feb>, B<Mar>, B<Apr>, B<May>, B<Jun>, B<Jul>, B<Aug>, B<Sep>, B<Oct>, B<Nov>, B<Dec>.
 
 =item I<jjjj>
 
@@ -139,31 +110,15 @@ ist die zweistellige Sekunde (B<00>-B<60>).
 
 =item [B<+->]I<zzzz>
 
-ist der Zeitzonenversatz zur koordinierten Weltzeit (UTC). ‚B<+>’ gibt an,
-dass die Zeit voraus (d.h. östlich von UTC) ist und ‚B<->’, dass die Zeit
-zurück (d.h. westlich von UTC) ist. Die ersten zwei Ziffern geben den
-Unterschied in Stunden von UTC und die letzten zwei Ziffern die Anzahl von
-zusätzlichen Minuten zu UTC an. Die letzten zwei Ziffern müssen im Bereich
-B<00>-B<59> liegen.
+ist der Zeitzonenversatz zur koordinierten Weltzeit (UTC). ‚B<+>’ gibt an, dass die Zeit voraus (d.h. östlich von UTC) ist und ‚B<->’, dass die Zeit zurück (d.h. westlich von UTC) ist. Die ersten zwei Ziffern geben den Unterschied in Stunden von UTC und die letzten zwei Ziffern die Anzahl von zusätzlichen Minuten zu UTC an. Die letzten zwei Ziffern müssen im Bereich B<00>-B<59> liegen.
 
 =back
 
-Die erste „Titel“-Zeile muss am linken Rand anfangen. Die „Schluss“-Zeile
-mit den Betreuer- und Datumsdetails muss durch genau ein Leerzeichen (U+0020
-B<LEERZEICHEN>) eingeleitet werden. Die Details zum Betreuer und das Datum
-müssen durch genau zwei Leerzeichen (U+0020 B<LEERZEICHEN>) getrennt
-sein. Jeder Teil vom I<Datum> kann durch eines oder mehrere Leerzeichen
-(U+0020 B<SPACE>) getrennt werden, außer nach dem Komma, wo es durch Null
-oder mehr Leerzeichen (U+0020 B<SPACE>) abgetrennt werden kann.
+Die erste „Titel“-Zeile muss am linken Rand anfangen. Die „Schluss“-Zeile mit den Betreuer- und Datumsdetails muss durch genau ein Leerzeichen (U+0020 B<LEERZEICHEN>) eingeleitet werden. Die Details zum Betreuer und das Datum müssen durch genau zwei Leerzeichen (U+0020 B<LEERZEICHEN>) getrennt sein. Jeder Teil vom I<Datum> kann durch eines oder mehrere Leerzeichen (U+0020 B<SPACE>) getrennt werden, außer nach dem Komma, wo es durch Null oder mehr Leerzeichen (U+0020 B<SPACE>) abgetrennt werden kann.
 
-Jede Zeile, die komplett (d.h. ohne vorangestellte Leerzeichen) aus
-Kommentaren im Stil B<#> oder B</* */> oder RCS-Schlüsselwörtern besteht,
-sollte ignoriert werden.
+Jede Zeile, die komplett (d.h. ohne vorangestellte Leerzeichen) aus Kommentaren im Stil B<#> oder B</* */> oder RCS-Schlüsselwörtern besteht, sollte ignoriert werden.
 
-Modelines von Vim oder lokale Emacs-Variablen sowie uralte
-Changelog-Einträge in anderen Formaten am Ende der Datei sollten akzeptiert
-und in der Ausgabe erhalten werden. Ihr Inhalt darf ansonsten aber ignoriert
-und die Auswertung an diesem Punkt beendet werden.
+Modelines von Vim oder lokale Emacs-Variablen sowie uralte Changelog-Einträge in anderen Formaten am Ende der Datei sollten akzeptiert und in der Ausgabe erhalten werden. Ihr Inhalt darf ansonsten aber ignoriert und die Auswertung an diesem Punkt beendet werden.
 
 Der gesamte Changelog muss in UTF-8 kodiert sein.
 
@@ -195,13 +150,12 @@ Der gesamte Changelog muss in UTF-8 kodiert sein.
 
 =head1 SIEHE AUCH
 
-B<deb822>(5), B<deb-version>(7), B<deb-changes>(5),
-B<dpkg-parsechangelog>(1).
+B<deb822>(5), B<deb-version>(7), B<deb-changes>(5), B<dpkg-parsechangelog>(1).
 
 
 =head1 ÜBERSETZUNG
 
-Die deutsche Übersetzung wurde 2004, 2006-2020 von Helge Kreutzmann
+Die deutsche Übersetzung wurde 2004, 2006-2023 von Helge Kreutzmann
 <debian@helgefjell.de>, 2007 von Florian Rehnisch <eixman@gmx.de> und
 2008 von Sven Joachim <svenjoac@gmx.de>
 angefertigt. Diese Übersetzung ist Freie Dokumentation; lesen Sie die

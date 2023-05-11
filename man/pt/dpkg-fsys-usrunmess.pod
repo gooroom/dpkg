@@ -22,11 +22,9 @@ B<dpkg-fsys-usrunmess> [B<option>...]
 
 =head1 DESCRIÇÃO
 
-B<dpkg-fsys-usrunmess> é uma ferramenta para corrigir sistemas de ficheiros
-que foram instalados de novo com instaladores recentes de predefinições
-infelizes ou migrados para um /usr danificado via directórios de disposição
-de nomes alternativos, o qual B<não> é suportado pelo dpkg. Veja a FAQ do
-dpkg.
+B<dpkg-fsys-usrunmess> é uma ferramenta para corrigir sistemas de ficheiros que foram instalados de novo com instaladores recentes de predefinições infelizes ou migrados para um /usr danificado via directórios de disposição de nomes alternativos, o qual B<não> é suportado pelo dpkg. Veja a FAQ do dpkg.
+
+B<Nota>: Em Debian o seu tech-ctte decretou que num lançamento após o bookworm a disposição não-usrmerged não irá ser suportada, e assim alguns dos seus maintainers podem não corrigir problemas ou intencionalmente remover o suporta não-usrmerged, assim você tem de decidir e escolher o seu veneno.
 
 Este programa irá executar as seguintes acções gerais:
 
@@ -42,13 +40,19 @@ Verifica a consistência da base de dados do dpkg e caso contrário aborta.
 
 =item *
 
+Gera e instala um pacote de prevenção de regressão, se pedido na linha de comandos ou caso contrário na solicitação.
+
+=item *
+
 Obtém a lista de ficheiros e alternativas que precisam ser restaurados.
 
 =item *
 
-Cria uma hierarquia sombra sob F</.usrunmess>, ao criar os links simbólicos
-de directórios ou por ligações rijas ou copiando os ficheiros como
-necessário.
+Procura ficheiros de módulos de kernel não vigiados que possam precisar se ser movidos também.
+
+=item *
+
+Cria uma hierarquia sombra sob F</.usrunmess>, ao criar os links simbólicos de directórios ou por ligações rijas ou copiando os ficheiros como necessário.
 
 =item *
 
@@ -60,19 +64,15 @@ Tranca a base de dados do dpkg.
 
 =item *
 
-Marca todos os pacotes como meio instalados para forçar o correr dos scripts
-de maintainer que podem precisar de recriar ficheiros.
+Marca todos os pacotes como meio instalados para forçar o correr dos scripts de maintainer que podem precisar de recriar ficheiros.
 
 =item *
 
-Substitui os directórios de nomes alternativos pelos sombra, ao criar uma
-cópia de salvaguarda dos antigos directórios de links simbólicos e
-renomeando os sombra sobre os outros.
+Substitui os directórios de nomes alternativos pelos sombra, ao criar uma cópia de salvaguarda dos antigos directórios de links simbólicos e renomeando os sombra sobre os outros.
 
 =item *
 
-Re-etiqueta a informação MAC para directórios e links simbólicos se
-necessário.
+Re-etiqueta a informação MAC para directórios e links simbólicos se necessário.
 
 =item *
 
@@ -92,8 +92,7 @@ Remove o directório raiz sombra.
 
 =item *
 
-Register a B<policy-rc.d> to disallow service actions, which means that
-services might need to be restarted afterwards, ideally via a reboot.
+Regista um B<policy-rc.d> para proibir acções de serviço, o que significa que os serviços podem precisar de serem reiniciados após isto, idealmente com um reiniciar da máquina.
 
 =item *
 
@@ -101,24 +100,15 @@ Reconfigura todos os pacotes.
 
 =item *
 
-Unregister the B<policy-rc.d> and restore the alternatives state.
+Retira o registo de B<policy-rc.d> e restaura o estado das alternativas.
 
 =back
 
-B<Nota>: Quando se corre o programa a partir de alguma shells tais como
-L<bash(1)> ou L<zsh(1)>, após o executar, você pode precisar de requisitar à
-shell para esquecer todas as localizações de executáveis lembradas com por
-exemplo C<hash -r>.
+B<Nota>: Quando se corre o programa a partir de alguma shells tais como L<bash(1)> ou L<zsh(1)>, após o executar, você pode precisar de requisitar à shell para esquecer todas as localizações de executáveis lembradas com por exemplo C<hash -r>.
 
-B<Note>: Some directories might linger after the migration in case they
-contain untracked files. A list is printed once the script has finished for
-further investigation.
+B<Nota>: Alguns directórios podem demorar após a migração no caso de conterem ficheiros não acompanhados. É escrita uma lista assim que o script terminar para investigação posterior.
 
-B<Aviso>: Note que esta operação tem o potencial de tornar o sistema não
-utilizável ou quebrado em caso de uma pagarem súbita ou reinicio do
-sistema. estado inesperado do sistema, ou possíveis bugs no script. Esteja
-preparado com meio de recuperação e considere fazer cópias de salvaguarda
-antes.
+B<Aviso>: Note que esta operação tem o potencial de tornar o sistema não utilizável ou quebrado em caso de uma pagarem súbita ou reinicio do sistema. estado inesperado do sistema, ou possíveis bugs no script. Esteja preparado com meio de recuperação e considere fazer cópias de salvaguarda antes.
 
 =head1 OPÇÕES
 
@@ -126,15 +116,21 @@ antes.
 
 =item B<-p>, B<--prompt>
 
-Pergunta no ponto de não retorno, para que os resultados de depuração da
-hierarquia sombra possam ser avaliados antes de proceder.
+Pergunta no ponto de não retorno, para que os resultados de depuração da hierarquia sombra possam ser avaliados antes de proceder.
+
+=item B<--prevention>
+
+=item B<--no-prevention>
+
+Activa ou desactiva a a geração e instalação de um pacote de prevenção de regressão no sistema. Se nenhuma opção for fornecida, será solicitada qual a acção a tomar.
+
+O pacote gerado contém o campo B<Protected> definido para B<yes> para proteção contra remoção acidental do pacote.
 
 =item B<-n>, B<--no-act>
 
 =item B<--dry-run>
 
-Esta opção activa o modo dry-run, onde não há acções destrutivas, apenas a
-parte de preparação.
+Esta opção activa o modo dry-run, onde não há acções destrutivas, apenas a parte de preparação.
 
 =item B<-?>, B<--help>
 
@@ -158,7 +154,7 @@ Esta definição define se se deve activar o modo dry-run.
 
 =head1 VEJA TAMBÉM
 
-L<https://wiki.debian.org/Teams/Dpkg/FAQ#Q:_Does_dpkg_support_merged-.2Fusr-via-aliased-dirs.3F>.
+L<https://wiki.debian.org/Teams/Dpkg/FAQ#broken-usrmerge>.
 
 
 =head1 TRADUÇÃO

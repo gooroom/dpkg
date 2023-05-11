@@ -14,8 +14,7 @@ If the PO get lost, keeping this translation up-to-date will be harder.
 
 =head1 NAMN
 
-dpkg-fsys-usrunmess - gör röran med sammanslagen-/usr-via-aliaskatalogen
-ogjord
+dpkg-fsys-usrunmess - gör röran med sammanslagen-/usr-via-aliaskatalogen ogjord
 
 =head1 SYNOPS
 
@@ -23,10 +22,9 @@ B<dpkg-fsys-usrunmess> [B<flagga>...]
 
 =head1 BESKRIVNING
 
-B<dpkg-fsys-usrunmess> är ett verktyg för att rätta till filsystem som har
-nyinstallerats med nyare installationsprogram med olyckliga förval eller
-migrerats till den trasiga sammanslagna /usr via aliaskataloglayout, som
-B<inte> stöds av dpkg. Se dpkg:s FAQ.
+B<dpkg-fsys-usrunmess> är ett verktyg för att rätta till filsystem som har nyinstallerats med nyare installationsprogram med olyckliga förval eller migrerats till den trasiga sammanslagna /usr via aliaskataloglayout, som B<inte> stöds av dpkg. Se dpkg:s FAQ.
+
+B<Observera>: I Debian har dess tech-ctte bestämt att i utgåvan efter bookworm så kommer inte filsystem som inte har usrmerged-layouten att stödas, och att några av deras paketansvariga kanske inte kommer rätta problem eller medvetet ta bort stöd för icke-usrmerged, så du måste bestämma dig för vad som passar dig bäst.
 
 Programmet kommer utföra följande övergripande funktioner:
 
@@ -42,12 +40,19 @@ Kontrollera att dpkg-databasen är konsistent och annars avsluta.
 
 =item *
 
+Skapa och installera ett paket för förebyggande av regression, om ombeds på kommandoraden eller annars i en fråga.
+
+=item *
+
 Hämta listan över filer och alternativ som behöver återställas.
 
 =item *
 
-Skapa en skugghierarki under F</.usrunmess>, genom att skapa katalogernas
-symboliska länkar eller hårdlänka eller kopiera filerna efter behov.
+Se efter ospårade kärnmoduler som också kan behöva flyttas,
+
+=item *
+
+Skapa en skugghierarki under F</.usrunmess>, genom att skapa katalogernas symboliska länkar eller hårdlänka eller kopiera filerna efter behov.
 
 =item *
 
@@ -59,14 +64,11 @@ Låser dpkg-databasen.
 
 =item *
 
-Markera alla paket som halvkonfigurerade och tvinga fram körning av
-utvecklarskript som kan behöva återskapa filer.
+Markera alla paket som halvkonfigurerade och tvinga fram körning av utvecklarskript som kan behöva återskapa filer.
 
 =item *
 
-Ersätt aliaskatalogerna med skuggkatalogerna, genom att skapa en
-säkerhetskopia av de gamla symboliskt länkade katalogerna och byta namn på
-skuggkatalogerna över dem.
+Ersätt aliaskatalogerna med skuggkatalogerna, genom att skapa en säkerhetskopia av de gamla symboliskt länkade katalogerna och byta namn på skuggkatalogerna över dem.
 
 =item *
 
@@ -90,8 +92,7 @@ Ta bort skugg-rotkatalogen.
 
 =item *
 
-Register a B<policy-rc.d> to disallow service actions, which means that
-services might need to be restarted afterwards, ideally via a reboot.
+Registrerar en B<policy-rc.d> som förhindrar tjänstehandlingar, vilket betyder att tjänster kan behöva startas om efteråt, ideellt genom en omstart.
 
 =item *
 
@@ -99,23 +100,15 @@ Omkonfigurera alla paket.
 
 =item *
 
-Unregister the B<policy-rc.d> and restore the alternatives state.
+Avregistrera B<policy-rc.d> och återställ altnerativ-tillståndet.
 
 =back
 
-B<Observera>: När programmet körs från vissa skal såsom L<bash(1)> eller
-L<zsh(1)>, kan du efter att det har körts be skalet att glömma alla
-ihågkomna platser för körbara program med till exempel C<hash -r>.
+B<Observera>: När programmet körs från vissa skal såsom L<bash(1)> eller L<zsh(1)>, kan du efter att det har körts be skalet att glömma alla ihågkomna platser för körbara program med till exempel C<hash -r>.
 
-B<Note>: Some directories might linger after the migration in case they
-contain untracked files. A list is printed once the script has finished for
-further investigation.
+B<Observera>: Vissa kataloger kan dröja kvar efter migreringen i vilket fall de innehåller ospårade filer. När skriptet är färdig skrivs en förteckning ut som kan undersökas ytterligare.
 
-B<Varning>: Observera att den här åtgärden potentiellt kan göra systemet
-oanvändbart eller trasigt ifall det uppstår en plötslig krasch eller
-omstart, systemet är i ett oväntat tillstånd, eller möjliga programfel i
-skriptet. Var förberedd med återställningsmedia och överväg att
-säkerhetskopiera systemet i förväg.
+B<Varning>: Observera att den här åtgärden potentiellt kan göra systemet oanvändbart eller trasigt ifall det uppstår en plötslig krasch eller omstart, systemet är i ett oväntat tillstånd, eller möjliga programfel i skriptet. Var förberedd med återställningsmedia och överväg att säkerhetskopiera systemet i förväg.
 
 =head1 FLAGGOR
 
@@ -123,15 +116,21 @@ säkerhetskopiera systemet i förväg.
 
 =item B<-p>, B<--prompt>
 
-Fråga vid punkten där det inte finns någon återvändo, så att
-felsökningsutdata och skugghierarkin kan utvärderas innan man fortsätter.
+Fråga vid punkten där det inte finns någon återvändo, så att felsökningsutdata och skugghierarkin kan utvärderas innan man fortsätter.
+
+=item B<--prevention>
+
+=item B<--no-prevention>
+
+Aktiverar eller inaktiverar skapande och installation av ett paket för förebyggande av regression i systemet. Om ingen av flaggorna anges ställs en fråga om vad som ska utföras.
+
+Det skapade paketet innehåller fältet B<Protected> satt till B<yes> för att skydda mot att paketet tas bort av misstag.
 
 =item B<-n>, B<--no-act>
 
 =item B<--dry-run>
 
-Den här flaggan aktiverar torrkörningsläget, där inga destruktiva åtgärder
-utförs, bara förberedelsedelen.
+Den här flaggan aktiverar torrkörningsläget, där inga destruktiva åtgärder utförs, bara förberedelsedelen.
 
 =item B<-?>, B<--help>
 
@@ -155,7 +154,7 @@ Den här inställningen anger om torrkörningsläget ska aktiveras.
 
 =head1 SE ÄVEN
 
-L<https://wiki.debian.org/Teams/Dpkg/FAQ#Q:_Does_dpkg_support_merged-.2Fusr-via-aliased-dirs.3F>.
+L<https://wiki.debian.org/Teams/Dpkg/FAQ#broken-usrmerge>.
 
 
 =head1 ÖVERSÄTTNING

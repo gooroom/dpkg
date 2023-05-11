@@ -22,13 +22,9 @@ B<override>
 
 =head1 BESKRIVNING
 
-Även om det mesta av informationen om ett binär-/källkodspaket finns i
-control-/.dsc-filen så kan allt överstyras när det exporteras till
-Packages-/Sources-filer. Den extra override-filen innehåller dessa
-överstyrningar.
+Även om det mesta av informationen om ett binär-/källkodspaket finns i control-/.dsc-filen så kan allt överstyras när det exporteras till Packages-/Sources-filer. Den extra override-filen innehåller dessa överstyrningar.
 
-Den extra override-filen har ett enkelt blanksteg-avdelat
-format. Kommentarer är tillåtna (markeras med ett B<#>).
+Den extra override-filen har ett enkelt blanksteg-avdelat format. Kommentarer är tillåtna (markeras med ett B<#>).
 
 =over 
 
@@ -40,11 +36,9 @@ I<paket> är namnet på binär-/källkodspaketet
 
 I<fältnamn> är namnet på fältet som överstyrs.
 
-I<värde> är värdet som ska läggas in i fältet. Det kan innehålla blanksteg
-då raden delas upp i maximalt tre kolumner vid tolkning.
+I<värde> är värdet som ska läggas in i fältet. Det kan innehålla blanksteg då raden delas upp i maximalt tre kolumner vid tolkning.
 
-De extra override-filer som används för att skapa den officiella listan över
-paket (B<Packages>) finns i I<indices>-katalogen på alla Debianspeglar.
+De extra override-filer som används för att skapa den officiella listan över paket (B<Packages>) finns i I<indices>-katalogen på alla Debianspeglar.
 
 =head1 SE ÄVEN
 

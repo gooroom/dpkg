@@ -22,13 +22,9 @@ B<dpkg-checkbuilddeps> [I<Option> …] [I<Steuerdatei>]
 
 =head1 BESCHREIBUNG
 
-Dieses Programm überprüft die im System installierten Pakete gegen die
-Bauabhängigkeiten und Baukonflikte, die in der B<control>-Datei aufgeführt
-sind. Falls welche davon nicht erfüllt sind, zeigt es diese an und beendet
-sich mit einem von Null verschiedenen Rückgabewert.
+Dieses Programm überprüft die im System installierten Pakete gegen die Bauabhängigkeiten und Baukonflikte, die in der B<control>-Datei aufgeführt sind. Falls welche davon nicht erfüllt sind, zeigt es diese an und beendet sich mit einem von Null verschiedenen Rückgabewert.
 
-Standardmäßig wird B<debian/control> gelesen, aber ein alternativer
-B<control>-Dateiname kann auf der Befehlszeile angegeben werden.
+Standardmäßig wird B<debian/control> gelesen, aber ein alternativer B<control>-Dateiname kann auf der Befehlszeile angegeben werden.
 
 =head1 OPTIONEN
 
@@ -36,49 +32,33 @@ B<control>-Dateiname kann auf der Befehlszeile angegeben werden.
 
 =item B<--admindir=>I<Verz>
 
-Ändert den Ablageort der B<dpkg>-Datenbank (seit Dpkg 1.14.0). Der
-Standardort ist I<%ADMINDIR%>.
+Ändert den Ablageort der B<dpkg>-Datenbank (seit Dpkg 1.14.0). Der Standardort ist I<%ADMINDIR%>.
 
 =item B<-A>
 
-Ignoriert B<Build-Depends-Indep> und B<Build-Conflicts-Arch>-Zeilen (seit
-Dpkg 1.16.4). Verwenden Sie dies, wenn nur architekturunabhängige Pakete
-gebaut werden oder kombinieren Sie es mit B<-B>, wenn nur ein Quellpaket
-gebaut werden soll.
+Ignoriert B<Build-Depends-Indep> und B<Build-Conflicts-Arch>-Zeilen (seit Dpkg 1.16.4). Verwenden Sie dies, wenn nur architekturunabhängige Pakete gebaut werden oder kombinieren Sie es mit B<-B>, wenn nur ein Quellpaket gebaut werden soll.
 
 =item B<-B>
 
-Ignoriert B<Build-Depends-Indep> und
-B<Build-Conflicts-Indep>-Zeilen. Verwenden Sie dies, wenn nur
-architekturabhängige Pakete gebaut werden oder kombinieren Sie es mit B<-A>,
-wenn nur ein Quellpaket gebaut werden soll.
+Ignoriert B<Build-Depends-Indep> und B<Build-Conflicts-Indep>-Zeilen. Verwenden Sie dies, wenn nur architekturabhängige Pakete gebaut werden oder kombinieren Sie es mit B<-A>, wenn nur ein Quellpaket gebaut werden soll.
 
 =item B<-I>
 
-Ignoriert eingebaute Bauabhängigkeiten und -konflikte (seit Dpkg
-1.18.2). Dies sind implizite Abhängigkeiten, die normalerweise in einer
-bestimmten Distribution benötigt werden, die sogenannte
-„Build-Essential“-Paketgruppe.
+Ignoriert eingebaute Bauabhängigkeiten und -konflikte (seit Dpkg 1.18.2). Dies sind implizite Abhängigkeiten, die normalerweise in einer bestimmten Distribution benötigt werden, die sogenannte „Build-Essential“-Paketgruppe.
 
 =item B<-d> I<Zeichenkette-für-Bauabhängigkeiten>
 
 =item B<-c> I<Zeichenkette-für-Baukonflikte>
 
-Verwendet die angegebenen Bauabhängigkeiten/-konflikte statt denen der Datei
-I<debian/control> (seit Dpkg 1.14.17).
+Verwendet die angegebenen Bauabhängigkeiten/-konflikte statt denen der Datei I<debian/control> (seit Dpkg 1.14.17).
 
 =item B<-a> I<Architektur>
 
-Überprüft Bauabhängigkeiten/-konflikte unter der Annahme, dass das Paket in
-der Datei B<control> für die angegebene Host-Architektur statt für die
-Architektur des aktuellen Systems gebaut werden soll (seit Dpkg 1.16.2).
+Überprüft Bauabhängigkeiten/-konflikte unter der Annahme, dass das Paket in der Datei B<control> für die angegebene Host-Architektur statt für die Architektur des aktuellen Systems gebaut werden soll (seit Dpkg 1.16.2).
 
 =item B<-P> I<Profil>[B<,>…]
 
-Überprüft Bauabhängigkeiten/-konflikte unter der Annahme, dass das Paket in
-der Datei B<control> für das/die angegebene(n) Bauprofil(e) gebaut werden
-soll (seit Dpkg 1.17.2). Das Argument ist eine Kommata-getrennte Liste von
-Profilnamen.
+Überprüft Bauabhängigkeiten/-konflikte unter der Annahme, dass das Paket in der Datei B<control> für das/die angegebene(n) Bauprofil(e) gebaut werden soll (seit Dpkg 1.17.2). Das Argument ist eine Kommata-getrennte Liste von Profilnamen.
 
 =item B<-?>, B<--help>
 
@@ -96,28 +76,22 @@ Gibt die Version aus und beendet das Programm.
 
 =item B<DEB_BUILD_PROFILES>
 
-Falls gesetzt, wird es als aktive(s) Bau-Profil(e) für das zu bauende Paket
-verwandt. Es ist eine durch Leerzeichen getrennte Liste von
-Profilnamen. Wird durch die Option B<-P> außer Kraft gesetzt.
+Falls gesetzt, wird es als aktive(s) Bau-Profil(e) für das zu bauende Paket verwandt. Es ist eine durch Leerzeichen getrennte Liste von Profilnamen. Wird durch die Option B<-P> außer Kraft gesetzt.
 
 =item B<DPKG_COLORS>
 
-Setzt den Farbmodus (seit Dpkg 1.18.5). Die derzeit unterstützten Werte
-sind: B<auto> (Vorgabe), B<always> und B<never>.
+Setzt den Farbmodus (seit Dpkg 1.18.5). Die derzeit unterstützten Werte sind: B<auto> (Vorgabe), B<always> und B<never>.
 
 =item B<DPKG_NLS>
 
-Falls dies gesetzt ist, wird es zur Entscheidung, ob Native Language
-Support, auch als Unterstützung für Internationalisierung (oder i18n)
-bekannt, aktiviert wird (seit Dpkg 1.19.0). Die akzeptierten Werte sind:
-B<0> und B<1> (Vorgabe).
+Falls dies gesetzt ist, wird es zur Entscheidung, ob Native Language Support, auch als Unterstützung für Internationalisierung (oder i18n) bekannt, aktiviert wird (seit Dpkg 1.19.0). Die akzeptierten Werte sind: B<0> und B<1> (Vorgabe).
 
 =back
 
 
 =head1 ÜBERSETZUNG
 
-Die deutsche Übersetzung wurde 2004, 2006-2020 von Helge Kreutzmann
+Die deutsche Übersetzung wurde 2004, 2006-2023 von Helge Kreutzmann
 <debian@helgefjell.de>, 2007 von Florian Rehnisch <eixman@gmx.de> und
 2008 von Sven Joachim <svenjoac@gmx.de>
 angefertigt. Diese Übersetzung ist Freie Dokumentation; lesen Sie die

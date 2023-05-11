@@ -125,7 +125,7 @@ Multiple co-maintainers should be separated by a comma.
 
 =item B<Description> I<short-description>
 
-=item B<> I<long-description>
+=item S< >I<long-description>
 
 The format for the source package description is a short brief summary on the
 first line (after the B<Description> field).
@@ -238,6 +238,8 @@ B<Build-Profile> field, with ORs converted to ‘+’ and ANDs to
 
 If the binary package is protected, this key will contain the value of the
 B<Protected> field, that is a B<yes> value.
+
+Supported since dpkg 1.20.1.
 
 =item B<essential>
 

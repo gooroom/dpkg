@@ -25,13 +25,64 @@ va_copy(v1, v2);
   ])
 ])# DPKG_FUNC_VA_COPY
 
+# DPKG_FUNC_FSYNC_DIR
+# -------------------
+# Define HAVE_FSYNC_DIR if we can fsync(2) directories.
+AC_DEFUN([DPKG_FUNC_FSYNC_DIR], [
+  AC_CACHE_CHECK([whether fsync works on directories], [dpkg_cv_fsync_dir], [
+    AC_RUN_IFELSE([
+      AC_LANG_PROGRAM([[
+#include <sys/types.h>
+#include <stddef.h>
+#include <dirent.h>
+#include <unistd.h>
+      ]], [[
+	int fd;
+	DIR *dir = opendir(".");
+	if (dir == NULL)
+		return 1;
+	fd = dirfd(dir);
+	if (fd < 0)
+		return 1;
+	if (fsync(fd) < 0)
+		return 1;
+	closedir(dir);
+      ]])
+    ], [
+      dpkg_cv_fsync_dir=yes
+    ], [
+      dpkg_cv_fsync_dir=no
+    ], [
+      dpkg_cv_fsync_dir=maybe
+    ])
+
+    AS_IF([test "x$dpkg_cv_fsync_dir" = "xmaybe"], [
+      AS_CASE([$host_os],
+        [aix*], [
+          # On AIX fsync(3) requires writable file descriptors, which
+          # opendir(3) does not provide, but even then fsync(3) nor
+          # fsync_range(3) always work on directories anyway.
+          dpkg_cv_fsync_dir=no
+        ], [
+          # On other systems we assume this works.
+          dpkg_cv_fsync_dir=yes
+        ]
+      )
+    ])
+  ])
+  AS_IF([test "x$dpkg_cv_fsync_dir" = "xyes"], [
+    AC_DEFINE([HAVE_FSYNC_DIR], [1],
+              [Define to 1 if the 'fsync' function works on directories])
+  ])
+])
+
 # DPKG_FUNC_C99_SNPRINTF
 # -----------------------
 # Define HAVE_C99_SNPRINTF if we have C99 snprintf family semantics
 AC_DEFUN([DPKG_FUNC_C99_SNPRINTF], [
   AC_CACHE_CHECK([for C99 snprintf functions], [dpkg_cv_c99_snprintf], [
     AC_RUN_IFELSE([
-      AC_LANG_SOURCE([[
+      AC_LANG_PROGRAM([[
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
@@ -46,8 +97,7 @@ int test_vsnprintf(const char *fmt, ...)
 
 	return n;
 }
-int main()
-{
+      ]], [[
 	int n;
 
 	n = snprintf(NULL, 0, "format %s %d", "string", 10);
@@ -57,9 +107,6 @@ int main()
 	n = test_vsnprintf("format %s %d", "string", 10);
 	if (n != strlen("format string 10"))
 		return 1;
-
-	return 0;
-}
       ]])
     ], [
       dpkg_cv_c99_snprintf=yes
@@ -128,9 +175,11 @@ AC_DEFUN([DPKG_USE_DISK_PREALLOCATE], [
 AC_DEFUN([DPKG_CHECK_PROGNAME], [
   AC_MSG_CHECKING([for program_invocation_short_name])
   AC_LINK_IFELSE([
-    AC_LANG_PROGRAM(
-      [[#include <errno.h>]],
-      [[const char *p = program_invocation_short_name;]])
+    AC_LANG_PROGRAM([[
+#include <errno.h>
+    ]], [[
+const char *p = program_invocation_short_name;
+    ]])
   ], [
     AC_DEFINE([HAVE_PROGRAM_INVOCATION_SHORT_NAME], [1],
       [Define to 1 if you have program_invocation_short_name])
@@ -141,9 +190,12 @@ AC_DEFUN([DPKG_CHECK_PROGNAME], [
 
   AC_MSG_CHECKING([for __progname])
   AC_LINK_IFELSE([
-    AC_LANG_PROGRAM(
-      [[extern char *__progname;]],
-      [[printf("%s", __progname);]])
+    AC_LANG_PROGRAM([[
+#include <stdio.h>
+extern char *__progname;
+    ]], [[
+printf("%s", __progname);
+    ]])
   ], [
     AC_DEFINE([HAVE___PROGNAME], [1], [Define to 1 if you have __progname])
     AC_MSG_RESULT([yes])

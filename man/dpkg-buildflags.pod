@@ -63,20 +63,20 @@ The configuration files can contain four types of directives:
 
 =over
 
-=item B<SET> I<flag value>
+=item B<SET> I<flag> I<value>
 
 Override the flag named I<flag> to have the value I<value>.
 
-=item B<STRIP> I<flag value>
+=item B<STRIP> I<flag> I<value>
 
 Strip from the flag named I<flag> all the build flags listed in I<value>.
 
-=item B<APPEND> I<flag value>
+=item B<APPEND> I<flag> I<value>
 
 Extend the flag named I<flag> by appending the options given in I<value>.
 A space is prepended to the appended value if the flag's current value is non-empty.
 
-=item B<PREPEND> I<flag value>
+=item B<PREPEND> I<flag> I<value>
 
 Extend the flag named I<flag> by prepending the options given in I<value>.
 A space is appended to the prepended value if the flag's current value is non-empty.
@@ -182,8 +182,9 @@ the flag is set/modified by an environment-specific configuration.
 
 Print any information that can be useful to explain the behaviour of the
 program: current vendor, relevant environment variables, feature areas,
-state of all feature flags, and the compiler flags with their origin
-(since dpkg 1.19.0).
+state of all feature flags, whether a feature is handled as a builtin
+default by the compiler (since dpkg 1.21.14),
+and the compiler flags with their origin (since dpkg 1.19.0).
 
 For example:
 
@@ -195,10 +196,18 @@ For example:
  Features:
   bug=no
   canary=no
+ Builtins:
+
+ Area: hardening
+ Features:
+  pie=no
+ Builtins:
+  pie=yes
 
  Area: reproducible
  Features:
   timeless=no
+ Builtins:
 
  Flag: CFLAGS
  Value: -O0 -Wall
@@ -211,6 +220,9 @@ For example:
 =item B<--query-features> I<area>
 
 Print the features enabled for a given area (since dpkg 1.16.2).
+If the feature is handled (even if only on some architectures) as a
+builtin default by the compiler, then a B<Builtin> field is printed
+(since dpkg 1.21.14).
 The only currently recognized
 areas on Debian and derivatives are B<future>, B<qa>, B<reproducible>,
 B<sanitize> and B<hardening>, see the B<FEATURE AREAS>
@@ -222,6 +234,7 @@ For example:
 
  Feature: pie
  Enabled: yes
+ Builtin: yes
 
  Feature: stackprotector
  Enabled: yes
@@ -239,6 +252,10 @@ Show the version and exit.
 =head1 SUPPORTED FLAGS
 
 =over
+
+=item B<ASFLAGS>
+
+Options for the assembler. Default value: empty. Since dpkg 1.21.0.
 
 =item B<CFLAGS>
 
@@ -351,6 +368,24 @@ The only currently supported flags are B<CPPFLAGS>, B<CFLAGS>,
 B<OBJCFLAGS>, B<CXXFLAGS> and B<OBJCXXFLAGS> with flags set
 to B<-D__DEB_CANARY_>I<flag>_I<random-id>B<__>, and
 B<LDFLAGS> set to B<-Wl,-z,deb-canary->I<random-id>.
+
+=back
+
+=head2 optimize
+
+Several compile-time options (detailed below) can be used to help optimize
+a resulting binary (since dpkg 1.21.0).
+B<Note>: enabling B<all> these options can result in unreproducible binary
+artifacts.
+
+=over
+
+=item B<lto>
+
+This setting (since dpkg 1.21.0; disabled by default) enables
+Link Time Optimization by adding B<-flto=auto -ffat-lto-objects> to
+B<CFLAGS>, B<CXXFLAGS>, B<OBJCFLAGS>, B<OBJCXXFLAGS>, B<GCJFLAGS>,
+B<FFLAGS>, B<FCFLAGS> and B<LDFLAGS>.
 
 =back
 
@@ -501,15 +536,15 @@ B<FFLAGS> and B<FCFLAGS>, and
 B<-fno-PIE -no-pie> (via I<%PKGDATADIR%/no-pie-link.specs>) to
 B<LDFLAGS>.
 
-Position Independent
-Executable are needed to take advantage of Address Space Layout
-Randomization, supported by some kernel versions. While ASLR can already
-be enforced for data areas in the stack and heap (brk and mmap), the code
-areas must be compiled as position-independent. Shared libraries already
-do this (B<-fPIC>), so they gain ASLR automatically, but binary .text
-regions need to be build PIE to gain ASLR. When this happens, ROP (Return
-Oriented Programming) attacks are much harder since there are no static
-locations to bounce off of during a memory corruption attack.
+Position Independent Executable (PIE) is needed to take advantage of
+Address Space Layout Randomization (ASLR), supported by some kernel versions.
+While ASLR can already be enforced for data areas in the stack and heap
+(brk and mmap), the code areas must be compiled as position-independent.
+Shared libraries already do this (B<-fPIC>), so they gain ASLR automatically,
+but binary .text regions need to be built as PIE to gain ASLR.
+When this happens, ROP (Return Oriented Programming) attacks are much
+harder since there are no static locations to bounce off of during a
+memory corruption attack.
 
 PIE is not compatible with B<-fPIC>, so in general care must be taken
 when building shared objects. But because the PIE flags emitted get injected

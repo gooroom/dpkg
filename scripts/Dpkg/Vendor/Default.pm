@@ -153,6 +153,15 @@ tags (formed by alphanumeric and dash characters).
 The hook is called by dpkg-buildpackage to sanitize its build environment
 (since dpkg 1.20.0).
 
+=item backport-version-regex ()
+
+The hook is called by dpkg-genchanges and dpkg-mergechangelog to determine
+the backport version string that should be specially handled as not an earlier
+than version or remapped so that it does not get considered as a pre-release
+(since dpkg 1.21.3).
+The returned string is a regex with one capture group for the backport
+delimiter string, or undef if there is no regex.
+
 =back
 
 =cut
@@ -186,9 +195,24 @@ sub run_hook {
         return ();
     } elsif ($hook eq 'sanitize-environment') {
         return;
+    } elsif ($hook eq 'backport-version-regex') {
+        return;
     }
 
     # Default return value for unknown/unimplemented hooks
+    return;
+}
+
+=item $vendor->set_build_features($flags)
+
+Sets the vendor build features, which will then be used to initialize the
+build flags.
+
+=cut
+
+sub set_build_features {
+    my ($self, $flags) = @_;
+
     return;
 }
 

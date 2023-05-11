@@ -22,10 +22,7 @@ B<DEBIAN/prerm>
 
 =head1 BESCHRIJVING
 
-Een pakket kan verschillende pre-verwijderingsacties uitvoeren via scripts
-van de pakketonderhouder door in zijn control-archief een uitvoerbaar
-bestand I<prerm> op te nemen (d.w.z. I<DEBIAN/prerm> bij het creëren van het
-pakket).
+Een pakket kan verschillende pre-verwijderingsacties uitvoeren via scripts van de pakketonderhouder door in zijn control-archief een uitvoerbaar bestand I<prerm> op te nemen (d.w.z. I<DEBIAN/prerm> bij het creëren van het pakket).
 
 Het script kan op de volgende manieren geactiveerd worden:
 
@@ -39,18 +36,19 @@ Voor het pakket verwijderd wordt.
 
 Voor een opwaardering.
 
-=item I<new-prerm> B<failed-upgrade> I<oude-versie nieuwe-versie>
+=item I<new-prerm> B<failed-upgrade> I<oude-versie> I<nieuwe-versie>
 
 Indien de hiervoor vermelde B<upgrade> mislukt.
 
-=item I<prerm> B<deconfigure in-favour> I<nieuw-pakket nieuwe-versie>
+De optie I<nieuwe-versie> wordt pas meegegeven sinds dpkg 1.18.5.
 
-=item S< >[ B<removing> I<oud-pakket oude-versie> ]
+=item I<prerm> B<deconfigure> B<in-favour> I<nieuw-pakket> I<nieuwe-versie>
 
-Vooraleer het pakket gedeconfigureerd wordt terwijl een vereiste wegens een
-conflict vervangen wordt.
+=item S< >[ B<removing> I<oud-pakket> I<oude-versie> ]
 
-=item I<prerm> B<remove in-favour> I<nieuw-pakket nieuwe-versie>
+Vooraleer het pakket gedeconfigureerd wordt terwijl een vereiste wegens een conflict vervangen wordt.
+
+=item I<prerm> B<remove> B<in-favour> I<nieuw-pakket> I<nieuwe-versie>
 
 Vooraleer het pakket vervangen word ten gevolge van een conflict.
 

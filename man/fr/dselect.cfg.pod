@@ -18,11 +18,7 @@ dselect.cfg - Fichier de configuration de dselect
 
 =head1 DESCRIPTION
 
-Ce fichier liste les options appliquées par défaut à dselect. Chaque ligne
-contient une seule option, écrite exactement comme sur la ligne de commande
-mais sans les tirets initiaux, inutilisés. Les guillemets placés autour des
-options sont supprimés. Les commentaires sont autorisés en faisant commencer
-la ligne par un caractère croisillon B<#>.
+Ce fichier liste les options appliquées par défaut à dselect. Chaque ligne contient une seule option, écrite exactement comme sur la ligne de commande mais sans les tirets initiaux, inutilisés. Les guillemets placés autour des options sont supprimés. Les commentaires sont autorisés en faisant commencer la ligne par un caractère croisillon B<#>.
 
 =head1 FICHIERS
 

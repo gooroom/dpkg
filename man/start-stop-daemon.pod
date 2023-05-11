@@ -371,6 +371,9 @@ The priority can be optionally specified by appending a B<:>
 followed by the value. The default I<priority> is 0. The currently
 supported policy values are B<other>, B<fifo> and B<rr>.
 
+This option might do nothing on some systems,
+where POSIX process scheduling is not supported.
+
 =item B<-I>, B<--iosched> I<class>B<:>I<priority>
 
 This alters the IO scheduler class and priority of the process before starting
@@ -379,6 +382,9 @@ The priority can be optionally specified by appending a B<:> followed
 by the value. The default I<priority> is 4, unless I<class> is B<idle>,
 then I<priority> will always be 7. The currently supported values for
 I<class> are B<idle>, B<best-effort> and B<real-time>.
+
+This option might do nothing on some systems,
+where Linux IO scheduling is not supported.
 
 =item B<-k>, B<--umask> I<mask>
 
@@ -485,8 +491,8 @@ food, running as user food, with pid in food.pid):
 =over
 
  start-stop-daemon --start --oknodo --user food --name food \
- 	--pidfile /run/food.pid --startas /usr/sbin/food \
- 	--chuid food -- --daemon
+   --pidfile %RUNSTATEDIR%/food.pid --startas /usr/sbin/food \
+   --chuid food -- --daemon
 
 =back
 
@@ -495,7 +501,7 @@ Send B<SIGTERM> to B<food> and wait up to 5 seconds for it to stop:
 =over
 
  start-stop-daemon --stop --oknodo --user food --name food \
- 	--pidfile /run/food.pid --retry 5
+   --pidfile %RUNSTATEDIR%/food.pid --retry 5
 
 =back
 
@@ -504,6 +510,6 @@ Demonstration of a custom schedule for stopping B<food>:
 =over
 
  start-stop-daemon --stop --oknodo --user food --name food \
- 	--pidfile /run/food.pid --retry=TERM/30/KILL/5
+   --pidfile %RUNSTATEDIR%/food.pid --retry=TERM/30/KILL/5
 
 =back

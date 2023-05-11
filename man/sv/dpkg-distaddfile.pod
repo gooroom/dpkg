@@ -22,15 +22,11 @@ B<dpkg-distaddfile> [I<flagga>...] I<filnamn sektion prioritet>
 
 =head1 BESKRIVNING
 
-B<dpkg-distaddfile> lägger till en post för en namngiven fil i
-B<debian/files>.
+B<dpkg-distaddfile> lägger till en post för en namngiven fil i B<debian/files>.
 
-Det tar tre argument som inte är flaggor - filnamn, sektion och prioritet
-för B<.changes>-filen.
+Det tar tre argument som inte är flaggor - filnamn, sektion och prioritet för B<.changes>-filen.
 
-Filnamnet anges relativt till katalogen där B<dpkg-genchanges> förväntas
-finna filerna, normalt B<..>, snarare än som en sökväg relativ till den
-aktuella katalogen när B<dpkg-distaddfile> körs.
+Filnamnet anges relativt till katalogen där B<dpkg-genchanges> förväntas finna filerna, normalt B<..>, snarare än som en sökväg relativ till den aktuella katalogen när B<dpkg-distaddfile> körs.
 
 =head1 FLAGGOR
 
@@ -38,8 +34,7 @@ aktuella katalogen när B<dpkg-distaddfile> körs.
 
 =item B<-f>I<fillistfil>
 
-Läs eller skriv listan över filer som ska sändas in här, istället för att
-använda B<debian/files>.
+Läs eller skriv listan över filer som ska sändas in här, istället för att använda B<debian/files>.
 
 =item B<-?>, B<--help>
 
@@ -57,14 +52,11 @@ Visar version och avslutar.
 
 =item B<DPKG_COLORS>
 
-Väljer färgläge (sedan dpkg 1.18.5). För närvarande godtas följande värden:
-B<auto> (förval), B<always> och B<never>.
+Väljer färgläge (sedan dpkg 1.18.5). För närvarande godtas följande värden: B<auto> (förval), B<always> och B<never>.
 
 =item B<DPKG_NLS>
 
-Om satt, används för att bestämma om lokalt språkstöd ska aktiveras, även
-känt som internationaliseringsstöd (eller i18n) (sedan dpkg
-1.19.0). Tillåtna värden är: B<0> och B<1> (förval).
+Om satt, används för att bestämma om lokalt språkstöd ska aktiveras, även känt som internationaliseringsstöd (eller i18n) (sedan dpkg 1.19.0). Tillåtna värden är: B<0> och B<1> (förval).
 
 =back
 
@@ -74,9 +66,7 @@ känt som internationaliseringsstöd (eller i18n) (sedan dpkg
 
 =item B<debian/files>
 
-Listan över genererade filer so ingår i insändningen som
-förbereds. B<dpkg-distaddfile> kan användas för att lägga till ytterligare
-filer.
+Listan över genererade filer so ingår i insändningen som förbereds. B<dpkg-distaddfile> kan användas för att lägga till ytterligare filer.
 
 =back
 

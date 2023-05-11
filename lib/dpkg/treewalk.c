@@ -15,7 +15,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 #include <config.h>
@@ -363,7 +363,7 @@ treeroot_visit_node(struct treeroot *tree, struct treenode *node)
  */
 struct treeroot *
 treewalk_open(const char *rootdir, enum treewalk_options options,
-              struct treewalk_funcs *func)
+              const struct treewalk_funcs *func)
 {
 	struct treeroot *tree;
 	struct treenode *root;

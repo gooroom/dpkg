@@ -24,7 +24,7 @@ our $VERSION = '1.02';
 
 use Dpkg::Gettext;
 use Dpkg::ErrorHandling;
-use Dpkg::Build::Env;
+use Dpkg::BuildEnv;
 
 =encoding utf8
 
@@ -60,7 +60,7 @@ sub new {
 	envvar => $opts{envvar} // 'DEB_BUILD_OPTIONS',
     };
     bless $self, $class;
-    $self->merge(Dpkg::Build::Env::get($self->{envvar}), $self->{envvar});
+    $self->merge(Dpkg::BuildEnv::get($self->{envvar}), $self->{envvar});
     return $self;
 }
 
@@ -118,7 +118,7 @@ sub set {
     my ($self, $key, $value, $source) = @_;
 
     # Sanity checks
-    if ($key =~ /^(noopt|nostrip|nocheck)$/ && defined($value)) {
+    if ($key =~ /^(terse|noopt|nostrip|nocheck)$/ && defined($value)) {
 	$value = undef;
     } elsif ($key eq 'parallel')  {
 	$value //= '';
@@ -160,8 +160,8 @@ sub has {
 Parse the $option values, as a set of known features to enable or disable,
 as specified in the $use_feature hash reference.
 
-Each feature is prefixed with a ‘B<+>’ or a ‘B<->’ character as a marker
-to enable or disable it. The special feature “B<all>” can be used to act
+Each feature is prefixed with a 'B<+>' or a 'B<->' character as a marker
+to enable or disable it. The special feature "B<all>" can be used to act
 on all known features.
 
 Unknown or malformed features will emit warnings.
@@ -220,7 +220,7 @@ sub export {
     my ($self, $var) = @_;
     $var //= $self->{envvar};
     my $content = $self->output();
-    Dpkg::Build::Env::set($var, $content);
+    Dpkg::BuildEnv::set($var, $content);
     return $content;
 }
 

@@ -22,10 +22,7 @@ B<DEBIAN/postrm>
 
 =head1 BESCHREIBUNG
 
-Ein Paket kann eine Reihe von Aktionen mittels Betreuerskripten nach dem
-Entfernen ausführen, indem es eine ausführbare Datei I<postrm> in seinem
-Steuerarchiv (d.h. I<DEBIAN/triggers> während der Paketerstellung)
-hinzunimmt.
+Ein Paket kann eine Reihe von Aktionen mittels Betreuerskripten nach dem Entfernen ausführen, indem es eine ausführbare Datei I<postrm> in seinem Steuerarchiv (d.h. I<DEBIAN/triggers> während der Paketerstellung) hinzunimmt.
 
 Das Skript kann in den folgenden Weisen aufgerufen werden:
 
@@ -47,21 +44,27 @@ Nachdem das Upgrade des Pakets durchgeführt wurde.
 
 Falls der obige B<upgrade>-Aufruf fehlschlägt.
 
+Die I<neue_Version> wird erst seit Dpkg 1.18.5 übergeben.
+
 =item I<postrm> B<disappear> I<überschreibendes_Paket> I<überschreibende_Version>
 
 Nachdem alle Paketdateien ersetzt wurden.
 
 =item I<new-postrm> B<abort-install>
 
-Falls I<preinst> während der Installation fehlschlägt.
+Falls I<preinst> während B<install> fehlschlägt.
 
-=item I<new-postrm> B<abort-install> I<alte_Version neue_Version>
+=item I<new-postrm> B<abort-install> I<alte_Version> I<neue_Version>
 
-Falls I<preinst> während des Upgrades eines entfernten Paketes fehlschlägt.
+Falls I<preinst> während B<install> für ein Upgrade eines entfernten Paketes fehlschlägt.
 
-=item I<new-postrm> B<abort-upgrade> I<alte_Version neue_Version>
+Die I<neue_Version> wird erst seit Dpkg 1.18.5 übergeben.
 
-Falls I<preinst> während des Upgrades fehlschlägt.
+=item I<new-postrm> B<abort-upgrade> I<alte_Version> I<neue_Version>
+
+Falls I<preinst> während B<upgrade> fehlschlägt.
+
+Die I<neue_Version> wird erst seit Dpkg 1.18.5 übergeben.
 
 =back
 
@@ -72,7 +75,7 @@ B<dpkg>(1).
 
 =head1 ÜBERSETZUNG
 
-Die deutsche Übersetzung wurde 2004, 2006-2020 von Helge Kreutzmann
+Die deutsche Übersetzung wurde 2004, 2006-2023 von Helge Kreutzmann
 <debian@helgefjell.de>, 2007 von Florian Rehnisch <eixman@gmx.de> und
 2008 von Sven Joachim <svenjoac@gmx.de>
 angefertigt. Diese Übersetzung ist Freie Dokumentation; lesen Sie die

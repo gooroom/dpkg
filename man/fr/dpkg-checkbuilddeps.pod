@@ -14,8 +14,7 @@ If the PO get lost, keeping this translation up-to-date will be harder.
 
 =head1 NOM
 
-dpkg-checkbuilddeps - Vérifier les dépendances et les conflits de
-construction
+dpkg-checkbuilddeps - Vérifier les dépendances et les conflits de construction
 
 =head1 SYNOPSIS
 
@@ -23,13 +22,9 @@ B<dpkg-checkbuilddeps> [I<option>...] [I<fichier-control>]
 
 =head1 DESCRIPTION
 
-Ce programme vérifie si les dépendances et les conflits de construction
-listés dans le fichier control existent dans les paquets installés sur le
-système. S'il en existe, il les affiche et se termine avec un code de retour
-différent de B<0>.
+Ce programme vérifie si les dépendances et les conflits de construction listés dans le fichier control existent dans les paquets installés sur le système. S'il en existe, il les affiche et se termine avec un code de retour différent de B<0>.
 
-Par défaut, le fichier I<debian/control> est lu, mais un autre nom de
-fichier peut être indiqué sur la ligne de commande.
+Par défaut, le fichier I<debian/control> est lu, mais un autre nom de fichier peut être indiqué sur la ligne de commande.
 
 =head1 OPTIONS
 
@@ -37,57 +32,41 @@ fichier peut être indiqué sur la ligne de commande.
 
 =item B<--admindir>=I<répertoire>
 
-Changer l'endroit où se trouve la base de données de B<dpkg> (depuis
-S<dpkg 1.14.0).> Par défaut, c'est I<%ADMINDIR%>.
+Changer l'endroit où se trouve la base de données de B<dpkg> (depuis dpkg 1.14.0). Par défaut, c'est I<%ADMINDIR%>.
 
 =item B<-A>
 
-Ignore les lignes B<Build-Depends-Arch> et B<Build-Conflicts-Arch> (depuis
-S<dpkg 1.16.4).> À utiliser lorsque seuls des paquets indépendants d'une
-architecture seront construits ou à combiner avec B<-B> si seul un paquet
-source est construit.
+Ignore les lignes B<Build-Depends-Arch> et B<Build-Conflicts-Arch> (depuis dpkg 1.16.4). À utiliser lorsque seuls des paquets indépendants d'une architecture seront construits ou à combiner avec B<-B> si seul un paquet source est construit.
 
 =item B<-B>
 
-Ignore les lignes B<Build-Depends-Indep> et B<Build-Conflicts-Indep>. À
-utiliser lorsque seuls des paquets dépendants de l'architecture sont
-construits ou à combiner avec B<-A> si seul un paquet source est construit.
+Ignore les lignes B<Build-Depends-Indep> et B<Build-Conflicts-Indep>. À utiliser lorsque seuls des paquets dépendants de l'architecture sont construits ou à combiner avec B<-A> si seul un paquet source est construit.
 
 =item B<-I>
 
-Ignore les dépendances et les conflits de construction internes (depuis
-S<dpkg 1.18.2).> Ce sont les dépendances implicites qui sont habituellement
-demandées sur une distribution particulière, c'est l'ensemble de paquets
-appelé Build-Essentiel.
+Ignore les dépendances et les conflits de construction internes (depuis dpkg 1.18.2). Ce sont les dépendances implicites qui sont habituellement demandées sur une distribution particulière, c'est l'ensemble de paquets appelé Build-Essentiel.
 
 =item B<-d> I<chaine-des-dépendances-pour-la-construction>
 
 =item B<-c> I<chaîne-des-conflits-de-construction>
 
-Utilise les dépendances et conflits de construction donnés au lieu de ceux
-indiqués dans le fichier I<debian/control> (depuis S<dpkg 1.14.17).>
+Utilise les dépendances et conflits de construction donnés au lieu de ceux indiqués dans le fichier I<debian/control> (depuis S<dpkg 1.14.17).>
 
 =item B<-a> I<arch>
 
-Vérifie les dépendances et conflits de construction en supposant que le
-paquet décrit dans le fichier de contrôle doit être construit pour
-l'architecture hôte indiquée au lieu de celle du système (depuis
-S<dpkg 1.16.2).>
+Vérifie les dépendances et conflits de construction en supposant que le paquet décrit dans le fichier de contrôle doit être construit pour l'architecture hôte indiquée au lieu de celle du système (depuis dpkg 1.16.2).
 
 =item B<-P> I<profil>[B<,>...]
 
-Vérifie les dépendances et conflits de construction en supposant que le
-paquet décrit dans le fichier de contrôle doit être construit pour le ou les
-profils donnés (depuis S<dpkg 1.17.2).> L'argument est une liste séparée par
-des virgules des noms de profil.
+Vérifie les dépendances et conflits de construction en supposant que le paquet décrit dans le fichier de contrôle doit être construit pour le ou les profils donnés (depuis S<dpkg 1.17.2).> L'argument est une liste séparée par des virgules des noms de profil.
 
 =item B<-?>, B<--help>
 
-Affiche un message d'aide puis quitte.
+Afficher un message d'aide puis quitter.
 
 =item B<--version>
 
-Affiche le numéro de version puis quitte.
+Afficher le numéro de version puis quitter.
 
 =back
 
@@ -97,22 +76,15 @@ Affiche le numéro de version puis quitte.
 
 =item B<DEB_BUILD_PROFILES>
 
-Si cette option est utilisée, elle sera utilisée comme profil(s) de
-construction actif(s) pour le paquet à construire. C'est une liste séparée
-par des espaces de noms de profil. Cette option est outrepassée par l'option
-B<-P>.
+Si cette option est utilisée, elle sera utilisée comme profil(s) de construction actif(s) pour le paquet à construire. C'est une liste séparée par des espaces de noms de profil. Cette option est outrepassée par l'option B<-P>.
 
 =item B<DPKG_COLORS>
 
-Définit le mode de couleur (depuis S<dpkg 1.18.5).> Les valeurs actuellement
-acceptées sont B<auto> (par défaut), B<always> et B<never>.
+Définit le mode de couleur (depuis S<dpkg 1.18.5).> Les valeurs actuellement acceptées sont B<auto> (par défaut), B<always> et B<never>.
 
 =item B<DPKG_NLS>
 
-Si cette variable est définie, elle sera utilisée pour décider l'activation
-de la prise en charge des langues (NLS S<– Native> Language Support), connu
-aussi comme la gestion de l'internationalisation (ou i18n) (depuis
-S<dpkg 1.19.0).> Les valeurs permises S<sont :> B<0> et B<1> (par défaut).
+Si cette variable est définie, elle sera utilisée pour décider l'activation de la prise en charge des langues (NLS – Native Language Support), connu aussi comme la gestion de l'internationalisation (ou i18n) (depuis S<dpkg 1.19.0).> Les valeurs permises S<sont :> B<0> et B<1> (par défaut).
 
 =back
 

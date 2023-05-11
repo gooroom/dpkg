@@ -22,10 +22,7 @@ B<dpkg-vendor> [I<Option> …] I<Befehl>
 
 =head1 BESCHREIBUNG
 
-B<dpkg-vendor> ist ein Werkzeug, um Informationen über in
-B<%PKGCONFDIR%/origins> aufgeführte Lieferanten (engl. „vendor“)
-abzufragen. B<%PKGCONFDIR%/origins/default> enthält Informationen über den
-aktuellen Lieferanten.
+B<dpkg-vendor> ist ein Werkzeug, um Informationen über in B<%PKGCONFDIR%/origins> aufgeführte Lieferanten (engl. „vendor“) abzufragen. B<%PKGCONFDIR%/origins/default> enthält Informationen über den aktuellen Lieferanten.
 
 =head1 BEFEHLE
 
@@ -33,19 +30,15 @@ aktuellen Lieferanten.
 
 =item B<--is> I<Lieferant>
 
-Beendet sich mit B<0>, falls der aktuelle Lieferant I<Lieferant> ist,
-ansonsten mit B<1>.
+Beendet sich mit B<0>, falls der aktuelle Lieferant I<Lieferant> ist, ansonsten mit B<1>.
 
 =item B<--derives-from> I<Lieferant>
 
-Beendet sich mit B<0>, falls die aktuelle Lieferant-Distribution von
-I<Lieferant> abgeleitet ist, ansonsten mit B<1>. Es verwendet das Feld
-B<Parent>, um alle Vorfahren des aktuellen Lieferanten zu ermitteln.
+Beendet sich mit B<0>, falls die aktuelle Lieferant-Distribution von I<Lieferant> abgeleitet ist, ansonsten mit B<1>. Es verwendet das Feld B<Parent>, um alle Vorfahren des aktuellen Lieferanten zu ermitteln.
 
 =item B<--query> I<Feld>
 
-Gibt auf der Standardausgabe den Wert des Lieferanten-spezifischen I<Feld>es
-für den aktuellen Lieferanten aus.
+Gibt auf der Standardausgabe den Wert des Lieferanten-spezifischen I<Feld>es für den aktuellen Lieferanten aus.
 
 =item B<--help>
 
@@ -63,9 +56,7 @@ Gibt die Version aus und beendet das Programm.
 
 =item B<--vendor> I<Lieferant>
 
-Nimmt an, dass der aktuelle Lieferant I<Lieferant> ist, statt ihn über die
-Umgebungsvariable B<DEB_VENDOR> oder aus B<%PKGCONFDIR%/origins/default> zu
-ermitteln.
+Nimmt an, dass der aktuelle Lieferant I<Lieferant> ist, statt ihn über die Umgebungsvariable B<DEB_VENDOR> oder aus B<%PKGCONFDIR%/origins/default> zu ermitteln.
 
 =back
 
@@ -75,20 +66,15 @@ ermitteln.
 
 =item B<DEB_VENDOR>
 
-Diese Einstellung definiert den aktuellen Lieferanten. Falls nicht gesetzt,
-wird er aus B<%PKGCONFDIR%/origins/default> ermittelt.
+Diese Einstellung definiert den aktuellen Lieferanten. Falls nicht gesetzt, wird er aus B<%PKGCONFDIR%/origins/default> ermittelt.
 
 =item B<DPKG_COLORS>
 
-Setzt den Farbmodus (seit Dpkg 1.18.5). Die derzeit unterstützten Werte
-sind: B<auto> (Vorgabe), B<always> und B<never>.
+Setzt den Farbmodus (seit Dpkg 1.18.5). Die derzeit unterstützten Werte sind: B<auto> (Vorgabe), B<always> und B<never>.
 
 =item B<DPKG_NLS>
 
-Falls dies gesetzt ist, wird es zur Entscheidung, ob Native Language
-Support, auch als Unterstützung für Internationalisierung (oder i18n)
-bekannt, aktiviert wird (seit Dpkg 1.19.0). Die akzeptierten Werte sind:
-B<0> und B<1> (Vorgabe).
+Falls dies gesetzt ist, wird es zur Entscheidung, ob Native Language Support, auch als Unterstützung für Internationalisierung (oder i18n) bekannt, aktiviert wird (seit Dpkg 1.19.0). Die akzeptierten Werte sind: B<0> und B<1> (Vorgabe).
 
 =back
 
@@ -99,7 +85,7 @@ B<deb-origin>(5).
 
 =head1 ÜBERSETZUNG
 
-Die deutsche Übersetzung wurde 2004, 2006-2020 von Helge Kreutzmann
+Die deutsche Übersetzung wurde 2004, 2006-2023 von Helge Kreutzmann
 <debian@helgefjell.de>, 2007 von Florian Rehnisch <eixman@gmx.de> und
 2008 von Sven Joachim <svenjoac@gmx.de>
 angefertigt. Diese Übersetzung ist Freie Dokumentation; lesen Sie die

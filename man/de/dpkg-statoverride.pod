@@ -22,17 +22,9 @@ B<dpkg-statoverride> [I<Option> …] I<Befehl>
 
 =head1 BESCHREIBUNG
 
-„B<Stat-Hinwegsetzungen>“ sind eine Möglichkeit, B<dpkg>(1) mitzuteilen,
-einen anderen Eigentümer oder Modus für einen Pfad zu verwenden, wenn ein
-Paket installiert wird (dies kann jedes Dateisystemobjekt sein, das B<dpkg>
-handhabt, darunter Verzeichnisse, Geräte, usw.). Dies kann dazu verwendet
-werden, Programme, die normalerweise setuid sind, dazu zu zwingen, ohne
-setuid-Markierung zu installieren, oder nur von einer bestimmten Gruppe
-ausführbar zu sein.
+„B<Stat-Hinwegsetzungen>“ sind eine Möglichkeit, B<dpkg>(1) mitzuteilen, einen anderen Eigentümer oder Modus für einen Pfad zu verwenden, wenn ein Paket installiert wird (dies kann jedes Dateisystemobjekt sein, das B<dpkg> handhabt, darunter Verzeichnisse, Geräte, usw.). Dies kann dazu verwendet werden, Programme, die normalerweise setuid sind, dazu zu zwingen, ohne setuid-Markierung zu installieren, oder nur von einer bestimmten Gruppe ausführbar zu sein.
 
-B<dpkg-statoverride> ist ein Hilfswerkzeug, um die Liste der
-Status-Hinwegsetzungen zu verwalten. Es hat drei grundlegende Funktionen:
-Hinzufügen, Entfernen und Auflisten von Hinwegsetzungen.
+B<dpkg-statoverride> ist ein Hilfswerkzeug, um die Liste der Status-Hinwegsetzungen zu verwalten. Es hat drei grundlegende Funktionen: Hinzufügen, Entfernen und Auflisten von Hinwegsetzungen.
 
 =head1 BEFEHLE
 
@@ -40,25 +32,17 @@ Hinzufügen, Entfernen und Auflisten von Hinwegsetzungen.
 
 =item B<--add> I<Benutzer Gruppe Modus Pfad>
 
-Fügt eine Hinwegsetzung für I<Pfad> hinzu. I<Pfad> muss noch nicht
-existieren, wenn dieser Befehl verwendet wird; die Hinwegsetzung wird
-aufbewahrt und später verwendet. Benutzer und Gruppen können über ihren
-Namen (beispielsweise B<root> oder B<nobody>) spezifiziert werden, oder über
-ihre Nummer mit vorangestelltem ‚B<#>’ (beispielsweise B<#0> oder
-B<#65534>). Der I<Modus> muss oktal angegeben werden.
+Fügt eine Hinwegsetzung für I<Pfad> hinzu. I<Pfad> muss noch nicht existieren oder B<dpkg> bekannt sein, wenn dieser Befehl verwendet wird; die Hinwegsetzung wird aufbewahrt und später verwendet. Benutzer und Gruppen können über ihren Namen (beispielsweise B<root> oder B<nobody>) spezifiziert werden, oder über ihre Nummer mit vorangestelltem ‚B<#>’ (beispielsweise B<#0> oder B<#65534>). Der I<Modus> muss oktal angegeben werden.
 
-Falls B<--update> angegeben ist und I<Pfad> existiert, dann wird dieser
-sofort auf den neuen Eigentümer und Modus eingestellt.
+Falls B<--update> angegeben ist und I<Pfad> existiert, dann wird dieser sofort auf den neuen Eigentümer und Modus eingestellt.
 
 =item B<--remove> I<Pfad>
 
-Entfernt eine Hinwegsetzung für I<Pfad>, der Status von I<Pfad> bleibt durch
-diesen Befehl unverändert.
+Entfernt eine Hinwegsetzung für I<Pfad>, der Status von I<Pfad> bleibt durch diesen Befehl unverändert.
 
 =item B<--list> [I<Glob-Muster>]
 
-Listet alle Hinwegsetzungen auf. Falls ein Glob-Muster spezifiziert wurde,
-begrenzt die Ausgabe auf Hinwegsetzungen, die auf den Glob passen.
+Listet alle Hinwegsetzungen auf. Falls ein Glob-Muster spezifiziert wurde, begrenzt die Ausgabe auf Hinwegsetzungen, die auf den Glob passen.
 
 =item B<--help>
 
@@ -80,59 +64,41 @@ Gibt die Version aus und beendet das Programm.
 
 =item B<--admindir> I<Verzeichnis>
 
-Setzt das administrative Verzeichnis auf I<Verzeichnis>. Hier wird auch die
-Datei I<statoverride> gelagert. Standardmäßig „I<%ADMINDIR%>“.
+Setzt das administrative Verzeichnis auf I<Verzeichnis>. Hier wird auch die Datei I<statoverride> gelagert. Standardmäßig „I<%ADMINDIR%>“, falls B<DPKG_ADMINDIR> nicht gesetzt wurde.
 
 =item B<--instdir> I<Verzeichnis>
 
-Setzt das Installationsverzeichnis, das sich auf das Verzeichnis bezieht, in
-dem Pakete installiert werden (seit Dpkg 1.19.2). Standardmäßig „I</>“.
+Setzt das Installationsverzeichnis, das sich auf das Verzeichnis bezieht, in dem Pakete installiert werden (seit Dpkg 1.19.2). Standardmäßig „I</>“, falls B<DPKG_ROOT> nicht gesetzt wurde.
 
 =item B<--root> I<Verzeichnis>
 
-Setzt das Wurzelverzeichnis auf I<Verzeichnis>, wodurch das
-Installationsverzeichnis auf „I<Verzeichnis>“ und das administrative
-Verzeichnis auf „I<Verzeichnis>B<%ADMINDIR%>“ gesetzt wird (seit Dpkg
-1.19.2).
+Setzt das Wurzelverzeichnis auf I<Verzeichnis>, wodurch das Installationsverzeichnis auf „I<Verzeichnis>“ und das administrative Verzeichnis auf „I<Verzeichnis>B<%ADMINDIR%>“ gesetzt wird (seit Dpkg 1.19.2), falls B<DPKG_ROOT> nicht gesetzt wurde.
 
 =item B<--force->I<Sachen>
 
 =item B<--no-force->I<Sachen>, B<--refuse->I<Sachen>
 
-Erzwingt oder verweigert (B<no-force> und B<refuse> bedeuten das gleiche)
-bestimmte Sachen (seit Dpkg 1.19.5). I<Sachen> ist eine Kommata-getrennte
-Liste von Dingen, die im Folgenden beschrieben sind. B<--force-help> zeigt
-eine Meldung an, die diese beschreibt. Mit (*) markierte Dinge werden
-standardmäßig erzwungen.
+Erzwingt oder verweigert (B<no-force> und B<refuse> bedeuten das gleiche) bestimmte Sachen (seit Dpkg 1.19.5). I<Sachen> ist eine Kommata-getrennte Liste von Dingen, die im Folgenden beschrieben sind. B<--force-help> zeigt eine Meldung an, die diese beschreibt. Mit (*) markierte Dinge werden standardmäßig erzwungen.
 
-I<Warnung: Diese Optionen sind hauptsächlich für den Einsatz durch Experten
-gedacht. Der Einsatz ohne komplettes Verständnis der Auswirkungen kann Ihr
-gesamtes System zerstören.>
+I<Warnung: Diese Optionen sind hauptsächlich für den Einsatz durch Experten gedacht. Der Einsatz ohne komplettes Verständnis der Auswirkungen kann Ihr gesamtes System zerstören.>
 
 B<all>: Schaltet alle „force“-Optionen ein (oder aus).
 
-B<statoverride-add>: Überschreibt eine existierende Status-Hinwegsetzung
-beim Hinzufügen (seit Dpkg 1.19.5).
+B<statoverride-add>: Überschreibt eine existierende Status-Hinwegsetzung beim Hinzufügen (seit Dpkg 1.19.5).
 
-B<statoverride-remove>: Ignoriert eine fehlende Status-Hinwegsetzung beim
-Entfernen (seit Dpkg 1.19.5).
+B<statoverride-remove>: Ignoriert eine fehlende Status-Hinwegsetzung beim Entfernen (seit Dpkg 1.19.5).
 
-B<security-mac>(*): Verwendet plattformspezifische „Mandatory Access Control
-(MAC)“-basierende Sicherheit bei der Installation von Dateien in das
-Dateisystem (seit Dpkg 1.19.5). Auf Linux-Systemen verwendet die
-Implementierung SELinux.
+B<security-mac>(*): Verwendet plattformspezifische „Mandatory Access Control (MAC)“-basierende Sicherheit bei der Installation von Dateien in das Dateisystem (seit Dpkg 1.19.5). Auf Linux-Systemen verwendet die Implementierung SELinux.
+
+B<not-root>: Versucht Sachen zu (de)installieren, selbst falls nicht root (seit Dpkg 1.21.8).
 
 =item B<--force>
 
-Erzwingt eine Aktion, selbst wenn eine Plausibilitätsüberprüfung diese
-normalerweise verböte. Dies ist notwendig, um sich über eine existierende
-Hinwegsetzung hinwegzusetzen. Diese Option ist (seit Dpkg 1.19.5)
-veraltet. Sie wurde durch B<--force-all> ersetzt.
+Erzwingt eine Aktion, selbst wenn eine Plausibilitätsüberprüfung diese normalerweise verböte. Dies ist notwendig, um sich über eine existierende Hinwegsetzung hinwegzusetzen. Diese Option ist (seit Dpkg 1.19.5) veraltet. Sie wurde durch B<--force-all> ersetzt.
 
 =item B<--update>
 
-Versucht den I<Pfad> sofort auf den neuen Eigentümer und neuen Modus zu
-ändern, falls er existiert.
+Versucht den I<Pfad> sofort auf den neuen Eigentümer und neuen Modus zu ändern, falls er existiert.
 
 =item B<--quiet>
 
@@ -150,14 +116,11 @@ Die angeforderte Aktion wurde erfolgreich ausgeführt.
 
 =item B<1>
 
-Für B<--list>, falls es keine Hinwegsetzungen gab oder keine auf die
-angegebenen Metazeichen passte.
+Für B<--list>, falls es keine Hinwegsetzungen gab oder keine auf die angegebenen Metazeichen passte.
 
 =item B<2>
 
-Fataler oder nicht behebbarer Fehler aufgrund eines ungültigen
-Befehlszeilenaufrufs oder Interaktionen mit dem System, wie Zugriffe auf die
-Datenbank, Speicherzuweisungen usw.
+Fataler oder nicht behebbarer Fehler aufgrund eines ungültigen Befehlszeilenaufrufs oder Interaktionen mit dem System, wie Zugriffe auf die Datenbank, Speicherzuweisungen usw.
 
 =back
 
@@ -167,24 +130,23 @@ Datenbank, Speicherzuweisungen usw.
 
 =item B<DPKG_ROOT>
 
-Falls gesetzt und die Option B<--instdir> oder B<--root> nicht angegeben
-wurde, wird dies als Dateisystemwurzelverzeichnis verwandt (seit Dpkg
-1.19.2).
+Falls gesetzt und die Option B<--instdir> oder B<--root> nicht angegeben wurde, wird dies als Dateisystemwurzelverzeichnis verwandt (seit Dpkg 1.19.2).
 
 =item B<DPKG_ADMINDIR>
 
-Falls gesetzt und die Option B<--admindir> oder B<--root> nicht verwandt
-wurde, wird dies als Datenverzeichnis von B<dpkg> verwandt.
+Falls gesetzt und die Option B<--admindir> oder B<--root> nicht verwandt wurde, wird dies als Datenverzeichnis von B<dpkg> verwandt.
+
+=item B<DPKG_DEBUG>
+
+Setzt die Fehlersuchmaske (seit Dpkg 1.21.10) aus einem oktalen Wert. Die derzeit akzeptierten Schalter werden in der Option B<dpkg --debug> beschrieben, aber nicht alle dieser Schalter könnten Auswirkungen auf dieses Programm haben.
 
 =item B<DPKG_FORCE>
 
-Falls gesetzt und keine der Optionen B<--force->I<…> festgelegt wurde, wird
-sie als die zu verwendenden Erzwingungsoptionen verwandt (seit Dpkg 1.19.5).
+Falls gesetzt und keine der Optionen B<--force->I<…> festgelegt wurde, wird sie als die zu verwendenden Erzwingungsoptionen verwandt (seit Dpkg 1.19.5).
 
 =item B<DPKG_COLORS>
 
-Setzt den Farbmodus (seit Dpkg 1.18.5). Die derzeit unterstützten Werte
-sind: B<auto> (Vorgabe), B<always> und B<never>.
+Setzt den Farbmodus (seit Dpkg 1.18.5). Die derzeit unterstützten Werte sind: B<auto> (Vorgabe), B<always> und B<never>.
 
 =back
 
@@ -194,12 +156,9 @@ sind: B<auto> (Vorgabe), B<always> und B<never>.
 
 =item I<%ADMINDIR%/statoverride>
 
-Datei, die die aktuelle Liste der Hinwegsetzungen auf dem System
-enthält. Sie befindet sich im B<pkg>-Administrationsverzeichnis, zusammen
-mit anderen für B<dpkg> wichtigen Dateien, wie I<status> oder I<available>.
+Datei, die die aktuelle Liste der Hinwegsetzungen auf dem System enthält. Sie befindet sich im B<pkg>-Administrationsverzeichnis, zusammen mit anderen für B<dpkg> wichtigen Dateien, wie I<status> oder I<available>.
 
-B<Hinweis>: B<dpkg-statoverride> erhält die alte Kopie dieser Datei mit der
-Endung „-old“, bevor es sie durch eine neue ersetzt.
+B<Hinweis>: B<dpkg-statoverride> erhält die alte Kopie dieser Datei mit der Endung „-old“, bevor es sie durch eine neue ersetzt.
 
 =back
 
@@ -210,7 +169,7 @@ B<dpkg>(1).
 
 =head1 ÜBERSETZUNG
 
-Die deutsche Übersetzung wurde 2004, 2006-2020 von Helge Kreutzmann
+Die deutsche Übersetzung wurde 2004, 2006-2023 von Helge Kreutzmann
 <debian@helgefjell.de>, 2007 von Florian Rehnisch <eixman@gmx.de> und
 2008 von Sven Joachim <svenjoac@gmx.de>
 angefertigt. Diese Übersetzung ist Freie Dokumentation; lesen Sie die

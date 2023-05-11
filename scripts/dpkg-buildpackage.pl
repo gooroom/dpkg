@@ -26,12 +26,13 @@ use warnings;
 use File::Temp qw(tempdir);
 use File::Basename;
 use File::Copy;
+use File::Glob qw(bsd_glob GLOB_TILDE GLOB_NOCHECK);
 use POSIX qw(:sys_wait_h);
 
 use Dpkg ();
 use Dpkg::Gettext;
 use Dpkg::ErrorHandling;
-use Dpkg::Build::Types;
+use Dpkg::BuildTypes;
 use Dpkg::BuildOptions;
 use Dpkg::BuildProfiles qw(set_build_profiles);
 use Dpkg::Conf;
@@ -42,6 +43,9 @@ use Dpkg::Version;
 use Dpkg::Control;
 use Dpkg::Control::Info;
 use Dpkg::Changelog::Parse;
+use Dpkg::OpenPGP;
+use Dpkg::OpenPGP::ErrorCodes;
+use Dpkg::OpenPGP::KeyHandle;
 use Dpkg::Path qw(find_command);
 use Dpkg::IPC;
 use Dpkg::Vendor qw(run_vendor_hook);
@@ -86,11 +90,13 @@ sub usage {
   -R, --rules-file=<rules>    rules file to execute (default is debian/rules).
   -T, --rules-target=<target> call debian/rules <target>.
       --as-root               ensure -T calls the target with root rights.
-  -j, --jobs[=<number>|auto]  jobs to run simultaneously (passed to <rules>),
-                                forced mode.
-  -J, --jobs-try[=<number>|auto]
+  -j, --jobs[=<jobs>|auto]    jobs to run simultaneously (passed to <rules>),
+                                (default; default is auto, opt-in mode).
+  -J, --jobs-try[=<jobs>|auto]
+                              alias for -j, --jobs.
+      --jobs-force[=<jobs>|auto]
                               jobs to run simultaneously (passed to <rules>),
-                                opt-in mode (default is auto).
+                                (default is auto, forced mode).
   -r, --root-command=<command>
                               command to gain root rights (default is fakeroot).
       --check-command=<command>
@@ -99,12 +105,19 @@ sub usage {
       --hook-<name>=<command> set <command> as the hook <name>, known hooks:
                                 init preclean source build binary buildinfo
                                 changes postclean check sign done
+      --buildinfo-file=<file> set the .buildinfo filename to generate.
       --buildinfo-option=<opt>
                               pass option <opt> to dpkg-genbuildinfo.
+      --changes-file=<file>   set the .changes filename to generate.
+      --sign-backend=<backend>
+                              OpenPGP backend to use to sign
+                                (default is auto).
   -p, --sign-command=<command>
                               command to sign .dsc and/or .changes files
                                 (default is gpg).
-  -k, --sign-key=<keyid>      the key to use for signing.
+      --sign-keyfile=<file>   the key file to use for signing.
+  -k, --sign-keyid=<keyid>    the key id to use for signing.
+      --sign-key=<keyid>      alias for -k, --sign-keyid.
   -ap, --sign-pause           add pause before starting signature process.
   -us, --unsigned-source      unsigned source package.
   -ui, --unsigned-buildinfo   unsigned .buildinfo file.
@@ -126,8 +139,10 @@ sub usage {
   -sa                         source includes orig, always.
   -sd                         source is diff and .dsc only.
   -v<version>                 changes since version <version>.
-  -m, --release-by=<maint>    maintainer for this release is <maint>.
-  -e, --build-by=<maint>      maintainer for this build is <maint>.
+  -m, --source-by=<maint>     maintainer for this source or build is <maint>.
+      --build-by=<maint>      ditto.
+  -e, --release-by=<maint>    maintainer for this change or release is <maint>.
+      --changed-by=<maint>    ditto.
   -C<descfile>                changes are described in <descfile>.
       --changes-option=<opt>  pass option <opt> to dpkg-genchanges.')
     . "\n\n" . g_(
@@ -148,6 +163,7 @@ sub usage {
 my $admindir;
 my @debian_rules = ('debian/rules');
 my @rootcommand = ();
+my $signbackend;
 my $signcommand;
 my $preclean = 1;
 my $postclean = 0;
@@ -160,7 +176,8 @@ my @source_opts;
 my $check_command = $ENV{DEB_CHECK_COMMAND};
 my @check_opts;
 my $signpause;
-my $signkey = $ENV{DEB_SIGN_KEYID};
+my $signkeyfile = $ENV{DEB_SIGN_KEYFILE};
+my $signkeyid = $ENV{DEB_SIGN_KEYID};
 my $signforce = 0;
 my $signreleased = 1;
 my $signsource = 1;
@@ -180,7 +197,9 @@ my $since;
 my $maint;
 my $changedby;
 my $desc;
+my $buildinfo_file;
 my @buildinfo_opts;
+my $changes_file;
 my @changes_opts;
 my %target_legacy_root = map { $_ => 1 } qw(
     clean binary binary-arch binary-indep
@@ -224,16 +243,39 @@ while (@ARGV) {
 	$admindir = $1;
     } elsif (/^--source-option=(.*)$/) {
 	push @source_opts, $1;
+    } elsif (/^--buildinfo-file=(.*)$/) {
+        $buildinfo_file = $1;
+        usageerr(g_('missing .buildinfo filename')) if not length $buildinfo_file;
     } elsif (/^--buildinfo-option=(.*)$/) {
-	push @buildinfo_opts, $1;
+        my $buildinfo_opt = $1;
+        if ($buildinfo_opt =~ m/^-O(.*)/) {
+            warning(g_('passing %s via %s is not supported; please use %s instead'),
+                    '-O', '--buildinfo-option', '--buildinfo-file');
+            $buildinfo_file = $1;
+        } else {
+            push @buildinfo_opts, $buildinfo_opt;
+        }
+    } elsif (/^--changes-file=(.*)$/) {
+        $changes_file = $1;
+        usageerr(g_('missing .changes filename')) if not length $changes_file;
     } elsif (/^--changes-option=(.*)$/) {
-	push @changes_opts, $1;
-    } elsif (/^(?:-j|--jobs=)(\d*|auto)$/) {
-	$parallel = $1 || '';
-	$parallel_force = 1;
-    } elsif (/^(?:-J|--jobs-try=)(\d*|auto)$/) {
+        my $changes_opt = $1;
+        if ($changes_opt =~ m/^-O(.*)/) {
+            warning(g_('passing %s via %s is not supported; please use %s instead'),
+                    '-O', '--changes-option', '--changes-file');
+            $changes_file = $1;
+        } else {
+            push @changes_opts, $changes_opt;
+        }
+    } elsif (/^--jobs(?:-try)?$/) {
+	$parallel = '';
+	$parallel_force = 0;
+    } elsif (/^(?:-[jJ]|--jobs(?:-try)?=)(\d*|auto)$/) {
 	$parallel = $1 || '';
 	$parallel_force = 0;
+    } elsif (/^--jobs-force(?:=(\d*|auto))?$/) {
+        $parallel = $1 || '';
+        $parallel_force = 1;
     } elsif (/^(?:-r|--root-command=)(.*)$/) {
 	my $arg = $1;
 	@rootcommand = split ' ', $arg;
@@ -248,13 +290,17 @@ while (@ARGV) {
 	usageerr(g_('missing hook %s command'), $hook_name)
 	    if not defined $hook_cmd;
 	$hook{$hook_name} = $hook_cmd;
-    } elsif (/^--buildinfo-id=.*$/) {
+    } elsif (/^(--buildinfo-id)=.*$/) {
 	# Deprecated option
-	warning('--buildinfo-id is deprecated, it is without effect');
+	warning(g_('%s is deprecated; it is without effect'), $1);
+    } elsif (/^--sign-backend=(.*)$/) {
+	$signbackend = $1;
     } elsif (/^(?:-p|--sign-command=)(.*)$/) {
 	$signcommand = $1;
-    } elsif (/^(?:-k|--sign-key=)(.*)$/) {
-	$signkey = $1;
+    } elsif (/^--sign-keyfile=(.*)$/) {
+	$signkeyfile = $1;
+    } elsif (/^(?:-k|--sign-keyid=|--sign-key=)(.*)$/) {
+	$signkeyid = $1;
     } elsif (/^--(no-)?check-builddeps$/) {
 	$checkbuilddep = !(defined $1 and $1 eq 'no-');
     } elsif (/^-([dD])$/) {
@@ -344,15 +390,15 @@ while (@ARGV) {
 	set_build_type(BUILD_FULL, $_);
     } elsif (/^-v(.*)$/) {
 	$since = $1;
-    } elsif (/^-m(.*)$/ or /^--release-by=(.*)$/) {
+    } elsif (/^-m(.*)$/ or /^--(?:source|build)-by=(.*)$/) {
 	$maint = $1;
-    } elsif (/^-e(.*)$/ or /^--build-by=(.*)$/) {
+    } elsif (/^-e(.*)$/ or /^--(?:changed|release)-by=(.*)$/) {
 	$changedby = $1;
     } elsif (/^-C(.*)$/) {
 	$desc = $1;
     } elsif (m/^-[EW]$/) {
 	# Deprecated option
-	warning(g_('-E and -W are deprecated, they are without effect'));
+	warning(g_('%s is deprecated; it is without effect'), $_);
     } elsif (/^-R(.*)$/ or /^--rules-file=(.*)$/) {
 	my $arg = $1;
 	@debian_rules = split ' ', $arg;
@@ -393,15 +439,8 @@ if ($check_command and not find_command($check_command)) {
     error(g_("check-command '%s' not found"), $check_command);
 }
 
-if ($signcommand) {
-    if (!find_command($signcommand)) {
-        error(g_("sign-command '%s' not found"), $signcommand);
-    }
-} elsif (($ENV{GNUPGHOME} && -e $ENV{GNUPGHOME}) ||
-         ($ENV{HOME} && -e "$ENV{HOME}/.gnupg")) {
-    if (find_command('gpg')) {
-        $signcommand = 'gpg';
-    }
+if ($signcommand and not find_command($signcommand)) {
+    error(g_("sign-command '%s' not found"), $signcommand);
 }
 
 # Default to auto if none of parallel=N, -J or -j have been specified.
@@ -426,6 +465,11 @@ if (defined $parallel) {
     }
     $build_opts->set('parallel', $parallel);
     $build_opts->export();
+}
+
+if ($build_opts->has('terse')) {
+    $ENV{MAKEFLAGS} //= '';
+    $ENV{MAKEFLAGS} .= ' --no-print-directory';
 }
 
 set_build_profiles(@build_profiles) if @build_profiles;
@@ -487,9 +531,33 @@ if (build_has_any(BUILD_ARCH_DEP)) {
 my $pv = "${pkg}_$sversion";
 my $pva = "${pkg}_${sversion}_$arch";
 
+my $signkeytype;
+my $signkeyhandle;
+if (defined $signkeyfile) {
+    $signkeytype = 'keyfile';
+    $signkeyhandle = bsd_glob($signkeyfile, GLOB_TILDE | GLOB_NOCHECK);
+} elsif (defined $signkeyid) {
+    $signkeytype = 'autoid';
+    $signkeyhandle = $signkeyid;
+} else {
+    $signkeytype = 'userid';
+    $signkeyhandle = $maintainer;
+}
+my $signkey = Dpkg::OpenPGP::KeyHandle->new(
+    type => $signkeytype,
+    handle => $signkeyhandle,
+);
 signkey_validate();
 
-if (not $signcommand) {
+my $openpgp = Dpkg::OpenPGP->new(
+    backend => $signbackend // 'auto',
+    cmd => $signcommand // 'auto',
+    needs => {
+        keystore => $signkey->needs_keystore(),
+    },
+);
+
+if (not $openpgp->can_use_secrets($signkey)) {
     $signsource = 0;
     $signbuildinfo = 0;
     $signchanges = 0;
@@ -585,29 +653,29 @@ if (build_has_any(BUILD_BINARY)) {
 
 run_hook('buildinfo', 1);
 
+$buildinfo_file //= "../$pva.buildinfo";
+
 push @buildinfo_opts, "--build=$build_types" if build_has_none(BUILD_DEFAULT);
 push @buildinfo_opts, "--admindir=$admindir" if $admindir;
+push @buildinfo_opts, "-O$buildinfo_file" if $buildinfo_file;
 
 run_cmd('dpkg-genbuildinfo', @buildinfo_opts);
 
 run_hook('changes', 1);
+
+$changes_file //= "../$pva.changes";
 
 push @changes_opts, "--build=$build_types" if build_has_none(BUILD_DEFAULT);
 push @changes_opts, "-m$maint" if defined $maint;
 push @changes_opts, "-e$changedby" if defined $changedby;
 push @changes_opts, "-v$since" if defined $since;
 push @changes_opts, "-C$desc" if defined $desc;
+push @changes_opts, "-O$changes_file";
 
-my $chg = "../$pva.changes";
 my $changes = Dpkg::Control->new(type => CTRL_FILE_CHANGES);
 
-printcmd("dpkg-genchanges @changes_opts >$chg");
-
-open my $changes_fh, '-|', 'dpkg-genchanges', @changes_opts
-    or subprocerr('dpkg-genchanges');
-$changes->parse($changes_fh, g_('parse changes file'));
-$changes->save($chg);
-close $changes_fh or subprocerr(g_('dpkg-genchanges'));
+run_cmd('dpkg-genchanges', @changes_opts);
+$changes->load($changes_file);
 
 run_hook('postclean', $postclean);
 
@@ -622,7 +690,7 @@ info(describe_build($changes->{'Files'}));
 run_hook('check', $check_command);
 
 if ($check_command) {
-    run_cmd($check_command, @check_opts, $chg);
+    run_cmd($check_command, @check_opts, $changes_file);
 }
 
 if ($signpause && ($signsource || $signbuildinfo || $signchanges)) {
@@ -633,21 +701,19 @@ if ($signpause && ($signsource || $signbuildinfo || $signchanges)) {
 run_hook('sign', $signsource || $signbuildinfo || $signchanges);
 
 if ($signsource) {
-    if (signfile("$pv.dsc")) {
-        error(g_('failed to sign %s file'), '.dsc');
-    }
+    signfile("$pv.dsc");
 
     # Recompute the checksums as the .dsc has changed now.
     my $buildinfo = Dpkg::Control->new(type => CTRL_FILE_BUILDINFO);
-    $buildinfo->load("../$pva.buildinfo");
+    $buildinfo->load($buildinfo_file);
     my $checksums = Dpkg::Checksums->new();
     $checksums->add_from_control($buildinfo);
     $checksums->add_from_file("../$pv.dsc", update => 1, key => "$pv.dsc");
     $checksums->export_to_control($buildinfo);
-    $buildinfo->save("../$pva.buildinfo");
+    $buildinfo->save($buildinfo_file);
 }
-if ($signbuildinfo && signfile("$pva.buildinfo")) {
-    error(g_('failed to sign %s file'), '.buildinfo');
+if ($signbuildinfo) {
+    signfile("$pva.buildinfo");
 }
 if ($signsource or $signbuildinfo) {
     # Recompute the checksums as the .dsc and/or .buildinfo have changed.
@@ -655,16 +721,16 @@ if ($signsource or $signbuildinfo) {
     $checksums->add_from_control($changes);
     $checksums->add_from_file("../$pv.dsc", update => 1, key => "$pv.dsc")
         if $signsource;
-    $checksums->add_from_file("../$pva.buildinfo", update => 1, key => "$pva.buildinfo");
+    $checksums->add_from_file($buildinfo_file, update => 1, key => "$pva.buildinfo");
     $checksums->export_to_control($changes);
     delete $changes->{'Checksums-Md5'};
     update_files_field($changes, $checksums, "$pv.dsc")
         if $signsource;
     update_files_field($changes, $checksums, "$pva.buildinfo");
-    $changes->save($chg);
+    $changes->save($changes_file);
 }
-if ($signchanges && signfile("$pva.changes")) {
-    error(g_('failed to sign %s file'), '.changes');
+if ($signchanges) {
+    signfile("$pva.changes");
 }
 
 if (not $signreleased) {
@@ -832,17 +898,13 @@ sub update_files_field {
 }
 
 sub signkey_validate {
-    return unless defined $signkey;
-    # Make sure this is an hex keyid.
-    return unless $signkey =~ m/^(?:0x)?([[:xdigit:]]+)$/;
+    return unless $signkey->type eq 'keyid';
 
-    my $keyid = $1;
-
-    if (length $keyid <= 8) {
+    if (length $signkey->handle <= 8) {
         error(g_('short OpenPGP key IDs are broken; ' .
                  'please use key fingerprints in %s or %s instead'),
               '-k', 'DEB_SIGN_KEYID');
-    } elsif (length $keyid <= 16) {
+    } elsif (length $signkey->handle <= 16) {
         warning(g_('long OpenPGP key IDs are strongly discouraged; ' .
                    'please use key fingerprints in %s or %s instead'),
                 '-k', 'DEB_SIGN_KEYID');
@@ -863,23 +925,22 @@ sub signfile {
     print { $signfh } "\n";
     close $signfh or syserr(g_('cannot close %s'), $signfile);
 
-    system($signcommand, '--utf8-strings', '--textmode', '--armor',
-           '--local-user', $signkey || $maintainer, '--clearsign',
-           '--output', "$signfile.asc", $signfile);
-    my $status = $?;
-    if ($status == 0) {
+    my $status = $openpgp->inline_sign($signfile, "$signfile.asc", $signkey);
+    if ($status == OPENPGP_OK) {
         move("$signfile.asc", "../$file")
             or syserror(g_('cannot move %s to %s'), "$signfile.asc", "../$file");
+    } else {
+        error(g_('failed to sign %s file: %s'), $file,
+              openpgp_errorcode_to_string($status));
     }
 
-    print "\n";
     return $status
 }
 
 sub fileomitted {
     my ($files, $regex) = @_;
 
-    return $files !~ /$regex/
+    return $files !~ m/$regex$/m
 }
 
 sub describe_build {

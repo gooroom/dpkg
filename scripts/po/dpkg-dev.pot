@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: dpkg 1.20.12\n"
+"Project-Id-Version: dpkg 1.21.22\n"
 "Report-Msgid-Bugs-To: debian-dpkg@lists.debian.org\n"
-"POT-Creation-Date: 2022-09-01 03:37+0000\n"
+"POT-Creation-Date: 2023-05-11 02:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -220,13 +220,15 @@ msgid ""
 "rules).\n"
 "  -T, --rules-target=<target> call debian/rules <target>.\n"
 "      --as-root               ensure -T calls the target with root rights.\n"
-"  -j, --jobs[=<number>|auto]  jobs to run simultaneously (passed to "
+"  -j, --jobs[=<jobs>|auto]    jobs to run simultaneously (passed to "
 "<rules>),\n"
-"                                forced mode.\n"
-"  -J, --jobs-try[=<number>|auto]\n"
+"                                (default; default is auto, opt-in mode).\n"
+"  -J, --jobs-try[=<jobs>|auto]\n"
+"                              alias for -j, --jobs.\n"
+"      --jobs-force[=<jobs>|auto]\n"
 "                              jobs to run simultaneously (passed to "
 "<rules>),\n"
-"                                opt-in mode (default is auto).\n"
+"                                (default is auto, forced mode).\n"
 "  -r, --root-command=<command>\n"
 "                              command to gain root rights (default is "
 "fakeroot).\n"
@@ -238,12 +240,19 @@ msgid ""
 "hooks:\n"
 "                                init preclean source build binary buildinfo\n"
 "                                changes postclean check sign done\n"
+"      --buildinfo-file=<file> set the .buildinfo filename to generate.\n"
 "      --buildinfo-option=<opt>\n"
 "                              pass option <opt> to dpkg-genbuildinfo.\n"
+"      --changes-file=<file>   set the .changes filename to generate.\n"
+"      --sign-backend=<backend>\n"
+"                              OpenPGP backend to use to sign\n"
+"                                (default is auto).\n"
 "  -p, --sign-command=<command>\n"
 "                              command to sign .dsc and/or .changes files\n"
 "                                (default is gpg).\n"
-"  -k, --sign-key=<keyid>      the key to use for signing.\n"
+"      --sign-keyfile=<file>   the key file to use for signing.\n"
+"  -k, --sign-keyid=<keyid>    the key id to use for signing.\n"
+"      --sign-key=<keyid>      alias for -k, --sign-keyid.\n"
 "  -ap, --sign-pause           add pause before starting signature process.\n"
 "  -us, --unsigned-source      unsigned source package.\n"
 "  -ui, --unsigned-buildinfo   unsigned .buildinfo file.\n"
@@ -272,8 +281,12 @@ msgid ""
 "  -sa                         source includes orig, always.\n"
 "  -sd                         source is diff and .dsc only.\n"
 "  -v<version>                 changes since version <version>.\n"
-"  -m, --release-by=<maint>    maintainer for this release is <maint>.\n"
-"  -e, --build-by=<maint>      maintainer for this build is <maint>.\n"
+"  -m, --source-by=<maint>     maintainer for this source or build is "
+"<maint>.\n"
+"      --build-by=<maint>      ditto.\n"
+"  -e, --release-by=<maint>    maintainer for this change or release is "
+"<maint>.\n"
+"      --changed-by=<maint>    ditto.\n"
 "  -C<descfile>                changes are described in <descfile>.\n"
 "      --changes-option=<opt>  pass option <opt> to dpkg-genchanges."
 msgstr ""
@@ -295,6 +308,19 @@ msgid ""
 msgstr ""
 
 #: scripts/dpkg-buildpackage.pl
+msgid "missing .buildinfo filename"
+msgstr ""
+
+#: scripts/dpkg-buildpackage.pl
+#, perl-format
+msgid "passing %s via %s is not supported; please use %s instead"
+msgstr ""
+
+#: scripts/dpkg-buildpackage.pl
+msgid "missing .changes filename"
+msgstr ""
+
+#: scripts/dpkg-buildpackage.pl
 #, perl-format
 msgid "unknown hook name %s"
 msgstr ""
@@ -304,13 +330,15 @@ msgstr ""
 msgid "missing hook %s command"
 msgstr ""
 
+#: scripts/dpkg-buildpackage.pl scripts/dpkg-genbuildinfo.pl
+#: scripts/dpkg-gencontrol.pl
+#, perl-format
+msgid "%s is deprecated; it is without effect"
+msgstr ""
+
 #: scripts/dpkg-buildpackage.pl
 #, perl-format
 msgid "-s%s is deprecated; always using gpg style interface"
-msgstr ""
-
-#: scripts/dpkg-buildpackage.pl scripts/dpkg-source.pl
-msgid "-E and -W are deprecated, they are without effect"
 msgstr ""
 
 #: scripts/dpkg-buildpackage.pl
@@ -372,20 +400,7 @@ msgid ""
 msgstr ""
 
 #: scripts/dpkg-buildpackage.pl
-msgid "parse changes file"
-msgstr ""
-
-#: scripts/dpkg-buildpackage.pl
-msgid "dpkg-genchanges"
-msgstr ""
-
-#: scripts/dpkg-buildpackage.pl
 msgid "Press <enter> to start the signing process.\n"
-msgstr ""
-
-#: scripts/dpkg-buildpackage.pl
-#, perl-format
-msgid "failed to sign %s file"
 msgstr ""
 
 #: scripts/dpkg-buildpackage.pl
@@ -468,7 +483,7 @@ msgstr ""
 
 #: scripts/dpkg-buildpackage.pl scripts/dpkg-checkbuilddeps.pl
 #: scripts/dpkg-genbuildinfo.pl scripts/dpkg-name.pl scripts/Dpkg/Arch.pm
-#: scripts/Dpkg/IPC.pm scripts/Dpkg/OpenPGP.pm scripts/Dpkg/Shlibs.pm
+#: scripts/Dpkg/IPC.pm scripts/Dpkg/Shlibs.pm
 #, perl-format
 msgid "cannot open %s"
 msgstr ""
@@ -484,6 +499,11 @@ msgstr ""
 #: scripts/dpkg-buildpackage.pl scripts/Dpkg/Source/Archive.pm
 #, perl-format
 msgid "cannot move %s to %s"
+msgstr ""
+
+#: scripts/dpkg-buildpackage.pl
+#, perl-format
+msgid "failed to sign %s file: %s"
 msgstr ""
 
 #: scripts/dpkg-buildpackage.pl
@@ -586,11 +606,10 @@ msgstr ""
 
 #: scripts/dpkg-distaddfile.pl scripts/dpkg-genbuildinfo.pl
 #: scripts/dpkg-gencontrol.pl scripts/dpkg-mergechangelogs.pl
-#: scripts/Dpkg/Compression/FileHandle.pm scripts/Dpkg/IPC.pm
-#: scripts/Dpkg/Interface/Storable.pm scripts/Dpkg/Source/Functions.pm
+#: scripts/Dpkg/Compression/FileHandle.pm scripts/Dpkg/File.pm
+#: scripts/Dpkg/IPC.pm scripts/Dpkg/Interface/Storable.pm
 #: scripts/Dpkg/Source/BinaryFiles.pm scripts/Dpkg/Source/Package.pm
-#: scripts/Dpkg/Source/Package/V2.pm scripts/Dpkg/Source/Package/V3/Quilt.pm
-#: scripts/Dpkg/Source/Quilt.pm
+#: scripts/Dpkg/Source/Package/V2.pm scripts/Dpkg/Source/Quilt.pm
 #, perl-format
 msgid "cannot write %s"
 msgstr ""
@@ -780,11 +799,6 @@ msgstr ""
 
 #: scripts/dpkg-gencontrol.pl
 #, perl-format
-msgid "-i%s is deprecated; it is without effect"
-msgstr ""
-
-#: scripts/dpkg-gencontrol.pl
-#, perl-format
 msgid "package %s not in control info"
 msgstr ""
 
@@ -950,7 +964,10 @@ msgid ""
 "\n"
 "Options:\n"
 "  -m, --merge-prereleases  merge pre-releases together, ignores everything\n"
-"                           after the last '~' in the version.\n"
+"                             after the last '~' in the version.\n"
+"      --merge-unreleased   merge UNRELEASED entries together, ignoring "
+"their\n"
+"                             version numbers.\n"
 "  -?, --help               show this help message.\n"
 "      --version            show the version.\n"
 msgstr ""
@@ -1114,7 +1131,7 @@ msgid ""
 "  -m, --multiversion       allow multiple versions of a single package.\n"
 "  -e, --extra-override <file>\n"
 "                           use extra override file.\n"
-"  -M, --medium <medium>    add X-Medium field for dselect multicd access "
+"  -M, --medium <medium>    add X-Medium field for dselect media access "
 "method\n"
 "  -?, --help               show this help message.\n"
 "      --version            show the version.\n"
@@ -1488,9 +1505,12 @@ msgid "%s is not a supported compression"
 msgstr ""
 
 #: scripts/dpkg-source.pl scripts/Dpkg/Compression.pm
-#: scripts/Dpkg/Compression/Process.pm
 #, perl-format
 msgid "%s is not a compression level"
+msgstr ""
+
+#: scripts/dpkg-source.pl
+msgid "-E and -W are deprecated, they are without effect"
 msgstr ""
 
 #: scripts/dpkg-source.pl scripts/dpkg-vendor.pl
@@ -1667,6 +1687,8 @@ msgstr ""
 #: scripts/dpkg-source.pl
 msgid ""
 "General options:\n"
+"      --threads-max=<threads>\n"
+"                           use at most <threads> with compressor.\n"
 "  -q                       quiet mode.\n"
 "  -?, --help               show this help message.\n"
 "      --version            show the version."
@@ -1718,7 +1740,7 @@ msgstr ""
 #: scripts/Dpkg/BuildFlags.pm scripts/Dpkg/Compression/FileHandle.pm
 #: scripts/Dpkg/File.pm scripts/Dpkg/Interface/Storable.pm
 #: scripts/Dpkg/Shlibs/Objdump.pm scripts/Dpkg/Source/BinaryFiles.pm
-#: scripts/Dpkg/Source/Package/V2.pm scripts/Dpkg/Source/Quilt.pm
+#: scripts/Dpkg/Source/Quilt.pm
 #, perl-format
 msgid "cannot read %s"
 msgstr ""
@@ -1748,12 +1770,12 @@ msgstr ""
 msgid "incorrect value in %s option of %s variable: %s"
 msgstr ""
 
-#: scripts/Dpkg/Build/Types.pm
+#: scripts/Dpkg/BuildTypes.pm
 #, perl-format
 msgid "cannot combine %s and %s"
 msgstr ""
 
-#: scripts/Dpkg/Build/Types.pm
+#: scripts/Dpkg/BuildTypes.pm
 #, perl-format
 msgid "unknown build type %s"
 msgstr ""
@@ -1941,6 +1963,11 @@ msgstr ""
 
 #: scripts/Dpkg/Changelog/Parse.pm
 #, perl-format
+msgid "changelog format %s is not a Dpkg::Changelog class"
+msgstr ""
+
+#: scripts/Dpkg/Changelog/Parse.pm
+#, perl-format
 msgid "fatal error occurred while parsing %s"
 msgstr ""
 
@@ -1977,6 +2004,11 @@ msgstr ""
 #: scripts/Dpkg/Checksums.pm
 #, perl-format
 msgid "conflicting file sizes '%u' and '%u' for file '%s'"
+msgstr ""
+
+#: scripts/Dpkg/Compression.pm
+#, perl-format
+msgid "compression threads %s is not a number"
 msgstr ""
 
 #: scripts/Dpkg/Compression/Process.pm
@@ -2033,7 +2065,7 @@ msgstr ""
 
 #: scripts/Dpkg/Control.pm
 #, perl-format
-msgid "entry in repository's %s file"
+msgid "stanza in repository's %s file"
 msgstr ""
 
 #: scripts/Dpkg/Control.pm
@@ -2054,7 +2086,7 @@ msgid "vendor file"
 msgstr ""
 
 #: scripts/Dpkg/Control.pm
-msgid "entry in dpkg's status file"
+msgid "stanza in dpkg's status file"
 msgstr ""
 
 #: scripts/Dpkg/Control/FieldsCore.pm
@@ -2110,17 +2142,18 @@ msgid "write error on control data"
 msgstr ""
 
 #: scripts/Dpkg/Control/Info.pm
-msgid "first block lacks a Source field"
+#, perl-format
+msgid "first stanza lacks a '%s' field"
 msgstr ""
 
 #: scripts/Dpkg/Control/Info.pm
 #, perl-format
-msgid "block lacks the '%s' field"
+msgid "stanza lacks the '%s' field"
 msgstr ""
 
 #: scripts/Dpkg/Control/Tests/Entry.pm
 #, perl-format
-msgid "block lacks either %s or %s fields"
+msgid "stanza lacks either %s or %s fields"
 msgstr ""
 
 #: scripts/Dpkg/Deps.pm
@@ -2197,6 +2230,11 @@ msgstr ""
 msgid "Use --help for program usage information."
 msgstr ""
 
+#: scripts/Dpkg/File.pm
+#, perl-format
+msgid "cannot create file %s"
+msgstr ""
+
 #: scripts/Dpkg/IPC.pm
 #, perl-format
 msgid "pipe for %s"
@@ -2246,45 +2284,74 @@ msgstr ""
 
 #: scripts/Dpkg/OpenPGP.pm
 #, perl-format
-msgid "cannot create signature file %s"
+msgid "unknown OpenPGP api requested %s"
 msgstr ""
 
 #: scripts/Dpkg/OpenPGP.pm
 #, perl-format
-msgid "cannot execute %s program"
+msgid "cannot load OpenPGP backend %s"
 msgstr ""
 
 #: scripts/Dpkg/OpenPGP.pm
 #, perl-format
-msgid "cannot write signature file %s"
+msgid "unknown OpenPGP backend %s"
 msgstr ""
 
-#: scripts/Dpkg/OpenPGP.pm
-msgid "signature file is already OpenPGP ASCII armor, copying"
+#: scripts/Dpkg/OpenPGP/ErrorCodes.pm
+msgid "success"
 msgstr ""
 
-#: scripts/Dpkg/OpenPGP.pm
-msgid "cannot OpenPGP ASCII armor signature file due to missing gpg"
+#: scripts/Dpkg/OpenPGP/ErrorCodes.pm
+msgid "no acceptable signature found"
 msgstr ""
 
-#: scripts/Dpkg/OpenPGP.pm
+#: scripts/Dpkg/OpenPGP/ErrorCodes.pm
+msgid "missing required argument"
+msgstr ""
+
+#: scripts/Dpkg/OpenPGP/ErrorCodes.pm
+msgid "unsupported option"
+msgstr ""
+
+#: scripts/Dpkg/OpenPGP/ErrorCodes.pm
+msgid "invalid data type"
+msgstr ""
+
+#: scripts/Dpkg/OpenPGP/ErrorCodes.pm
+msgid "non-text input where text expected"
+msgstr ""
+
+#: scripts/Dpkg/OpenPGP/ErrorCodes.pm
+msgid "output file already exists"
+msgstr ""
+
+#: scripts/Dpkg/OpenPGP/ErrorCodes.pm
+msgid "input file does not exist"
+msgstr ""
+
+#: scripts/Dpkg/OpenPGP/ErrorCodes.pm
+msgid "cannot unlock password-protected key"
+msgstr ""
+
+#: scripts/Dpkg/OpenPGP/ErrorCodes.pm
+msgid "unsupported subcommand"
+msgstr ""
+
+#: scripts/Dpkg/OpenPGP/ErrorCodes.pm
+msgid "key is not signature-capable"
+msgstr ""
+
+#: scripts/Dpkg/OpenPGP/ErrorCodes.pm
+msgid "missing OpenPGP implementation"
+msgstr ""
+
+#: scripts/Dpkg/OpenPGP/ErrorCodes.pm
+msgid "specified key needs a keystore"
+msgstr ""
+
+#: scripts/Dpkg/OpenPGP/ErrorCodes.pm
 #, perl-format
-msgid "cannot import key in %s since GnuPG is not installed"
-msgstr ""
-
-#: scripts/Dpkg/OpenPGP.pm
-#, perl-format
-msgid "failed to import key in %s"
-msgstr ""
-
-#: scripts/Dpkg/OpenPGP.pm
-#, perl-format
-msgid "cannot verify signature on %s since GnuPG is not installed"
-msgstr ""
-
-#: scripts/Dpkg/OpenPGP.pm
-#, perl-format
-msgid "failed to verify signature on %s"
+msgid "error code %d"
 msgstr ""
 
 #: scripts/Dpkg/Package.pm
@@ -2316,7 +2383,7 @@ msgid ""
 "interferes with cross-building, please use -l option instead"
 msgstr ""
 
-#: scripts/Dpkg/Shlibs/Objdump.pm
+#: scripts/Dpkg/Shlibs.pm scripts/Dpkg/Shlibs/Objdump.pm
 #, perl-format
 msgid "unknown executable format in file '%s'"
 msgstr ""
@@ -2334,6 +2401,11 @@ msgstr ""
 #: scripts/Dpkg/Shlibs/Symbol.pm
 #, perl-format
 msgid "symbol name unspecified: %s"
+msgstr ""
+
+#: scripts/Dpkg/Shlibs/Symbol.pm
+#, perl-format
+msgid "symver tag with versioned symbol will not match: %s"
 msgstr ""
 
 #: scripts/Dpkg/Shlibs/Symbol.pm
@@ -2496,6 +2568,21 @@ msgstr ""
 
 #: scripts/Dpkg/Source/Package.pm
 msgid "upstream tarball signatures but no upstream signing key"
+msgstr ""
+
+#: scripts/Dpkg/Source/Package.pm
+#, perl-format
+msgid "verifying %s"
+msgstr ""
+
+#: scripts/Dpkg/Source/Package.pm
+#, perl-format
+msgid "cannot verify upstream tarball signature for %s: %s"
+msgstr ""
+
+#: scripts/Dpkg/Source/Package.pm
+#, perl-format
+msgid "cannot verify inline signature for %s: %s"
 msgstr ""
 
 #: scripts/Dpkg/Source/Package.pm
@@ -2691,8 +2778,8 @@ msgstr ""
 #: scripts/Dpkg/Source/Package/V1.pm
 #, perl-format
 msgid ""
-"orig argument is empty (means no orig, no diff) but source handling style -s"
-"%s wants something"
+"orig argument is empty (means no orig, no diff) but source handling style -"
+"s%s wants something"
 msgstr ""
 
 #: scripts/Dpkg/Source/Package/V1.pm
@@ -2756,11 +2843,6 @@ msgstr ""
 #: scripts/Dpkg/Source/Package/V1.pm scripts/Dpkg/Source/Package/V2.pm
 #, perl-format
 msgid "building %s using existing %s"
-msgstr ""
-
-#: scripts/Dpkg/Source/Package/V1.pm
-#, perl-format
-msgid "verifying %s using existing %s"
 msgstr ""
 
 #: scripts/Dpkg/Source/Package/V1.pm scripts/Dpkg/Source/Package/V2.pm
@@ -2914,6 +2996,12 @@ msgstr ""
 msgid ""
 "add %s in debian/source/include-binaries if you want to store the modified "
 "binary in the debian tarball"
+msgstr ""
+
+#: scripts/Dpkg/Source/Package/V2.pm
+msgid ""
+"Hint: make sure the version in debian/changelog matches the unpacked source "
+"tree"
 msgstr ""
 
 #: scripts/Dpkg/Source/Package/V2.pm
@@ -3094,6 +3182,11 @@ msgstr ""
 
 #: scripts/Dpkg/Source/Package/V3/Git.pm
 msgid "setting up shallow clone"
+msgstr ""
+
+#: scripts/Dpkg/Source/Package/V3/Git.pm
+#, perl-format
+msgid "setting remote %s to %s"
 msgstr ""
 
 #: scripts/Dpkg/Source/Package/V3/Native.pm
@@ -3360,6 +3453,12 @@ msgid "if patch '%s' is correctly applied by quilt, use '%s' to update it"
 msgstr ""
 
 #: scripts/Dpkg/Source/Quilt.pm
+msgid ""
+"if the file is present in the unpacked source, make sure it is also present "
+"in the orig tarball"
+msgstr ""
+
+#: scripts/Dpkg/Source/Quilt.pm
 #, perl-format
 msgid "%s should be a directory or non-existing"
 msgstr ""
@@ -3419,6 +3518,20 @@ msgstr ""
 #: scripts/Dpkg/Vars.pm
 #, perl-format
 msgid "source package has two conflicting values - %s and %s"
+msgstr ""
+
+#: scripts/Dpkg/Vendor.pm
+#, perl-format
+msgid ""
+"%s origin filename is deprecated; it should have only alphanumeric or dash "
+"characters"
+msgstr ""
+
+#: scripts/Dpkg/Vendor.pm
+#, perl-format
+msgid ""
+"%s module name is deprecated; it should be capitalized with only "
+"alphanumeric characters"
 msgstr ""
 
 #: scripts/Dpkg/Vendor/Debian.pm

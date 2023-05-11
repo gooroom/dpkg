@@ -117,7 +117,7 @@ with B<--check-command>).
 
 =item B<11.>
 
-It runs the B<sign> hook and calls B<gpg> (as long as it
+It runs the B<sign> hook and signs using the OpenPGP backend (as long as it
 is not an UNRELEASED build, or B<--no-sign> is specified) to sign the
 B<.dsc> file (if any, unless
 B<-us> or B<--unsigned-source> is specified), the B<.buildinfo>
@@ -146,6 +146,9 @@ it starts with a ‘B<#>’).
 
 Specifies the build I<type> from a comma-separated list of components
 (since dpkg 1.18.5).
+All the specified components get combined to select the single build type
+to use, which implies a single build run with a single F<.changes> file
+generated.
 Passed to B<dpkg-genchanges>.
 
 The allowed values are:
@@ -244,11 +247,23 @@ Requires that the target be run with root rights.
 
 =item B<-C>I<changes-description>
 
-=item B<-m>, B<--release-by=>I<maintainer-address>
+=item B<-m>I<maintainer-address>
 
-=item B<-e>, B<--build-by=>I<maintainer-address>
+=item B<-e>I<maintainer-address>
 
 Passed unchanged to B<dpkg-genchanges>. See its manual page.
+
+=item B<--build-by=>I<maintainer-address>
+
+=item B<--source-by=>I<maintainer-address> (since dpkg 1.21.10)
+
+Pass as B<-m> to B<dpkg-genchanges>. See its manual page.
+
+=item B<--release-by=>I<maintainer-address>
+
+=item B<--changed-by=>I<maintainer-address> (since dpkg 1.21.10)
+
+Pass as B<-e> to B<dpkg-genchanges>. See its manual page.
 
 =item B<-a>, B<--host-arch> I<architecture>
 
@@ -290,22 +305,20 @@ conditional builds.
 
 =item B<-j>, B<--jobs>[=I<jobs>|B<auto>]
 
-Number of jobs allowed to be run simultaneously, number of jobs matching
-the number of online processors if B<auto> is specified
-(since dpkg 1.17.10), or unlimited number if I<jobs> is not specified,
-equivalent to the
-B<make>(1)
-option of the same name (since dpkg 1.14.7, long option since dpkg 1.18.8).
-Will add itself to the B<MAKEFLAGS>
-environment variable, which should cause all subsequent make
-invocations to inherit the option, thus forcing the parallel setting on
-the packaging (and possibly the upstream build system if that uses make)
-regardless of their support for parallel builds, which might cause build
-failures.
-Also adds B<parallel=>I<jobs> or
-B<parallel> to the B<DEB_BUILD_OPTIONS> environment variable which
-allows debian/rules files to use this information for their own purposes.
-The B<-j> value will override the B<parallel=>I<jobs> or
+Specifies the number of jobs allowed to be run simultaneously
+(since dpkg 1.14.7, long option since dpkg 1.18.8).
+The number of jobs matching the number of online processors if B<auto> is
+specified (since dpkg 1.17.10), or unlimited number if I<jobs> is not
+specified.
+The default behavior is B<auto> (since dpkg 1.18.11) in non-forced mode
+(since dpkg 1.21.10), and as such it is always safer to use with any
+package including those that are not parallel-build safe.
+Setting the number of jobs to B<1> will restore serial execution.
+
+Will add B<parallel=>I<jobs> or B<parallel> to the B<DEB_BUILD_OPTIONS>
+environment variable which allows debian/rules files to opt-in to use this
+information for their own purposes.
+The I<jobs> value will override the B<parallel=>I<jobs> or
 B<parallel> option in the B<DEB_BUILD_OPTIONS> environment variable.
 Note that the B<auto> value will get replaced by the actual number of
 currently active processors, and as such will not get propagated to any
@@ -316,12 +329,27 @@ although this should only happen on exotic and unsupported systems.
 =item B<-J>, B<--jobs-try>[=I<jobs>|B<auto>]
 
 This option (since dpkg 1.18.2, long option since dpkg 1.18.8) is equivalent
-to the B<-j> option except that it does not set the B<MAKEFLAGS>
-environment variable, and as such it is safer to use with any package
-including those that are not parallel-build safe.
+to the B<-j> above.
 
-B<auto> is the default behavior (since dpkg 1.18.11). Setting the number
-of jobs to 1 will restore a serial behavior.
+Since the behavior for B<-j> changed in dpkg 1.21.10 to the opt-in mode,
+you can use this option instead if you need to guarantee semantics across
+dpkg release series.
+
+=item B<--jobs-force>[=I<jobs>|B<auto>]
+
+This option (since dpkg 1.21.10) is equivalent to the B<--jobs> option
+except that it will enable forced parallel mode, by adding the B<make> B<-j>
+option with the computed number of parallel jobs to the B<MAKEFLAGS>
+environment variable.
+
+This should cause all subsequent make invocations to inherit the option,
+thus forcing the parallel setting on the packaging (and possibly the
+upstream build system if that uses L<make(1)>) regardless of their support
+for parallel builds, which might cause build failures.
+
+Note: Any Makefile that is not parallel-safe should be considered to be buggy.
+These should either be made parallel-safe, or marked as not being safe with
+the L<make(1)> B<.NOTPARALLEL> target.
 
 =item B<-D>, B<--check-builddeps>
 
@@ -480,24 +508,56 @@ The upstream version.
 
 =back
 
+=item B<--buildinfo-file=>I<filename>
+
+Set the I<filename> for the generated B<.buildinfo> file (since dpkg 1.21.0).
+
 =item B<--buildinfo-option=>I<opt>
 
 Pass option I<opt> to B<dpkg-genbuildinfo> (since dpkg 1.18.11).
 Can be used multiple times.
 
+=item B<--sign-backend=>I<sign-backend>
+
+Specify an OpenPGP backend interface to use when invoking the I<sign-command>
+(since dpkg 1.21.10).
+
+The default is B<auto>, where the best current backend available will be used.
+The specific OpenPGP backends supported in order of preference are:
+
+=over 2
+
+=item B<sop> (any conforming Stateless OpenPGP implementation)
+
+=item B<sq> (from Sequoia-PGP)
+
+=item B<gpg> (from GnuPG)
+
+=back
+
 =item B<-p>, B<--sign-command=>I<sign-command>
 
-When B<dpkg-buildpackage> needs to execute GPG to sign a source
-control (B<.dsc>) file or a B<.changes> file it will run
-I<sign-command> (searching the B<PATH> if necessary) instead of
-B<gpg> (long option since dpkg 1.18.8).
-I<sign-command> will get all the arguments
-that B<gpg> would have gotten. I<sign-command>
-should not contain spaces or any other shell metacharacters.
+When B<dpkg-buildpackage> needs to execute an OpenPGP backend command to
+sign a source control (B<.dsc>) file or a B<.changes> file it will run
+I<sign-command> (searching the B<PATH> if necessary) instead of the
+default or auto-detected backend command (long option since dpkg 1.18.8).
+I<sign-command> will get all the arguments defined by the B<--sign-backend>.
+I<sign-command> should not contain spaces or any other shell metacharacters.
 
-=item B<-k>, B<--sign-key=>I<key-id>
+=item B<-k>, B<--sign-keyid=>I<key-id>
 
-Specify a key-ID to use when signing packages (long option since dpkg 1.18.8).
+=item B<--sign-key=>I<key-id>
+
+Specify an OpenPGP key-ID (either a fingerprint or a user-ID) for the
+secret key to use when signing packages (B<--sign-key> since dpkg 1.18.8,
+B<--sign-keyid> since dpkg 1.21.10).
+
+=item B<--sign-keyfile=>I<key-file>
+
+Specify an OpenPGP I<key-file> containing the secret key to use when signing
+packages (since dpkg 1.21.10).
+
+Note: For security reasons the I<key-file> is best kept locked with a password.
 
 =item B<-us>, B<--unsigned-source>
 
@@ -558,6 +618,10 @@ Passed unchanged to B<dpkg-source>. See its manual page.
 Pass option I<opt> to B<dpkg-source> (since dpkg 1.15.6).
 Can be used multiple times.
 
+=item B<--changes-file=>I<filename>
+
+Set the I<filename> for the generated B<.changes> file (since dpkg 1.21.0).
+
 =item B<--changes-option=>I<opt>
 
 Pass option I<opt> to B<dpkg-genchanges> (since dpkg 1.15.6).
@@ -594,9 +658,15 @@ Overridden by the B<--check-command> option.
 
 =item B<DEB_SIGN_KEYID>
 
-If set, it will be used to sign the B<.changes> and B<.dsc> files
-(since dpkg 1.17.2).
+If set, it will be used to sign the B<.changes>, B<.buildinfo> and B<.dsc>
+files (since dpkg 1.17.2).
 Overridden by the B<--sign-key> option.
+
+=item B<DEB_SIGN_KEYFILE>
+
+If set, it will be used to sign the B<.changes>, B<.buildinfo> and B<.dsc>
+files (since dpkg 1.21.10).
+Overridden by the B<--sign-keyfile> option.
 
 =item B<DEB_BUILD_OPTIONS>
 
@@ -713,6 +783,7 @@ I<gain-root-command> and I<sign-command>.
 
 =head1 SEE ALSO
 
+I<%PKGDOCDIR%/spec/rootless-builds.txt>,
 B<dpkg-source>(1),
 B<dpkg-architecture>(1),
 B<dpkg-buildflags>(1),
@@ -720,4 +791,6 @@ B<dpkg-genbuildinfo>(1),
 B<dpkg-genchanges>(1),
 B<fakeroot>(1),
 B<lintian>(1),
+L<https://datatracker.ietf.org/doc/draft-dkg-openpgp-stateless-cli/>,
+B<sq>(1),
 B<gpg>(1).

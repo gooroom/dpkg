@@ -1,0 +1,601 @@
+AT_SETUP([dpkg-deb options])
+AT_KEYWORDS([dpkg-deb command-line])
+
+AT_CHECK([dpkg-deb --version], [], [ignore])
+AT_CHECK([dpkg-deb --help], [], [ignore])
+
+AT_CLEANUP
+
+
+AT_SETUP([dpkg-deb .deb format 0.93x])
+AT_KEYWORDS([dpkg-deb deb-old])
+
+AT_SKIP_IF([! command -v gzip >/dev/null])
+
+AT_DATA([pkg-deb-old-bogus-only-version.deb], [0.93
+])
+AT_CHECK([
+# Check truncated old deb w/ only version magic
+dpkg-deb --info pkg-deb-old-bogus-only-version.deb
+], [2], [], [dpkg-deb: error: unexpected end of file in archive control member size in pkg-deb-old-bogus-only-version.deb
+])
+
+DPKG_GEN_CONTROL([pkg-deb-old-format])
+DPKG_MOD_CONTROL([pkg-deb-old-format],
+                 [s/^Description:.*$/& - deb old format support/])
+AT_DATA([pkg-deb-old-format/file-templ], [test
+])
+AT_CHECK([
+# Initialize the template package
+mv pkg-deb-old-format pkg-old-templ
+cp $top_srcdir/ChangeLog.old pkg-old-templ/
+chmod 0644 pkg-old-templ/ChangeLog.old
+chmod -R u+w pkg-old-templ
+find pkg-old-templ | xargs touch -t 197001010100.00
+dpkg-deb --deb-format=0.939000 --root-owner-group -Zgzip -b pkg-old-templ >/dev/null
+
+dpkg-deb --fsys-tarfile pkg-old-templ.deb >fsys.tar
+gzip -n fsys.tar
+
+# Create deb-old 0.939
+cp pkg-old-templ.deb pkg-old.deb
+
+# Create deb-old-old-old 0.931
+mkdir -p pkg-old-0931-templ/.DEBIAN
+cp pkg-old-templ/DEBIAN/* pkg-old-0931-templ/.DEBIAN/
+find pkg-old-0931-templ | xargs touch -t 197001010100.00
+tar czf ctrl-0931.tar.gz --format=gnu --mtime @0 --clamp-mtime --owner root:0 --group root:0 -C pkg-old-0931-templ .DEBIAN
+
+echo '0.931000' >pkg-old-0931.deb
+DPKG_FILE_SIZE([ctrl-0931.tar.gz]) >>pkg-old-0931.deb
+cat ctrl-0931.tar.gz >>pkg-old-0931.deb
+cat fsys.tar.gz >>pkg-old-0931.deb
+
+# Create deb-old-old template
+mkdir -p pkg-old-0932-templ/DEBIAN
+cp pkg-old-templ/DEBIAN/* pkg-old-0932-templ/DEBIAN/
+find pkg-old-0932-templ | xargs touch -t 197001010100.00
+tar czf ctrl-0932.tar.gz --format=gnu --mtime @0 --clamp-mtime --owner root:0 --group root:0 -C pkg-old-0932-templ DEBIAN
+
+# Create deb-old-old 0.932
+echo '0.932000' >pkg-old-0932.deb
+DPKG_FILE_SIZE([ctrl-0932.tar.gz]) >>pkg-old-0932.deb
+cat ctrl-0932.tar.gz >>pkg-old-0932.deb
+cat fsys.tar.gz >>pkg-old-0932.deb
+
+# Create deb-old-old 0.933
+echo '0.933000' >pkg-old-0933.deb
+DPKG_FILE_SIZE([ctrl-0932.tar.gz]) >>pkg-old-0933.deb
+cat ctrl-0932.tar.gz >>pkg-old-0933.deb
+cat fsys.tar.gz >>pkg-old-0933.deb
+])
+
+AT_CHECK([
+# Check old package metadata
+dpkg-deb -I pkg-old.deb | $SED -e 's/ *$//'
+], [], [ old Debian package, version 0.939000.
+ size 174621 bytes: control archive=274, main archive=174334.
+     201 bytes,     7 lines      control
+ Package: pkg-deb-old-format
+ Version: 0.0-1
+ Section: test
+ Priority: extra
+ Maintainer: Dpkg Developers <debian-dpkg@lists.debian.org>
+ Architecture: all
+ Description: test package - deb old format support
+])
+
+AT_CHECK([
+# Check old package metadata
+dpkg-deb -I pkg-old-0931.deb | $SED -e 's/ *$//'
+], [], [ old Debian package, version 0.931000.
+ size 175522 bytes: control archive=291, main archive=175218.
+     201 bytes,     7 lines      control
+ Package: pkg-deb-old-format
+ Version: 0.0-1
+ Section: test
+ Priority: extra
+ Maintainer: Dpkg Developers <debian-dpkg@lists.debian.org>
+ Architecture: all
+ Description: test package - deb old format support
+])
+
+AT_CHECK([
+# Check old package metadata
+dpkg-deb -I pkg-old-0932.deb | $SED -e 's/ *$//'
+], [], [ old Debian package, version 0.932000.
+ size 175522 bytes: control archive=291, main archive=175218.
+     201 bytes,     7 lines      control
+ Package: pkg-deb-old-format
+ Version: 0.0-1
+ Section: test
+ Priority: extra
+ Maintainer: Dpkg Developers <debian-dpkg@lists.debian.org>
+ Architecture: all
+ Description: test package - deb old format support
+])
+
+AT_CHECK([
+# Check old package metadata
+dpkg-deb -I pkg-old-0933.deb | $SED -e 's/ *$//'
+], [], [ old Debian package, version 0.933000.
+ size 175522 bytes: control archive=291, main archive=175218.
+     201 bytes,     7 lines      control
+ Package: pkg-deb-old-format
+ Version: 0.0-1
+ Section: test
+ Priority: extra
+ Maintainer: Dpkg Developers <debian-dpkg@lists.debian.org>
+ Architecture: all
+ Description: test package - deb old format support
+])
+
+AT_CHECK([
+# Check old package contents
+dpkg-deb -c pkg-old.deb
+], [], [drwxr-xr-x root/root         0 1970-01-01 00:00 ./
+-rw-r--r-- root/root    641345 1970-01-01 00:00 ./ChangeLog.old
+-rw-r--r-- root/root         5 1970-01-01 00:00 ./file-templ
+])
+
+AT_CHECK([
+# Check old package contents
+dpkg-deb -c pkg-old-0931.deb
+], [], [drwxr-xr-x root/root         0 1970-01-01 00:00 ./
+-rw-r--r-- root/root    641345 1970-01-01 00:00 ./ChangeLog.old
+-rw-r--r-- root/root         5 1970-01-01 00:00 ./file-templ
+])
+
+AT_CHECK([
+# Check old package contents
+dpkg-deb -c pkg-old-0932.deb
+], [], [drwxr-xr-x root/root         0 1970-01-01 00:00 ./
+-rw-r--r-- root/root    641345 1970-01-01 00:00 ./ChangeLog.old
+-rw-r--r-- root/root         5 1970-01-01 00:00 ./file-templ
+])
+
+AT_CHECK([
+# Check old package contents
+dpkg-deb -c pkg-old-0933.deb
+], [], [drwxr-xr-x root/root         0 1970-01-01 00:00 ./
+-rw-r--r-- root/root    641345 1970-01-01 00:00 ./ChangeLog.old
+-rw-r--r-- root/root         5 1970-01-01 00:00 ./file-templ
+])
+
+AT_CLEANUP
+
+
+AT_SETUP([dpkg-deb .deb format 2.x])
+AT_KEYWORDS([dpkg-deb deb])
+
+AT_SKIP_IF([! command -v xz >/dev/null])
+AT_SKIP_IF([! command -v gzip >/dev/null])
+AT_SKIP_IF([! command -v zstd >/dev/null])
+AT_SKIP_IF([! command -v bzip2 >/dev/null])
+AT_SKIP_IF([! command -v lzma >/dev/null])
+
+AT_DATA([pkg-deb-bogus-empty.deb], [])
+AT_CHECK([
+# Check truncated deb w/ 0 size
+dpkg-deb --info pkg-deb-bogus-empty.deb
+], [2], [], [dpkg-deb: error: unexpected end of file in archive magic version number in pkg-deb-bogus-empty.deb
+])
+
+DPKG_GEN_CONTROL([pkg-deb-format])
+DPKG_MOD_CONTROL([pkg-deb-format],
+                 [s/^Description:.*$/& - deb format support/])
+AT_DATA([pkg-deb-format/file-templ], [test
+])
+AT_CHECK([
+# Initialize the template package
+mv pkg-deb-format pkg-templ
+cp $top_srcdir/ChangeLog.old pkg-templ/
+chmod 0644 pkg-templ/ChangeLog.old
+chmod -R u+w pkg-templ
+find pkg-templ | xargs touch -t 197001010100.00
+dpkg-deb --uniform-compression --root-owner-group -Znone -b pkg-templ >/dev/null
+
+# Extract the base members
+ar x pkg-templ.deb
+gzip -c control.tar >control.tar.gz
+gzip -c data.tar >data.tar.gz
+xz -c control.tar >control.tar.xz
+xz -c data.tar >data.tar.xz
+zstd -c control.tar >control.tar.zst
+zstd -c data.tar >data.tar.zst
+bzip2 -c data.tar >data.tar.bz2
+lzma -c data.tar >data.tar.lzma
+touch _ignore
+touch unknown
+])
+
+AT_CHECK([
+# Test debian-binary with 2.x versions
+cp pkg-templ.deb pkg-version-2x.deb
+echo 2.999 >debian-binary
+ar rc pkg-version-2x.deb debian-binary
+ar t pkg-version-2x.deb
+ar x pkg-templ.deb debian-binary
+# XXX: Ideally we would have no need to strip trailing spaces.
+dpkg-deb -I pkg-version-2x.deb | $SED -e 's/ *$//'
+], [], [debian-binary
+control.tar
+data.tar
+ new Debian package, version 2.999.
+ size 655554 bytes: control archive=10240 bytes.
+     193 bytes,     7 lines      control
+ Package: pkg-deb-format
+ Version: 0.0-1
+ Section: test
+ Priority: extra
+ Maintainer: Dpkg Developers <debian-dpkg@lists.debian.org>
+ Architecture: all
+ Description: test package - deb format support
+])
+
+AT_CHECK([
+# Test debian-binary with extra lines
+cp pkg-templ.deb pkg-magic-extra.deb
+echo "extra line" >>debian-binary
+ar rc pkg-magic-extra.deb debian-binary
+ar t pkg-magic-extra.deb
+ar x pkg-templ.deb debian-binary
+# XXX: Ideally we would have no need to strip trailing spaces.
+dpkg-deb -I pkg-magic-extra.deb | $SED -e 's/ *$//'
+], [], [debian-binary
+control.tar
+data.tar
+ new Debian package, version 2.0.
+ size 655564 bytes: control archive=10240 bytes.
+     193 bytes,     7 lines      control
+ Package: pkg-deb-format
+ Version: 0.0-1
+ Section: test
+ Priority: extra
+ Maintainer: Dpkg Developers <debian-dpkg@lists.debian.org>
+ Architecture: all
+ Description: test package - deb format support
+])
+
+AT_CHECK([
+# Test missing debian-binary member
+cp pkg-templ.deb pkg-missing-magic.deb
+ar d pkg-missing-magic.deb debian-binary
+ar t pkg-missing-magic.deb
+dpkg-deb -I pkg-missing-magic.deb
+], [2], [control.tar
+data.tar
+], [dpkg-deb: error: file 'pkg-missing-magic.deb' is not a Debian binary archive (try dpkg-split?)
+])
+
+AT_CHECK([
+# Test missing control member
+cp pkg-templ.deb pkg-missing-control.deb
+ar d pkg-missing-control.deb control.tar
+ar t pkg-missing-control.deb
+dpkg-deb -I pkg-missing-control.deb
+], [2], [debian-binary
+data.tar
+], [dpkg-deb: error: archive 'pkg-missing-control.deb' has premature member 'data.tar' before 'control.tar', giving up
+])
+
+AT_CHECK([
+# Test missing data member
+cp pkg-templ.deb pkg-missing-data.deb
+ar d pkg-missing-data.deb data.tar
+ar t pkg-missing-data.deb
+dpkg-deb -c pkg-missing-data.deb
+], [2], [debian-binary
+control.tar
+], [dpkg-deb: error: unexpected end of file in archive member header in pkg-missing-data.deb
+])
+
+AT_CHECK([
+# Test duplicate debian-binary member
+cp pkg-templ.deb pkg-duplicate-magic.deb
+ar ra debian-binary pkg-duplicate-magic.deb debian-binary debian-binary
+ar t pkg-duplicate-magic.deb
+dpkg-deb -I pkg-duplicate-magic.deb
+], [2], [debian-binary
+debian-binary
+control.tar
+data.tar
+], [dpkg-deb: error: archive 'pkg-duplicate-magic.deb' has premature member 'debian-binary' before 'control.tar', giving up
+])
+
+AT_CHECK([
+# Test duplicate control member
+cp pkg-templ.deb pkg-duplicate-control.deb
+ar ra control.tar pkg-duplicate-control.deb control.tar control.tar
+ar t pkg-duplicate-control.deb
+dpkg-deb -c pkg-duplicate-control.deb
+], [2], [debian-binary
+control.tar
+control.tar
+data.tar
+], [dpkg-deb: error: archive 'pkg-duplicate-control.deb' contains two control members, giving up
+])
+
+AT_CHECK([
+# Test mixed member (index 1)
+cp pkg-templ.deb pkg-mixed-1-member.deb
+ar ra debian-binary pkg-mixed-1-member.deb unknown
+ar t pkg-mixed-1-member.deb
+dpkg-deb -I pkg-mixed-1-member.deb
+], [2], [debian-binary
+unknown
+control.tar
+data.tar
+], [dpkg-deb: error: archive 'pkg-mixed-1-member.deb' has premature member 'unknown' before 'control.tar', giving up
+])
+
+AT_CHECK([
+# Test mixed member (index 2)
+cp pkg-templ.deb pkg-mixed-2-member.deb
+ar ra control.tar pkg-mixed-2-member.deb unknown
+ar t pkg-mixed-2-member.deb
+dpkg-deb -c pkg-mixed-2-member.deb
+], [2], [debian-binary
+control.tar
+unknown
+data.tar
+], [dpkg-deb: error: archive 'pkg-mixed-2-member.deb' has premature member 'unknown' before 'data.tar', giving up
+])
+
+AT_CHECK([
+# Test swapped control and data members
+cp pkg-templ.deb pkg-swap-members.deb
+ar ma data.tar pkg-swap-members.deb control.tar
+ar t pkg-swap-members.deb
+dpkg-deb -I pkg-swap-members.deb
+], [2], [debian-binary
+data.tar
+control.tar
+], [dpkg-deb: error: archive 'pkg-swap-members.deb' has premature member 'data.tar' before 'control.tar', giving up
+])
+
+AT_CHECK([
+# Test extra member
+cp pkg-templ.deb pkg-extra-member.deb
+ar q pkg-extra-member.deb unknown
+ar t pkg-extra-member.deb
+# XXX: Ideally we would have no need to strip trailing spaces.
+dpkg-deb -I pkg-extra-member.deb | $SED -e 's/ *$//'
+], [], [debian-binary
+control.tar
+data.tar
+unknown
+ new Debian package, version 2.0.
+ size 655612 bytes: control archive=10240 bytes.
+     193 bytes,     7 lines      control
+ Package: pkg-deb-format
+ Version: 0.0-1
+ Section: test
+ Priority: extra
+ Maintainer: Dpkg Developers <debian-dpkg@lists.debian.org>
+ Architecture: all
+ Description: test package - deb format support
+])
+
+AT_CHECK([
+# Test _ member
+cp pkg-templ.deb pkg-under-member.deb
+ar ra debian-binary pkg-under-member.deb _ignore
+ar t pkg-under-member.deb
+# XXX: Ideally we would have no need to strip trailing spaces.
+dpkg-deb -I pkg-under-member.deb | $SED -e 's/ *$//'
+], [], [debian-binary
+_ignore
+control.tar
+data.tar
+ new Debian package, version 2.0.
+ size 655612 bytes: control archive=10240 bytes.
+     193 bytes,     7 lines      control
+ Package: pkg-deb-format
+ Version: 0.0-1
+ Section: test
+ Priority: extra
+ Maintainer: Dpkg Developers <debian-dpkg@lists.debian.org>
+ Architecture: all
+ Description: test package - deb format support
+])
+
+AT_CHECK([
+# Test data.tar.bad member
+dd if=/dev/zero of=data.tar.bad bs=1K count=4 status=none
+ar rc pkg-data-bad.deb debian-binary control.tar.gz data.tar.bad
+ar t pkg-data-bad.deb
+dpkg-deb -c pkg-data-bad.deb
+], [2], [debian-binary
+control.tar.gz
+data.tar.bad
+], [dpkg-deb: error: archive 'pkg-data-bad.deb' uses unknown compression for member 'data.tar.bad', giving up
+])
+
+AT_CHECK([
+# Test control.tar member
+ar rc pkg-control-none.deb debian-binary control.tar data.tar
+ar t pkg-control-none.deb
+# XXX: Ideally we would have no need to strip trailing spaces.
+dpkg-deb -I pkg-control-none.deb | $SED -e 's/ *$//'
+], [], [debian-binary
+control.tar
+data.tar
+ new Debian package, version 2.0.
+ size 655552 bytes: control archive=10240 bytes.
+     193 bytes,     7 lines      control
+ Package: pkg-deb-format
+ Version: 0.0-1
+ Section: test
+ Priority: extra
+ Maintainer: Dpkg Developers <debian-dpkg@lists.debian.org>
+ Architecture: all
+ Description: test package - deb format support
+])
+
+AT_CHECK([
+# Test control.tar.xz member
+ar rc pkg-control-xz.deb debian-binary control.tar.xz data.tar.xz
+ar t pkg-control-xz.deb
+dpkg-deb -c pkg-control-xz.deb
+], [], [debian-binary
+control.tar.xz
+data.tar.xz
+drwxr-xr-x root/root         0 1970-01-01 00:00 ./
+-rw-r--r-- root/root    641345 1970-01-01 00:00 ./ChangeLog.old
+-rw-r--r-- root/root         5 1970-01-01 00:00 ./file-templ
+])
+
+AT_CHECK([
+# Test control.tar.zst member
+ar rc pkg-control-zst.deb debian-binary control.tar.zst data.tar.zst
+ar t pkg-control-zst.deb
+dpkg-deb -c pkg-control-zst.deb
+], [], [debian-binary
+control.tar.zst
+data.tar.zst
+drwxr-xr-x root/root         0 1970-01-01 00:00 ./
+-rw-r--r-- root/root    641345 1970-01-01 00:00 ./ChangeLog.old
+-rw-r--r-- root/root         5 1970-01-01 00:00 ./file-templ
+])
+
+AT_CHECK([
+# Test data.tar member
+ar rc pkg-data-none.deb debian-binary control.tar.gz data.tar
+ar t pkg-data-none.deb
+dpkg-deb -c pkg-data-none.deb
+], [], [debian-binary
+control.tar.gz
+data.tar
+drwxr-xr-x root/root         0 1970-01-01 00:00 ./
+-rw-r--r-- root/root    641345 1970-01-01 00:00 ./ChangeLog.old
+-rw-r--r-- root/root         5 1970-01-01 00:00 ./file-templ
+])
+
+AT_CHECK([
+# Test data.tar.gz member
+ar rc pkg-data-gz.deb debian-binary control.tar.gz data.tar.gz
+ar t pkg-data-gz.deb
+dpkg-deb -c pkg-data-gz.deb
+], [], [debian-binary
+control.tar.gz
+data.tar.gz
+drwxr-xr-x root/root         0 1970-01-01 00:00 ./
+-rw-r--r-- root/root    641345 1970-01-01 00:00 ./ChangeLog.old
+-rw-r--r-- root/root         5 1970-01-01 00:00 ./file-templ
+])
+
+AT_CHECK([
+# Test data.tar.xz member
+ar rc pkg-data-xz.deb debian-binary control.tar.gz data.tar.xz
+ar t pkg-data-xz.deb
+dpkg-deb -c pkg-data-xz.deb
+], [], [debian-binary
+control.tar.gz
+data.tar.xz
+drwxr-xr-x root/root         0 1970-01-01 00:00 ./
+-rw-r--r-- root/root    641345 1970-01-01 00:00 ./ChangeLog.old
+-rw-r--r-- root/root         5 1970-01-01 00:00 ./file-templ
+])
+
+AT_CHECK([
+# Test data.tar.zst member
+ar rc pkg-data-zst.deb debian-binary control.tar.gz data.tar.zst
+ar t pkg-data-zst.deb
+dpkg-deb -c pkg-data-zst.deb
+], [], [debian-binary
+control.tar.gz
+data.tar.zst
+drwxr-xr-x root/root         0 1970-01-01 00:00 ./
+-rw-r--r-- root/root    641345 1970-01-01 00:00 ./ChangeLog.old
+-rw-r--r-- root/root         5 1970-01-01 00:00 ./file-templ
+])
+
+AT_CHECK([
+# Test data.tar.bz2 member
+ar rc pkg-data-bz2.deb debian-binary control.tar.gz data.tar.bz2
+ar t pkg-data-bz2.deb
+dpkg-deb -c pkg-data-bz2.deb
+], [], [debian-binary
+control.tar.gz
+data.tar.bz2
+drwxr-xr-x root/root         0 1970-01-01 00:00 ./
+-rw-r--r-- root/root    641345 1970-01-01 00:00 ./ChangeLog.old
+-rw-r--r-- root/root         5 1970-01-01 00:00 ./file-templ
+])
+
+AT_CHECK([
+# Test data.tar.lzma member
+ar rc pkg-data-lzma.deb debian-binary control.tar.gz data.tar.lzma
+ar t pkg-data-lzma.deb
+dpkg-deb -c pkg-data-lzma.deb
+], [], [debian-binary
+control.tar.gz
+data.tar.lzma
+drwxr-xr-x root/root         0 1970-01-01 00:00 ./
+-rw-r--r-- root/root    641345 1970-01-01 00:00 ./ChangeLog.old
+-rw-r--r-- root/root         5 1970-01-01 00:00 ./file-templ
+])
+
+AT_CHECK([
+# Test non-uniform data.tar/control.tar member compression
+ar rc pkg-mixed-comp.deb debian-binary control.tar.xz data.tar.gz
+ar t pkg-mixed-comp.deb
+# XXX: Ideally we would have no need to strip trailing spaces.
+dpkg-deb -I pkg-mixed-comp.deb | $SED -e 's/ *$//'
+dpkg-deb -c pkg-mixed-comp.deb
+], [], [debian-binary
+control.tar.xz
+data.tar.gz
+ new Debian package, version 2.0.
+ size 175756 bytes: control archive=336 bytes.
+     193 bytes,     7 lines      control
+ Package: pkg-deb-format
+ Version: 0.0-1
+ Section: test
+ Priority: extra
+ Maintainer: Dpkg Developers <debian-dpkg@lists.debian.org>
+ Architecture: all
+ Description: test package - deb format support
+drwxr-xr-x root/root         0 1970-01-01 00:00 ./
+-rw-r--r-- root/root    641345 1970-01-01 00:00 ./ChangeLog.old
+-rw-r--r-- root/root         5 1970-01-01 00:00 ./file-templ
+])
+
+AT_CHECK([
+# Test building and extracting none compressed archive
+dpkg-deb --uniform-compression --root-owner-group -Znone -b pkg-templ pkg-comp-none.deb >/dev/null
+dpkg-deb --ctrl-tarfile pkg-comp-none.deb >ctrl-none.tar
+dpkg-deb --fsys-tarfile pkg-comp-none.deb >fsys-none.tar
+cmp ctrl-none.tar control.tar
+cmp fsys-none.tar data.tar
+])
+
+AT_CHECK([
+# Test building and extracting gzip compressed archive
+dpkg-deb --uniform-compression --root-owner-group -Zgzip -b pkg-templ pkg-comp-gzip.deb >/dev/null
+dpkg-deb --ctrl-tarfile pkg-comp-gzip.deb >ctrl-gzip.tar
+dpkg-deb --fsys-tarfile pkg-comp-gzip.deb >fsys-gzip.tar
+cmp ctrl-gzip.tar control.tar
+cmp fsys-gzip.tar data.tar
+])
+
+AT_CHECK([
+# Test building and extracting xz compressed archive
+dpkg-deb --uniform-compression --root-owner-group -Zxz -b pkg-templ pkg-comp-xz.deb >/dev/null
+dpkg-deb --ctrl-tarfile pkg-comp-xz.deb >ctrl-xz.tar
+dpkg-deb --fsys-tarfile pkg-comp-xz.deb >fsys-xz.tar
+cmp ctrl-xz.tar control.tar
+cmp fsys-xz.tar data.tar
+])
+
+AT_CHECK([
+# Test building and extracting zstd compressed archive
+dpkg-deb --uniform-compression --root-owner-group -Zzstd -b pkg-templ pkg-comp-zstd.deb >/dev/null
+dpkg-deb --ctrl-tarfile pkg-comp-zstd.deb >ctrl-zstd.tar
+dpkg-deb --fsys-tarfile pkg-comp-zstd.deb >fsys-zstd.tar
+cmp ctrl-zstd.tar control.tar
+cmp fsys-zstd.tar data.tar
+])
+
+AT_CLEANUP

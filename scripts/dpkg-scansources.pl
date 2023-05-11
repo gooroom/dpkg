@@ -99,7 +99,7 @@ sub load_override {
 
     my $comp_file = Dpkg::Compression::FileHandle->new(filename => $file);
     while (<$comp_file>) {
-    	s/#.*//;
+        s/#.*//;
 	next if /^\s*$/;
 	s/\s+$//;
 
@@ -126,12 +126,10 @@ sub load_override {
 	$override{$package}[O_SECTION] = $section;
 	if (!defined $maintainer) {
 	    # do nothing
-	}
-	elsif ($maintainer =~ /^(.*\S)\s*=>\s*(.*)$/) {
+        } elsif ($maintainer =~ /^(.*\S)\s*=>\s*(.*)$/) {
 	    $override{$package}[O_MAINT_FROM] = [split m{\s*//\s*}, $1];
 	    $override{$package}[O_MAINT_TO] = $2;
-	}
-	else {
+        } else {
 	    $override{$package}[O_MAINT_TO] = $maintainer;
 	}
     }
@@ -145,26 +143,24 @@ sub load_src_override {
 
     if (defined $user_file) {
 	$file = $user_file;
-    }
-    elsif (defined $regular_file) {
+    } elsif (defined $regular_file) {
         my $comp = compression_guess_from_filename($regular_file);
         if (defined($comp)) {
 	    $file = $regular_file;
-	    my $ext = compression_get_property($comp, 'file_ext');
+            my $ext = compression_get_file_extension($comp);
             $file =~ s/\.$ext$/.src.$ext/;
         } else {
 	    $file = "$regular_file.src";
         }
         return unless -e $file;
-    }
-    else {
+    } else {
 	return;
     }
 
     debug(1, "source override file $file");
     my $comp_file = Dpkg::Compression::FileHandle->new(filename => $file);
     while (<$comp_file>) {
-    	s/#.*//;
+        s/#.*//;
 	next if /^\s*$/;
 	s/\s+$//;
 
@@ -237,10 +233,10 @@ sub process_dsc {
     # The priority for the source package is the highest priority of the
     # binary packages it produces.
     my @binary_by_priority = sort {
-	    ($override{$a} ? $priority{$override{$a}[O_PRIORITY]} : 0)
-		<=>
-	    ($override{$b} ? $priority{$override{$b}[O_PRIORITY]} : 0)
-	} @binary;
+        ($override{$a} ? $priority{$override{$a}[O_PRIORITY]} : 0)
+        <=>
+        ($override{$b} ? $priority{$override{$b}[O_PRIORITY]} : 0)
+    } @binary;
     my $priority_override = $override{$binary_by_priority[-1]};
     my $priority = $priority_override
 			? $priority_override->[O_PRIORITY]

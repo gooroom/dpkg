@@ -22,67 +22,41 @@ B<DEBIAN/symbols>
 
 =head1 BESKRIVNING
 
-Symbolfiler medföljer Debianbinärpaket och dess format är en undermängd av
-symbolfilmallarna som används av B<dpkg-gensymbols>(1) i
-Debiankällkodspaket.
+Symbolfiler medföljer Debianbinärpaket och dess format är en undermängd av symbolfilmallarna som används av B<dpkg-gensymbols>(1) i Debiankällkodspaket, se L<deb-src-symbols(5)>.
 
-Formatet för posterna med utökad beroendeinformation för delade bibliotek i
-dessa filer är:
+Formatet för posterna med utökad beroendeinformation för delade bibliotek i dessa filer är:
 
 Z<>
- I<biblioteks-soname huvud-beroendemall>
+ I<biblioteks-soname> I<huvud-beroendemall>
  [| I<alternativ-beroende-mall>]
  [...]
  [* I<fälrnamn>: I<fältvärde>]
  [...]
   I<symbol> I<minsta-version> [I<id-för-beroendemall>]
 
-I<biblioteks-sonamn> är det exakta värdet från SONAME-fältet, som det
-exporteras från B<objdump>(1). En I<beroendemall> är ett beroende där
-I<#MINVER#> dynamiskt ersätts av en versionskontrollrad ”(E<gt>=
-I<minsta-version>)” eller av ingenting (om ett ej versionsstyrt beroende
-anses tillräckligt).
+I<biblioteks-sonamn> är det exakta värdet från SONAME-fältet, som det exporteras från B<objdump>(1). En I<beroendemall> är ett beroende där I<#MINVER#> dynamiskt ersätts av en versionskontrollrad ”(E<gt>= I<minsta-version>)” eller av ingenting (om ett ej versionsstyrt beroende anses tillräckligt).
 
-Varje exporterad I<symbol> (anges som I<namn>@I<version>, där I<version> är
-”Base” om biblioteket inte är versionsstyrt) associeras med en
-I<minsta-version> i sin beroendemall (huvudberoendemallen används alltid och
-kommer att kombineras med beroendemallen som anges med
-I<id-för-beroendemall> om den finns). Den första alternativa beroendemallen
-får nummer 1, den andra 2, osv. Varje kolumn avdelas av exakt ett enkelt
-blanktecken.
+Varje exporterad I<symbol> (anges som I<namn>@I<version>, där I<version> är ”Base” om biblioteket inte är versionsstyrt) associeras med en I<minsta-version> i sin beroendemall (huvudberoendemallen används alltid och kommer att kombineras med beroendemallen som anges med I<id-för-beroendemall> om den finns). Den första alternativa beroendemallen får nummer 1, den andra 2, osv. Varje kolumn avdelas av exakt ett enkelt blanktecken.
 
-Alla poster i ett bibliotek kan även innehålla några fält med
-metainformation. Dessa fält lagras på rader som börjar med en asterisk. De
-enda fält som för närvarande är giltiga är:
+Alla poster i ett bibliotek kan även innehålla några fält med metainformation. Dessa fält lagras på rader som börjar med en asterisk. De enda fält som för närvarande är giltiga är:
 
 =over 
 
 =item B<Build-Depends-Package>
 
-Anger namnet på det ”-dev”-paket som hör till biblioteket, och används av
-B<dpkg-shlibdeps> för att se till att det beroende som genereras är
-åtminstone lika strikt som motsvarande byggberoende (sedan dpkg 1.14.13).
+Anger namnet på det ”-dev”-paket som hör till biblioteket, och används av B<dpkg-shlibdeps> för att se till att det beroende som genereras är åtminstone lika strikt som motsvarande byggberoende (sedan dpkg 1.14.13).
 
 =item B<Build-Depends-Packages>
 
-Samma som B<Build-Depends-Package> men godtar en kommaseparerad lista med
-paketnamn (sedan dpkg 1.20.0). Fältet kommer överstyra fältet
-B<Build-Depends-Package> om det finns, och är huvudsakligen användbart för
-”-dev”-paket och metapaket som beror på dessa, säg för en övergångsperiod.
+Samma som B<Build-Depends-Package> men godtar en kommaseparerad lista med paketnamn (sedan dpkg 1.20.0). Fältet kommer överstyra fältet B<Build-Depends-Package> om det finns, och är huvudsakligen användbart för ”-dev”-paket och metapaket som beror på dessa, säg för en övergångsperiod.
 
 =item B<Allow-Internal-Symbol-Groups>
 
-Anger vilka interna symbolgrupper som ska ignoreras, som en
-blankteckenavdelad lista, så att symbolerna som förekommer i dessa grupper
-tas med i utdatafilen (sedan dpkg 1.20.1). Detta bör endast vara nödvändigt
-för vektygskedjepaket som tillhandahåller dessa interna symboler. Vilka
-grupper som är tillgängliga beror på systemet, för ELF- och GNU-baserade
-system är de B<aeabi> och B<gomp>.
+Anger vilka interna symbolgrupper som ska ignoreras, som en blankteckenavdelad lista, så att symbolerna som förekommer i dessa grupper tas med i utdatafilen (sedan dpkg 1.20.1). Detta bör endast vara nödvändigt för vektygskedjepaket som tillhandahåller dessa interna symboler. Vilka grupper som är tillgängliga beror på systemet, för ELF- och GNU-baserade system är de B<aeabi> och B<gomp>.
 
 =item B<Ignore-Blacklist-Groups>
 
-Ett alias för B<Allow-Internal-Symbol-Groups> som avråds från (sedan dpkg
-1.20.1, stöds sedan dpkg 1.17.6).
+Ett alias för B<Allow-Internal-Symbol-Groups> som avråds från (sedan dpkg 1.20.1, stöds sedan dpkg 1.17.6).
 
 =back
 
@@ -106,8 +80,7 @@ Ett alias för B<Allow-Internal-Symbol-Groups> som avråds från (sedan dpkg
 
 =head1 SE ÄVEN
 
-L<https://wiki.debian.org/Projects/ImprovedDpkgShlibdeps>,
-B<dpkg-shlibdeps>(1), B<dpkg-gensymbols>(1).
+L<https://wiki.debian.org/Projects/ImprovedDpkgShlibdeps>, L<deb-src-symbols(5)>, B<dpkg-shlibdeps>(1), B<dpkg-gensymbols>(1).
 
 
 =head1 ÖVERSÄTTNING

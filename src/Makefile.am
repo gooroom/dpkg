@@ -1,87 +1,178 @@
 ## Process this file with automake to produce Makefile.in
 
-localedir = $(datadir)/locale
-pkgconfdir = $(sysconfdir)/@PACKAGE@
-
 AM_CPPFLAGS = \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DADMINDIR=\"$(admindir)\" \
 	-idirafter $(top_srcdir)/lib/compat \
 	-I$(top_builddir) \
-	-I$(top_srcdir)/lib
+	-I$(top_srcdir)/lib \
+	-I$(srcdir)/common \
+	# EOL
 LDADD = \
 	../lib/dpkg/libdpkg.la \
-	$(LIBINTL)
+	$(LIBINTL) \
+	../lib/compat/libcompat.la \
+	# EOL
 
+EXTRA_DIST =
+CLEANFILES =
+DISTCLEANFILES =
 
-EXTRA_DIST = \
-	$(test_scripts) \
-	$(nil)
+nobase_dist_pkgdata_DATA = \
+	sh/dpkg-error.sh \
+	# EOL
 
 bin_PROGRAMS = \
 	dpkg \
+	dpkg-deb \
 	dpkg-divert \
 	dpkg-query \
+	dpkg-split \
 	dpkg-statoverride \
-	dpkg-trigger
+	dpkg-trigger \
+	# EOL
+
+bin_SCRIPTS = \
+	dpkg-maintscript-helper \
+	dpkg-realpath \
+	# EOL
+
+pkglibexec_SCRIPTS = \
+	dpkg-db-backup \
+	# EOL
+
+EXTRA_DIST += \
+	dpkg-db-backup.sh \
+	dpkg-maintscript-helper.sh \
+	dpkg-realpath.sh \
+	# EOL
+
+CLEANFILES += \
+	$(bin_SCRIPTS) \
+	$(pkglibexec_SCRIPTS) \
+	# EOL
 
 dpkg_SOURCES = \
-	archives.c archives.h \
-	cleanup.c \
-	configure.c \
-	depcon.c \
-	enquiry.c \
-	errors.c \
-	file-match.c file-match.h \
-	filters.c filters.h \
-	force.c force.h \
-	help.c \
-	main.c main.h \
-	packages.c \
-	perpkgstate.c \
-	remove.c \
-	script.c \
-	select.c \
-	selinux.c \
-	trigproc.c \
-	unpack.c \
-	update.c \
-	verify.c \
-	imasig.c \
-	$(nil)
+	common/actions.h \
+	common/force.c \
+	common/force.h \
+	common/security-mac.h \
+	common/selinux.c \
+	main/archives.c \
+	main/archives.h \
+	main/cleanup.c \
+	main/configure.c \
+	main/depcon.c \
+	main/enquiry.c \
+	main/errors.c \
+	main/file-match.c \
+	main/file-match.h \
+	main/filters.c \
+	main/filters.h \
+	main/help.c \
+	main/main.c \
+	main/main.h \
+	main/packages.c \
+	main/perpkgstate.c \
+	main/remove.c \
+	main/script.c \
+	main/select.c \
+	main/trigproc.c \
+	main/unpack.c \
+	main/update.c \
+	main/verify.c \
+	# EOL
 
 dpkg_LDADD = \
 	$(LDADD) \
-	$(SELINUX_LIBS)
+	$(SELINUX_LIBS) \
+	# EOL
+
+dpkg_deb_SOURCES = \
+	deb/dpkg-deb.h \
+	deb/build.c \
+	deb/extract.c \
+	deb/info.c \
+	deb/main.c \
+	# EOL
+
+dpkg_deb_LDADD = \
+	$(LDADD) \
+	$(Z_LIBS) \
+	$(LZMA_LIBS) \
+	$(ZSTD_LIBS) \
+	$(BZ2_LIBS) \
+	# EOL
 
 dpkg_divert_SOURCES = \
-	divertcmd.c
+	divert/main.c \
+	# EOL
 
 dpkg_query_SOURCES = \
-	querycmd.c
+	common/actions.h \
+	query/main.c \
+	# EOL
+
+dpkg_split_SOURCES = \
+	split/dpkg-split.h \
+	split/info.c \
+	split/join.c \
+	split/main.c \
+	split/queue.c \
+	split/split.c \
+	# EOL
 
 dpkg_statoverride_SOURCES = \
-	force.c force.h \
-	selinux.c \
-	statcmd.c
+	common/actions.h \
+	common/force.c \
+	common/force.h \
+	common/security-mac.h \
+	common/selinux.c \
+	statoverride/main.c \
+	# EOL
 
 dpkg_statoverride_LDADD = \
 	$(LDADD) \
-	$(SELINUX_LIBS)
+	$(SELINUX_LIBS) \
+	# EOL
 
 dpkg_trigger_SOURCES = \
-	trigcmd.c
+	trigger/main.c \
+	# EOL
+
+SUFFIXES =
+
+include $(top_srcdir)/build-aux/subst.am
 
 install-data-local:
 	$(MKDIR_P) $(DESTDIR)$(pkgconfdir)/dpkg.cfg.d
 	$(MKDIR_P) $(DESTDIR)$(admindir)/info
+	$(MKDIR_P) $(DESTDIR)$(admindir)/parts
 	$(MKDIR_P) $(DESTDIR)$(admindir)/updates
 
-test_tmpdir = t.tmp
+EXTRA_DIST += $(srcdir)/at/atlocal.in
+EXTRA_DIST += $(srcdir)/at/package.m4
 
-test_scripts = \
-	t/dpkg_divert.t
+TESTSUITE_AT = $(srcdir)/at/testsuite.at
+TESTSUITE_AT += $(srcdir)/at/local.at
+TESTSUITE_AT += $(srcdir)/at/deb-format.at
+TESTSUITE_AT += $(srcdir)/at/deb-fields.at
+TESTSUITE_AT += $(srcdir)/at/deb-content.at
+TESTSUITE_AT += $(srcdir)/at/deb-split.at
+TESTSUITE_AT += $(srcdir)/at/realpath.at
+TESTSUITE_AT += $(srcdir)/at/divert.at
+TESTSUITE_AT += $(srcdir)/at/chdir.at
+EXTRA_DIST += $(TESTSUITE_AT)
 
-include $(top_srcdir)/check.am
+TESTSUITE = $(srcdir)/at/testsuite
+EXTRA_DIST += $(TESTSUITE)
 
-clean-local: check-clean
+DISTCLEANFILES += at/atconfig
+
+include $(top_srcdir)/build-aux/autotest.am
+
+check-local: autotest-check
+
+installcheck-local: autotest-installcheck
+
+clean-local: autotest-clean

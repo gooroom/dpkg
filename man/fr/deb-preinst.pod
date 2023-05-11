@@ -22,10 +22,7 @@ B<DEBIAN/preinst>
 
 =head1 DESCRIPTION
 
-Un paquet peut réaliser plusieurs actions pré-installation à l'aide de
-scripts du responsable, en incluant un fichier I<preinst> exécutable dans
-son archive de contrôle (c'est-à-dire I<DEBIAN/preinst> au moment de la
-création du paquet).
+Un paquet peut réaliser plusieurs actions pré-installation à l'aide de scripts du responsable, en incluant un fichier I<preinst> exécutable dans son archive de contrôle (c'est-à-dire I<DEBIAN/preinst> au moment de la création du paquet).
 
 Le script peut être appelé de diverses S<manières :>
 
@@ -35,18 +32,21 @@ Le script peut être appelé de diverses S<manières :>
 
 Avant que le paquet ne soit installé.
 
-=item I<nouveau-preinst> B<install> I<ancienne-version nouvelle-version>
+=item I<nouveau-preinst> B<install> I<ancienne-version> I<nouvelle-version>
 
 Avant qu'un paquet supprimé ne soit mis à niveau.
 
-=item I<nouveau-preinst> B<upgrade> I<ancienne-version nouvelle-version>
+La I<nouvelle_version> est passée depuis S<dpkg 1.18.5.>
+
+=item I<nouveau-preinst> B<upgrade> I<ancienne-version> I<nouvelle-version>
 
 Avant qu'un paquet ne soit mis à niveau.
 
+La I<nouvelle_version> est passée depuis S<dpkg 1.18.5.>
+
 =item I<ancien-preinst> B<abort-upgrade> I<nouvelle-version>
 
-Si I<postrm> échoue lors de la mise à niveau ou échoue après l'échec de la
-mise à niveau.
+Si I<postrm> échoue lors de la mise à niveau ou échoue après l'échec de la mise à niveau.
 
 =back
 

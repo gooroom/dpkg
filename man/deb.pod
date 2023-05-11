@@ -84,9 +84,11 @@ It is a tar archive containing the package control information, either
 not compressed (supported since dpkg 1.17.6), or compressed with
 gzip (with B<.gz> extension) or
 xz (with B<.xz> extension, supported since 1.17.6),
+zstd (with B<.zst> extension, supported since dpkg 1.21.18),
 as a series of plain files, of which the file
 B<control>
 is mandatory and contains the core control information, the
+B<md5sums>,
 B<conffiles>, B<triggers>, B<shlibs>
 and
 B<symbols>
@@ -105,6 +107,7 @@ It contains the filesystem as a tar archive, either
 not compressed (supported since dpkg 1.10.24), or compressed with
 gzip (with B<.gz> extension),
 xz (with B<.xz> extension, supported since dpkg 1.15.6),
+zstd (with B<.zst> extension, supported since dpkg 1.21.18),
 bzip2 (with B<.bz2> extension, supported since dpkg 1.10.24) or
 lzma (with B<.lzma> extension, supported since dpkg 1.13.25).
 
@@ -147,6 +150,7 @@ B<deb-old>(5),
 B<dpkg-deb>(1),
 B<deb-control>(5),
 B<deb-conffiles>(5),
+B<deb-md5sums>(5),
 B<deb-triggers>(5),
 B<deb-shlibs>(5),
 B<deb-symbols>(5),

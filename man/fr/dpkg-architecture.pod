@@ -14,8 +14,7 @@ If the PO get lost, keeping this translation up-to-date will be harder.
 
 =head1 NOM
 
-dpkg-architecture - Fixer et déterminer l'architecture pour la construction
-d'un paquet
+dpkg-architecture - Fixer et déterminer l'architecture pour la construction d'un paquet
 
 =head1 SYNOPSIS
 
@@ -23,22 +22,11 @@ B<dpkg-architecture> [I<option>...] [I<commande>]
 
 =head1 DESCRIPTION
 
-B<dpkg-architecture> aide à déterminer et à fixer l'architecture de
-construction et l'architecture hôte pour la création d'un paquet.
+B<dpkg-architecture> aide à déterminer et à fixer l'architecture de construction et l'architecture hôte pour la création d'un paquet.
 
-The build architecture is always determined by either the B<DEB_BUILD_ARCH>
-variable if set (and B<--force> not being specified) or by an external call
-to B<dpkg>(1), and cannot be set at the command line.
+L'architecture de construction est toujours déterminée par soit la variable B<DEB_BUILD_ARCH> si elle est définie (et que B<--force> n'a pas été spécifié) ou par un appel externe à B<dpkg>(1). Elle ne peut pas être spécifiée en ligne de commande.
 
-You can specify the host architecture by providing one or both of the
-options B<--host-arch> and B<--host-type>, otherwise the B<DEB_HOST_ARCH>
-variable is used if set (and B<--force> not being specified). The default is
-determined by an external call to B<gcc>(1), or the same as the build
-architecture if B<CC> or gcc are both not available. One out of
-B<--host-arch> and B<--host-type> is sufficient, the value of the other will
-be set to a usable default. Indeed, it is often better to only specify one,
-because B<dpkg-architecture> will warn you if your choice does not match the
-default.
+Vous pouvez spécifier une architecture hôte en utilisant une des options B<--host-arch> et B<--host-type> (ou les deux), autrement la variable B<DEB_HOST_ARCH> est utilisée si elle est définie (et que B<--force> n'a pas été spécifié). Par défaut, la valeur est déterminée par un appel à B<gcc>(1), ou en utilisant l'architecture de construction si B<CC> ou gcc ne sont pas disponibles. Utiliser une seule des options B<--host-arch> et B<--host-type> est suffisant, la valeur de l'une est utilisée comme valeur par défaut de l'autre. Bien sûr, il est préférable de n'en préciser qu'une seule, puisque B<dpkg-architecture> affichera un avertissement si le choix ne correspond pas à la valeur par défaut.
 
 =head1 COMMANDES
 
@@ -46,56 +34,43 @@ default.
 
 =item B<-l>, B<--list>
 
-Affiche les variables d'environnement, une par ligne, en utilisant le format
-I<VARIABLE=valeur>. C'est l'action par défaut.
+Afficher les variables d'environnement, une par ligne, en utilisant le format I<VARIABLE=valeur>. C'est l'action par défaut.
 
 =item B<-e>, B<--equal> I<architecture>
 
-Vérifie l'égalité d'architectures (depuis S<dpkg 1.13.13).> Cela compare
-l'architecture Debian en cours (ou celle spécifiée) à I<architecture> afin
-de vérifier leur égalité. Cette action ne gère pas les architectures
-joker. La commande quitte avec un code de retour de B<0> si l'architecture
-correspond et de B<1> dans le cas contraire.
+Vérifier l'égalité d'architectures (depuis S<dpkg 1.13.13).> Cela compare l'architecture Debian en cours (ou celle spécifiée) à I<architecture> afin de vérifier leur égalité. Cette action ne gère pas les architectures joker. La commande quitte avec un code de retour de B<0> si l'architecture correspond et de B<1> dans le cas contraire.
 
 =item B<-i>, B<--is> I<architecture-joker>
 
-Vérifie l'identité des architectures (depuis S<dpkg 1.13.13).> Cela compare
-l'architecture Debian en cours (ou celle spécifiée) à I<architecture-joker>
-(après expansion de celle-ci) afin de vérifier leur correspondance. La
-commande quitte avec un code de retour de B<0> si l'architecture correspond
-et de B<1> dans le cas contraire.
+Vérifier l'identité des architectures (depuis S<dpkg 1.13.13).> Cela compare l'architecture Debian en cours (ou celle spécifiée) à I<architecture-joker> (après expansion de celle-ci) afin de vérifier leur correspondance. La commande quitte avec un code de retour de B<0> si l'architecture correspond et de B<1> dans le cas contraire.
 
 =item B<-q>, B<--query> I<nom-de-variable>
 
-Affiche la valeur d'une seule variable.
+Afficher la valeur d'une seule variable.
 
 =item B<-s>, B<--print-set>
 
-Print an export command. This can be used to set the environment variables
-using the POSIX shell or make B<eval>, depending on the output format.
+Produire une commande d'exportation, qui peut être utilisée pour positionner les variables d'environnement utilisant le B<shell> POSIX ou S<« make> S<B<eval> »,> selon le format de sortie.
 
 =item B<-u>, B<--print-unset>
 
-Print a similar command to B<--print-set> but to unset all variables.
+Afficher une commande similaire à celle produite par B<--print-set>, mais pour supprimer toutes les variables.
 
 =item B<-c>, B<--command> I<chaîne-de-commande>
 
-Exécute une I<chaîne-de-commande> dans un environnement où toutes les
-variables sont positionnées aux valeurs spécifiées.
+Exécuter une I<chaîne-de-commande> dans un environnement où toutes les variables sont positionnées aux valeurs spécifiées.
 
 =item B<-L>, B<--list-known>
 
-Affiche une liste des architectures valables. Elle peut être restreinte par
-une ou plusieurs des options correspondantes B<--match-wildcard>,
-B<--match-bits> ou B<--match-endian> (depuis S<dpkg 1.17.14).>
+Afficher une liste des architectures valables. Elle peut être restreinte par une ou plusieurs des options correspondantes B<--match-wildcard>, B<--match-bits> ou B<--match-endian> (depuis S<dpkg 1.17.14).>
 
 =item B<-?>, B<--help>
 
-Affiche un message d'aide puis quitte.
+Afficher un message d'aide puis quitter.
 
 =item B<--version>
 
-Affiche le numéro de version puis quitte.
+Afficher le numéro de version puis quitter.
 
 =back
 
@@ -105,50 +80,39 @@ Affiche le numéro de version puis quitte.
 
 =item B<-a>, B<--host-arch> I<architecture>
 
-Définit l'architecture Debian en cours.
+Définir l'architecture Debian en cours.
 
 =item B<-t>, B<--host-type> I<type-de-système-gnu>
 
-Définit le type de système GNU en cours.
+Définir le type de système GNU en cours.
 
 =item B<-A>, B<--target-arch> I<architecture>
 
-Définit l'architecture Debian de la cible (depuis S<dpkg 1.17.14).>
+Définir l'architecture Debian de la cible (depuis S<dpkg 1.17.14).>
 
 =item B<-T>, B<--target-type> I<type-de-système-gnu>
 
-Définit le type de système GNU de la cible (depuis S<dpkg 1.17.14).>
+Définir le type de système GNU de la cible (depuis S<dpkg 1.17.14).>
 
 =item B<-W>, B<--match-wildcard> I<architecture-joker>
 
-Restreindre les architectures listées par B<--list-known> à celles
-correspondant à l'architecture-joker (depuis S<dpkg 1.17.14).>
+Restreindre les architectures listées par B<--list-known> à celles correspondant à l'architecture-joker (depuis S<dpkg 1.17.14).>
 
 =item B<-B>, B<--match-bits> I<bits-de-l'architecture>
 
-Restreindre les architectures listées par B<--list-known> à celles employant
-un CPU disposant du nombre de bits indiqués (depuis S<dpkg 1.17.14).> Soit
-B<32>, S<soit B<64>.>
+Restreindre les architectures listées par B<--list-known> à celles employant un CPU disposant du nombre de bits indiqués (depuis S<dpkg 1.17.14).> Soit B<32>, soit B<64>.
 
 =item B<-E>, B<--match-endian> I<boutisme-d'architecture>
 
-Restreindre les architectures listées par B<--list-known> à celles
-correspondant au boutisme spécifié (depuis S<dpkg 1.17.14).> Soit B<little>,
-soit B<big>.
+Restreindre les architectures listées par B<--list-known> à celles correspondant au boutisme spécifié (depuis S<dpkg 1.17.14).> Soit B<little>, soit B<big>.
 
 =item B<--print-format> I<format>
 
-Sets the output format for B<--print-set> and B<--print-unset> (since dpkg
-1.20.6), to either B<shell> (default) or B<make>.
+Configurer le format de sortie de B<--print-set> et B<--print-unset> (depuis S<dpkg 1.20.6),> pour B<shell> (par défaut) ou B<make>.
 
 =item B<-f>, B<--force>
 
-Les valeurs positionnées par les variables d'environnement ayant le même nom
-que celles utilisées par les scripts sont prises en compte (c'est-à-dire
-utilisées par B<dpkg-architecture>), sauf si cette option est présente. Cela
-permet à un utilisateur de surcharger une valeur même lorsque l'appel à
-B<dpkg-architecture> est inclus dans un autre script (par exemple
-B<dpkg-buildpackage>(1)).
+Les valeurs positionnées par les variables d'environnement ayant le même nom que celles utilisées par les scripts sont prises en compte (c'est-à-dire utilisées par B<dpkg-architecture>), sauf si cette option est présente. Cela permet à un utilisateur de surcharger une valeur même lorsque l'appel à B<dpkg-architecture> est inclus dans un autre script (par exemple B<dpkg-buildpackage>(1)).
 
 =back
 
@@ -166,33 +130,19 @@ Machine pour laquelle le paquet est construit.
 
 =item Machine cible
 
-La machine pour laquelle le compilateur construit. Cela est nécessaire
-uniquement lors de la construction d'une chaîne d'outils de compilation
-croisée qui sera construite sur l'architecture de construction, pour être
-exécutée sur l'architecture hôte, afin de construire du code pour
-l'architecture cible.
+La machine pour laquelle le compilateur construit ou pour laquelle l'émulateur exécutera le code. Cela est nécessaire uniquement lors de la construction d'une chaîne d'outils de compilation croisée qui sera construite sur l'architecture de construction, pour être exécutée sur l'architecture hôte, afin de construire du code (ou d'exécuter du code émulé) pour l'architecture cible.
 
 =item Architecture Debian
 
-Chaîne de caractères de l'architecture Debian qui spécifie l'emplacement
-dans l'archive FTP. Par S<exemple :> i386, sparc, hurd-i386.
+Chaîne de caractères de l'architecture Debian qui spécifie l'emplacement dans l'archive FTP. Par S<exemple :> i386, sparc, hurd-i386.
 
 =item N-uplet d'architecture Debian
 
-Un n-uplet d'architecture Debian est l'architecture pleinement qualifiée
-avec tous ses composants énoncés. C'est différent des architectures Debian
-en ce que le composant I<processeur> n'intègre pas l'I<ABI>. Le n-uplet
-actuel a la forme I<ABI>-I<libc>-I<os>-I<processeur>. S<Exemples :>
-base-gnu-linux-amd64, eabihf-musl-linux-arm.
+Un n-uplet d'architecture Debian est l'architecture pleinement qualifiée avec tous ses composants énoncés. C'est différent des architectures Debian en ce que le composant I<processeur> n'intègre pas l'I<ABI>. Le n-uplet actuel a la forme I<ABI>-I<libc>-I<os>-I<processeur>. S<Exemples :> base-gnu-linux-amd64, eabihf-musl-linux-arm.
 
 =item Architecture Debian joker
 
-Une architecture Debian joker est une architecture spéciale qui correspond à
-toutes les architectures réelles qui en font partie. Il est en général de la
-forme d'un n-uplet d'architecture Debian avec quatre éléments ou moins dont
-au moins l'un d'eux est B<any>. Les éléments manquants du n-uplet sont
-préfixés implicitement par B<any>, et donc les paires suivantes sont
-équivalentes.
+Une architecture Debian joker est une architecture spéciale qui correspond à toutes les architectures réelles qui en font partie. Il est en général de la forme d'un n-uplet d'architecture Debian avec quatre éléments ou moins dont au moins l'un d'eux est B<any>. Les éléments manquants du n-uplet sont préfixés implicitement par B<any>, et donc les paires suivantes sont équivalentes.
 
 =over 
 
@@ -208,27 +158,17 @@ S<Exemples :> linux-any, any-i386, hurd-any, eabi-any-any-arm, musl-any-any.
 
 =item Type de système GNU
 
-Chaîne de caractères définissant l'architecture et constituée de deux
-parties séparées par un S<tiret :> processeur et système. Par S<exemple :>
-i586-linux-gnu, sparc-linux-gnu, i386-gnu, x86_64-netbsd.
+Chaîne de caractères définissant l'architecture et constituée de deux parties séparées par un S<tiret :> processeur et système. Par S<exemple :> i586-linux-gnu, sparc-linux-gnu, i386-gnu, x86_64-netbsd.
 
 =item n-uplet multiarchitecture
 
-Type en clair de système GNU, utilisé pour les chemins du système de
-fichiers. Ce n-uplet ne change pas même quand l'ISA de base est incrémentée,
-de sorte que les chemins résultants sont stables dans la durée. La seule
-différence actuelle avec le type du système GNU est que la partie processeur
-pour les systèmes basés sur l'i386 est toujours i386. S<Exemples :>
-i386-linux-gnu, x86_64-linux-gnu. Exemple de S<chemins :>
-/lib/powerpc64le-linux-gnu/, /usr/lib/i386-kfreebsd-gnu/.
+Type en clair de système GNU, utilisé pour les chemins du système de fichiers. Ce n-uplet ne change pas même quand l'ISA de base est incrémentée, de sorte que les chemins résultants sont stables dans la durée. La seule différence actuelle avec le type du système GNU est que la partie processeur pour les systèmes basés sur l'i386 est toujours i386. S<Exemples :> i386-linux-gnu, x86_64-linux-gnu. Exemple de S<chemins :> /lib/powerpc64le-linux-gnu/, /usr/lib/i386-kfreebsd-gnu/.
 
 =back
 
 =head1 VARIABLES D'ENVIRONNEMENT
 
-The following variables are read from the environment (unless B<--force> has
-been specified) and set by B<dpkg-architecture> (see the B<TERMS> section
-for a description of the naming scheme):
+Les variables suivantes sont lues à partir de l'environnement (à moins que B<--force> n'ait été spécifié) et sont positionnées par B<dpkg-architecture> (voir la section B<TERMS> pour une description du schéma de S<nommage) :>
 
 =over 
 
@@ -238,7 +178,7 @@ Architecture Debian de la machine de construction.
 
 =item B<DEB_BUILD_ARCH_ABI>
 
-The Debian ABI name of the build machine (since dpkg 1.18.11).
+Nom de l'ABI Debian de la machine de construction (depuis S<dpkg 1.18.11).>
 
 =item B<DEB_BUILD_ARCH_LIBC>
 
@@ -250,12 +190,11 @@ Nom du système Debian de la machine de construction (depuis S<dpkg 1.13.2).>
 
 =item B<DEB_BUILD_ARCH_CPU>
 
-The Debian CPU name of the build machine (since dpkg 1.13.2).
+Nom de processeur Debian de la machine de construction (depuis S<dpkg 1.13.2).>
 
 =item B<DEB_BUILD_ARCH_BITS>
 
-Taille de pointeur de la machine de construction (en bits, depuis
-S<dpkg 1.15.4).>
+Taille de pointeur de la machine de construction (en bits, depuis S<dpkg 1.15.4).>
 
 =item B<DEB_BUILD_ARCH_ENDIAN>
 
@@ -263,11 +202,11 @@ Boutisme de la machine de construction (petit ou gros, depuis S<dpkg 1.15.4).>
 
 =item B<DEB_BUILD_GNU_CPU>
 
-The GNU CPU part of B<DEB_BUILD_GNU_TYPE>.
+Partie CPU GNU de B<DEB_BUILD_GNU_TYPE>.
 
 =item B<DEB_BUILD_GNU_SYSTEM>
 
-The GNU system part of B<DEB_BUILD_GNU_TYPE>.
+Partie système GNU de B<DEB_BUILD_GNU_TYPE>.
 
 =item B<DEB_BUILD_GNU_TYPE>
 
@@ -275,8 +214,7 @@ Type de système GNU de la machine de construction.
 
 =item B<DEB_BUILD_MULTIARCH>
 
-Le type en clair de système GNU de la machine de construction, utilisé pour
-les chemins du système de fichiers (depuis S<dpkg 1.16.0).>
+Le type en clair de système GNU de la machine de construction, utilisé pour les chemins du système de fichiers (depuis S<dpkg 1.16.0).>
 
 =item B<DEB_HOST_ARCH>
 
@@ -284,7 +222,7 @@ Architecture Debian de la machine hôte.
 
 =item B<DEB_HOST_ARCH_ABI>
 
-The Debian ABI name of the host machine (since dpkg 1.18.11).
+Nom de l'ABI Debian de la machine hôte (depuis S<dpkg 1.18.11).>
 
 =item B<DEB_HOST_ARCH_LIBC>
 
@@ -296,7 +234,7 @@ Nom du système Debian de la machine hôte (depuis S<dpkg 1.13.2).>
 
 =item B<DEB_HOST_ARCH_CPU>
 
-The Debian CPU name of the host machine (since dpkg 1.13.2).
+Nom du processeur Debian de la machine hôte (depuis S<dpkg 1.13.2).>
 
 =item B<DEB_HOST_ARCH_BITS>
 
@@ -308,11 +246,11 @@ Boutisme de la machine hôte (petit ou gros, depuis S<dpkg 1.15.4).>
 
 =item B<DEB_HOST_GNU_CPU>
 
-The GNU CPU part of B<DEB_HOST_GNU_TYPE>.
+Partie CPU GNU de B<DEB_HOST_GNU_TYPE>.
 
 =item B<DEB_HOST_GNU_SYSTEM>
 
-The GNU system part of B<DEB_HOST_GNU_TYPE>.
+Partie système GNU de B<DEB_HOST_GNU_TYPE>.
 
 =item B<DEB_HOST_GNU_TYPE>
 
@@ -320,8 +258,7 @@ Type de système GNU de la machine hôte.
 
 =item B<DEB_HOST_MULTIARCH>
 
-Le type en clair de système GNU de la machine hôte, utilisé pour les chemins
-du système de fichiers (depuis S<dpkg 1.16.0).>
+Le type en clair de système GNU de la machine hôte, utilisé pour les chemins du système de fichiers (depuis S<dpkg 1.16.0).>
 
 =item B<DEB_TARGET_ARCH>
 
@@ -329,7 +266,7 @@ L'architecture Debian de la machine cible (depuis S<dpkg 1.17.14).>
 
 =item B<DEB_TARGET_ARCH_ABI>
 
-The Debian ABI name of the target machine (since dpkg 1.18.11).
+Nom de l'ABI Debian de la machine cible (depuis S<dpkg 1.18.11).>
 
 =item B<DEB_TARGET_ARCH_LIBC>
 
@@ -341,7 +278,7 @@ Nom du système Debian de la machine cible (depuis S<dpkg 1.17.14).>
 
 =item B<DEB_TARGET_ARCH_CPU>
 
-The Debian CPU name of the target machine (since dpkg 1.17.14).
+Nom du processeur Debian de la machine cible (depuis S<dpkg 1.17.14).>
 
 =item B<DEB_TARGET_ARCH_BITS>
 
@@ -353,11 +290,11 @@ Boutisme de la machine cible (petit ou gros, depuis S<dpkg 1.17.14).>
 
 =item B<DEB_TARGET_GNU_CPU>
 
-The GNU CPU part of B<DEB_TARGET_GNU_TYPE> (since dpkg 1.17.14).
+Partie CPU GNU de B<DEB_TARGET_GNU_TYPE> (depuis S<dpkg 1.17.14).>
 
 =item B<DEB_TARGET_GNU_SYSTEM>
 
-The GNU system part of B<DEB_TARGET_GNU_TYPE> (since dpkg 1.17.14).
+Partie S<système GNU> de B<DEB_TARGET_GNU_TYPE> (depuis S<dpkg 1.17.14).>
 
 =item B<DEB_TARGET_GNU_TYPE>
 
@@ -365,8 +302,7 @@ Type du système GNU de la machine cible (depuis S<dpkg 1.17.14).>
 
 =item B<DEB_TARGET_MULTIARCH>
 
-Le type en clair du système GNU de la machine cible, utilisé pour les
-chemins du système de fichiers (depuis S<dpkg 1.17.14).>
+Le type en clair du système GNU de la machine cible, utilisé pour les chemins du système de fichiers (depuis S<dpkg 1.17.14).>
 
 =back
 
@@ -374,34 +310,25 @@ chemins du système de fichiers (depuis S<dpkg 1.17.14).>
 
 =head2 Tables d'architectures
 
-Tous ces fichiers sont nécessaires afin que B<dpkg-architecture> puisse
-fonctionner. Leurs emplacements peuvent être modifiés lors du traitement à
-l'aide de la variable d'environnement B<DPKG_DATADIR>. Ces tables
-contiennent en première ligne un pseudo-champ de B<Version> de format pour
-indiquer leur format de sorte que les analyseurs peuvent vérifier s'ils les
-comprennent, tel que S<« # Version=1.0 ».>
+Tous ces fichiers sont nécessaires afin que B<dpkg-architecture> puisse fonctionner. Leurs emplacements peuvent être modifiés lors du traitement à l'aide de la variable d'environnement B<DPKG_DATADIR>. Ces tables contiennent en première ligne un pseudo-champ de B<Version> de format pour indiquer leur format de sorte que les analyseurs peuvent vérifier s'ils les comprennent, tel que S<« #> S<Version=1.0 ».>
 
 =over 
 
 =item I<%PKGDATADIR%/table-processeur>
 
-Table des noms de processeurs connus et liaison avec leur nom
-GNU. S<Version 1.0> de format (depuis S<dpkg 1.13.2).>
+Table des noms de processeurs connus et liaison avec leur nom GNU. Version 1.0 de format (depuis S<dpkg 1.13.2).>
 
 =item I<%PKGDATADIR%/table-système-exploitation>
 
-Table des noms des systèmes d'exploitation connus et liaison avec leurs noms
-GNU. S<Version 2.0> de format (depuis S<dpkg 1.18.11).>
+Table des noms des systèmes d'exploitation connus et liaison avec leurs noms GNU. Version 2.0 de format (depuis S<dpkg 1.18.11).>
 
 =item I<%PKGDATADIR%/table-n-uplet>
 
-Correspondances entre les n-uplets de l'architecture Debian et les noms des
-architectures Debian. Format S<version 1.0> (depuis S<dpkg 1.18.11).>
+Correspondances entre les n-uplets de l'architecture Debian et les noms des architectures Debian. Format version 1.0 (depuis S<dpkg 1.18.11).>
 
 =item I<%PKGDATADIR%/table-ABI>
 
-Table des substituts d'attributs d'ABI d'architecture Debian. Format
-S<version 2.0> (depuis S<dpkg 1.18.11).>
+Table des substituts d'attributs d'ABI d'architecture Debian. Format version 2.0 (depuis S<dpkg 1.18.11).>
 
 =back
 
@@ -411,15 +338,13 @@ S<version 2.0> (depuis S<dpkg 1.18.11).>
 
 =item I<%PKGDATADIR%/architecture.mk>
 
-Un fragment de fichier Makefile qui définit correctement et exporte toutes
-les variables que B<dpkg-architecture> peut fournir (depuis S<dpkg 1.16.1).>
+Un fragment de fichier Makefile qui définit correctement et exporte toutes les variables que B<dpkg-architecture> peut fournir (depuis S<dpkg 1.16.1).>
 
 =back
 
 =head1 EXEMPLES
 
-B<dpkg-buildpackage> accepte l'option B<-a>, et la passe à
-B<dpkg-architecture>. Voici d'autres S<exemples :>
+B<dpkg-buildpackage> accepte l'option B<-a>, et la passe à B<dpkg-architecture>. Voici d'autres S<exemples :>
 
 =over 
 
@@ -429,8 +354,7 @@ B<dpkg-architecture>. Voici d'autres S<exemples :>
 
 =back
 
-Vérifie si l'architecture en cours (ou celle spécifiée) est identique à une
-S<architecture :>
+Vérifier si l'architecture en cours (ou celle spécifiée) est identique à une S<architecture :>
 
 =over 
 
@@ -440,8 +364,7 @@ S<architecture :>
 
 =back
 
-Vérifie si l'architecture en cours (ou celle spécifiée) est un système
-S<Linux :>
+Vérifier si l'architecture en cours (ou celle spécifiée) est un système S<Linux :>
 
 =over 
 
@@ -453,13 +376,7 @@ S<Linux :>
 
 =head2 Utilisation dans debian/rules
 
-Les variables d'environnement définies par B<dpkg-architecture> sont
-fournies à I<debian/rules> comme variables pour make (consultez la
-documentation de make). Cependant, vous ne devez pas compter là-dessus
-puisque cela empêche les appels manuels à ce script. À la place, vous devez
-toujours les initialiser en utilisant B<dpkg-architecture> avec l'option
-B<-q>. Voici quelques exemples, qui indiquent aussi comment améliorer la
-gestion des compilations croisées de votre S<paquet :>
+Les variables d'environnement définies par B<dpkg-architecture> sont fournies à I<debian/rules> comme variables pour make (consultez la documentation de make). Cependant, vous ne devez pas compter là-dessus puisque cela empêche les appels manuels à ce script. À la place, vous devez toujours les initialiser en utilisant B<dpkg-architecture> avec l'option B<-q>. Voici quelques exemples, qui indiquent aussi comment améliorer la gestion des compilations croisées de votre S<paquet :>
 
 Récupération du type de système GNU et passage à S<./configure :>
 
@@ -491,12 +408,9 @@ Effectuer une action pour une architecture S<spécifique :>
 
 =back
 
-Ou, si vous n'avez besoin que de vérifier le type du processeur et du
-système, utilisez les variables B<DEB_HOST_ARCH_CPU> ou B<DEB_HOST_ARCH_OS>.
+Ou, si vous n'avez besoin que de vérifier le type du processeur et du système, utilisez les variables B<DEB_HOST_ARCH_CPU> ou B<DEB_HOST_ARCH_OS>.
 
-Veuillez noter qu'il est également possible d'utiliser un fragment externe
-de fichier Makefile pour définir correctement toutes les variables que
-B<dpkg-architecture> peut S<fournir :>
+Veuillez noter qu'il est également possible d'utiliser un fragment externe de fichier Makefile pour définir correctement toutes les variables que B<dpkg-architecture> peut S<fournir :>
 
 =over 
 
@@ -508,9 +422,7 @@ B<dpkg-architecture> peut S<fournir :>
 
 =back
 
-Dans tous les cas, il ne faut jamais utiliser B<dpkg --print-architecture>
-pour récupérer les informations relatives à l'architecture pendant la
-construction d'un paquet.
+Dans tous les cas, il ne faut jamais utiliser B<dpkg --print-architecture> pour récupérer les informations relatives à l'architecture pendant la construction d'un paquet.
 
 =head1 ENVIRONNEMENT
 
@@ -518,28 +430,21 @@ construction d'un paquet.
 
 =item B<DPKG_DATADIR>
 
-Si cette variable est définie, elle sera utilisée comme répertoire de
-données de B<dpkg> où sont placées les tables d'architecture (depuis
-S<dpkg 1.14.17).> Par défaut «%PKGDATADIR%».
+Si cette variable est définie, elle sera utilisée comme répertoire de données de B<dpkg> où sont placées les tables d'architecture (depuis S<dpkg 1.14.17).> Par défaut «%PKGDATADIR%».
 
 =item B<DPKG_COLORS>
 
-Définit le mode de couleur (depuis S<dpkg 1.18.5).> Les valeurs actuellement
-acceptées sont B<auto> (par défaut), B<always> et B<never>.
+Définit le mode de couleur (depuis S<dpkg 1.18.5).> Les valeurs actuellement acceptées sont B<auto> (par défaut), B<always> et B<never>.
 
 =item B<DPKG_NLS>
 
-Si cette variable est définie, elle sera utilisée pour décider l'activation
-de la prise en charge des langues (NLS S<– Native> Language Support), connu
-aussi comme la gestion de l'internationalisation (ou i18n) (depuis
-S<dpkg 1.19.0).> Les valeurs permises S<sont :> B<0> et B<1> (par défaut).
+Si cette variable est définie, elle sera utilisée pour décider l'activation de la prise en charge des langues (NLS – Native Language Support), connu aussi comme la gestion de l'internationalisation (ou i18n) (depuis S<dpkg 1.19.0).> Les valeurs permises S<sont :> B<0> et B<1> (par défaut).
 
 =back
 
 =head1 NOTES
 
-Tous les noms de commandes et d'options longs ne sont disponibles qu'à
-partir de S<dpkg 1.17.17.>
+Tous les noms de commandes et d'options longs ne sont disponibles qu'à partir de S<dpkg 1.17.17.>
 
 =head1 VOIR AUSSI
 

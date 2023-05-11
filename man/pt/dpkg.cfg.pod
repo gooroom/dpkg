@@ -18,11 +18,7 @@ dpkg.cfg - ficheiro de configuração do dpkg
 
 =head1 DESCRIÇÃO
 
-Este ficheiro contem opções predefinidas para o dpkg. Cada linha contem uma
-opção única que é exatamente a mesma que uma opção de linha de comandos
-normal para o dpkg excepto pelos traços iniciais que não são usados aqui. As
-citações que rodeiam os valores das opções são cortadas. Os comentários são
-permitidos ao iniciar uma linha com um sinal cardinal (‘B<#>’).
+Este ficheiro contem opções predefinidas para o dpkg. Cada linha contem uma opção única que é exatamente a mesma que uma opção de linha de comandos normal para o dpkg excepto pelos traços iniciais que não são usados aqui. As citações que rodeiam os valores das opções são cortadas. Os comentários são permitidos ao iniciar uma linha com um sinal cardinal (‘B<#>’).
 
 =head1 FICHEIROS
 

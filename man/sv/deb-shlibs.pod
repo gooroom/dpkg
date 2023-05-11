@@ -22,11 +22,7 @@ B<debian/shlibs>, B<debian/>I<binary-name>B<.shlibs>, B<DEBIAN/shlibs>
 
 =head1 BESKRIVNING
 
-B<shlibs>-filer skapar en koppling mellan biblioteksnamn och versioner
-(I<SONAME>s) till beroenden som är lämpliga för en paketstyrfil. Den har en
-post per rad. Blanka rader är B<inte> tillåtna. Rader som inleds med ett
-B<#>-tecken anses vara kommentarer, och ignoreras. Alla andra rader måste
-vara på formatet
+B<shlibs>-filer skapar en koppling mellan biblioteksnamn och versioner (I<SONAME>s) till beroenden som är lämpliga för en paketstyrfil. Den har en post per rad. Blanka rader är B<inte> tillåtna. Rader som inleds med ett B<#>-tecken anses vara kommentarer, och ignoreras. Alla andra rader måste vara på formatet
 
 =over 
 
@@ -34,12 +30,9 @@ vara på formatet
 
 =back
 
-Fälten I<bibliotek> och I<version> avdelas med blanktecken medan fältet
-I<beroenden> sträcker sig till slutet av raden. Fältet I<typ> är frivilligt
-och behövs vanligtvis inte.
+Fälten I<bibliotek> och I<version> avdelas med blanktecken medan fältet I<beroenden> sträcker sig till slutet av raden. Fältet I<typ> är frivilligt och behövs vanligtvis inte.
 
-Fältet I<dependencies> har samma syntax som fältet B<Depends> i en
-binär-styrfil, se B<deb-control>(5).
+Fältet I<dependencies> har samma syntax som fältet B<Depends> i en binär-styrfil, se B<deb-control>(5).
 
 =head1 SONAME-FORMAT
 
@@ -63,9 +56,7 @@ där I<namn> vanligtvis prefigeras med B<lib>.
 
 =head1 EXEMPEL
 
-B<shlibs>-filen för ett typiskt bibliotekspaket, som heter I<libcrunch1> och
-som innehåller ett bibliotek vars SONAME är I<libcrunch.so.1>, kan se ut så
-här:
+B<shlibs>-filen för ett typiskt bibliotekspaket, som heter I<libcrunch1> och som innehåller ett bibliotek vars SONAME är I<libcrunch.so.1>, kan se ut så här:
 
 =over 
 
@@ -73,10 +64,7 @@ här:
 
 =back
 
-Fältet I<beroenden> måste ange den senaste versionen av paketet som lade
-till nya symboler i biblioteket: i exemplet ovan lades nya symboler till i
-version 1.2 av I<libcrunch>. Det är inte den enda orsaken till att beroenden
-kan behöva snävras in.
+Fältet I<beroenden> måste ange den senaste versionen av paketet som lade till nya symboler i biblioteket: i exemplet ovan lades nya symboler till i version 1.2 av I<libcrunch>. Det är inte den enda orsaken till att beroenden kan behöva snävras in.
 
 =head1 SE ÄVEN
 

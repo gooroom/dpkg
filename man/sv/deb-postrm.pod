@@ -22,9 +22,7 @@ B<DEBIAN/postrm>
 
 =head1 BESKRIVNING
 
-Ett paket kan utföra flera åtgärder efter borttagning via utvecklarskript,
-genom att ta med en körbar fil I<postrm> i sitt styrarkiv
-(dvs. I<DEBIAN/postrm> när paketet skapas).
+Ett paket kan utföra flera åtgärder efter borttagning via utvecklarskript, genom att ta med en körbar fil I<postrm> i sitt styrarkiv (dvs. I<DEBIAN/postrm> när paketet skapas).
 
 Skriptet kan anropas på följande sätt:
 
@@ -46,21 +44,27 @@ Efter att paketet har uppgraderats.
 
 Om ovanstående B<upgrade>-anrop misslyckas.
 
+I<ny-version> sänds endast sedan dpkg 1.18.5.
+
 =item I<postrm> B<disappear> I<överskrivande-paket> I<överskrivande-version>
 
 Efter att alla filer i paketet har ersatts.
 
 =item I<ny-postrm> B<abort-install>
 
-Om I<preinst> misslyckas under installation.
+Om I<preinst> misslyckas under B<install> (installation).
 
-=item I<ny-postrm> B<abort-install> I<gammal-version ny-version>
+=item I<ny-postrm> B<abort-install> I<gammal-version> I<ny-version>
 
-Om I<preinst> misslyckas vid uppgradering av borttagna paket.
+Om I<preinst> misslyckas B<install> (installation) vid uppgradering av borttagna paket.
 
-=item I<ny-postrm> B<abort-upgrade> I<gammal-version ny-version>
+I<ny-version> sänds endast sedan dpkg 1.18.5.
 
-Om I<preinst> misslycas vid uppgradering.
+=item I<ny-postrm> B<abort-upgrade> I<gammal-version> I<ny-version>
+
+Om I<preinst> misslycas vid B<upgrade> (uppgradering).
+
+I<ny-version> sänds endast sedan dpkg 1.18.5.
 
 =back
 

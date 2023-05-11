@@ -4,7 +4,7 @@
  *
  * Copyright © 2000 Wichert Akkerman <wakkerma@debian.org>
  * Copyright © 2004 Scott James Remnant <scott@netsplit.com>
- * Copyright © 2006-2015 Guillem Jover <guillem@debian.org>
+ * Copyright © 2006-2023 Guillem Jover <guillem@debian.org>
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,11 +29,18 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#ifdef WITH_LIBZ
-#include <zlib.h>
+#if USE_LIBZ_IMPL != USE_LIBZ_IMPL_NONE
+#include <compat-zlib.h>
 #endif
 #ifdef WITH_LIBLZMA
 #include <lzma.h>
+#endif
+#ifdef WITH_LIBZSTD
+#include <zstd.h>
+#define DPKG_ZSTD_MAX_LEVEL ZSTD_maxCLevel()
+#else
+#define DPKG_ZSTD_MAX_LEVEL 22
+#define ZSTD_CLEVEL_DEFAULT 3
 #endif
 #ifdef WITH_LIBBZ2
 #include <bzlib.h>
@@ -45,17 +52,18 @@
 #include <dpkg/varbuf.h>
 #include <dpkg/fdio.h>
 #include <dpkg/buffer.h>
+#include <dpkg/meminfo.h>
 #include <dpkg/command.h>
 #include <dpkg/compress.h>
-#if !defined(WITH_LIBZ) || !defined(WITH_LIBLZMA) || !defined(WITH_LIBBZ2)
+#if USE_LIBZ_IMPL == USE_LIBZ_IMPL_NONE || \
+    !defined(WITH_LIBLZMA) || \
+    !defined(WITH_LIBZSTD) || \
+    !defined(WITH_LIBBZ2)
 #include <dpkg/subproc.h>
 
-static void DPKG_ATTR_SENTINEL
-fd_fd_filter(int fd_in, int fd_out, const char *desc, const char *delenv[],
-             const char *file, ...)
+static void
+fd_fd_filter(struct command *cmd, int fd_in, int fd_out, const char *delenv[])
 {
-	va_list args;
-	struct command cmd;
 	pid_t pid;
 	int i;
 
@@ -73,16 +81,50 @@ fd_fd_filter(int fd_in, int fd_out, const char *desc, const char *delenv[],
 		for (i = 0; delenv[i]; i++)
 			unsetenv(delenv[i]);
 
-		command_init(&cmd, file, desc);
-		command_add_arg(&cmd, file);
-		va_start(args, file);
-		command_add_argv(&cmd, args);
-		va_end(args);
-
-		command_exec(&cmd);
+		command_exec(cmd);
 	}
-	subproc_reap(pid, desc, 0);
+	subproc_reap(pid, cmd->name, 0);
 }
+
+static void
+command_compress_init(struct command *cmd, const char *name, const char *desc,
+                      int level)
+{
+	static char combuf[6];
+
+	command_init(cmd, name, desc);
+	command_add_arg(cmd, name);
+
+	snprintf(combuf, sizeof(combuf), "-c%d", level);
+	command_add_arg(cmd, combuf);
+}
+
+static void
+command_decompress_init(struct command *cmd, const char *name, const char *desc)
+{
+	command_init(cmd, name, desc);
+	command_add_arg(cmd, name);
+	command_add_arg(cmd, "-dc");
+}
+#endif
+
+#if defined(WITH_LIBLZMA) || defined(WITH_LIBZSTD)
+enum dpkg_stream_filter {
+	DPKG_STREAM_COMPRESS	= 1,
+	DPKG_STREAM_DECOMPRESS	= 2,
+};
+
+enum dpkg_stream_action {
+	DPKG_STREAM_INIT	= 0,
+	DPKG_STREAM_RUN		= 1,
+	DPKG_STREAM_FINISH	= 2,
+};
+
+enum dpkg_stream_status {
+	DPKG_STREAM_OK,
+	DPKG_STREAM_END,
+	DPKG_STREAM_ERROR,
+};
 #endif
 
 struct compressor {
@@ -90,9 +132,10 @@ struct compressor {
 	const char *extension;
 	int default_level;
 	void (*fixup_params)(struct compress_params *params);
-	void (*compress)(int fd_in, int fd_out, struct compress_params *params,
-	                 const char *desc);
-	void (*decompress)(int fd_in, int fd_out, const char *desc);
+	void (*compress)(struct compress_params *params,
+	                 int fd_in, int fd_out, const char *desc);
+	void (*decompress)(struct compress_params *params,
+	                   int fd_in, int fd_out, const char *desc);
 };
 
 /*
@@ -105,7 +148,8 @@ fixup_none_params(struct compress_params *params)
 }
 
 static void
-decompress_none(int fd_in, int fd_out, const char *desc)
+decompress_none(struct compress_params *params, int fd_in, int fd_out,
+                const char *desc)
 {
 	struct dpkg_error err;
 
@@ -114,7 +158,8 @@ decompress_none(int fd_in, int fd_out, const char *desc)
 }
 
 static void
-compress_none(int fd_in, int fd_out, struct compress_params *params, const char *desc)
+compress_none(struct compress_params *params, int fd_in, int fd_out,
+              const char *desc)
 {
 	struct dpkg_error err;
 
@@ -145,21 +190,25 @@ fixup_gzip_params(struct compress_params *params)
 		params->type = COMPRESSOR_TYPE_NONE;
 }
 
-#ifdef WITH_LIBZ
+#if USE_LIBZ_IMPL != USE_LIBZ_IMPL_NONE
 static void
-decompress_gzip(int fd_in, int fd_out, const char *desc)
+decompress_gzip(struct compress_params *params, int fd_in, int fd_out,
+                const char *desc)
 {
-	char buffer[DPKG_BUFFER_SIZE];
+	char *buffer;
+	size_t bufsize = DPKG_BUFFER_SIZE;
 	int z_errnum;
 	gzFile gzfile = gzdopen(fd_in, "r");
 
 	if (gzfile == NULL)
 		ohshit(_("%s: error binding input to gzip stream"), desc);
 
+	buffer = m_malloc(bufsize);
+
 	for (;;) {
 		int actualread, actualwrite;
 
-		actualread = gzread(gzfile, buffer, sizeof(buffer));
+		actualread = gzread(gzfile, buffer, bufsize);
 		if (actualread < 0) {
 			const char *errmsg = gzerror(gzfile, &z_errnum);
 
@@ -175,6 +224,8 @@ decompress_gzip(int fd_in, int fd_out, const char *desc)
 		if (actualwrite != actualread)
 			ohshite(_("%s: internal gzip write error"), desc);
 	}
+
+	free(buffer);
 
 	z_errnum = gzclose(gzfile);
 	if (z_errnum) {
@@ -192,10 +243,12 @@ decompress_gzip(int fd_in, int fd_out, const char *desc)
 }
 
 static void
-compress_gzip(int fd_in, int fd_out, struct compress_params *params, const char *desc)
+compress_gzip(struct compress_params *params, int fd_in, int fd_out,
+              const char *desc)
 {
-	char buffer[DPKG_BUFFER_SIZE];
+	char *buffer;
 	char combuf[6];
+	size_t bufsize = DPKG_BUFFER_SIZE;
 	int strategy;
 	int z_errnum;
 	gzFile gzfile;
@@ -216,10 +269,12 @@ compress_gzip(int fd_in, int fd_out, struct compress_params *params, const char 
 	if (gzfile == NULL)
 		ohshit(_("%s: error binding output to gzip stream"), desc);
 
+	buffer = m_malloc(bufsize);
+
 	for (;;) {
 		int actualread, actualwrite;
 
-		actualread = fd_read(fd_in, buffer, sizeof(buffer));
+		actualread = fd_read(fd_in, buffer, bufsize);
 		if (actualread < 0)
 			ohshite(_("%s: internal gzip read error"), desc);
 		if (actualread == 0) /* EOF. */
@@ -236,6 +291,8 @@ compress_gzip(int fd_in, int fd_out, struct compress_params *params, const char 
 		}
 	}
 
+	free(buffer);
+
 	z_errnum = gzclose(gzfile);
 	if (z_errnum) {
 		const char *errmsg;
@@ -251,18 +308,30 @@ compress_gzip(int fd_in, int fd_out, struct compress_params *params, const char 
 static const char *env_gzip[] = { "GZIP", NULL };
 
 static void
-decompress_gzip(int fd_in, int fd_out, const char *desc)
+decompress_gzip(struct compress_params *params, int fd_in, int fd_out,
+                const char *desc)
 {
-	fd_fd_filter(fd_in, fd_out, desc, env_gzip, GZIP, "-dc", NULL);
+	struct command cmd;
+
+	command_decompress_init(&cmd, GZIP, desc);
+
+	fd_fd_filter(&cmd, fd_in, fd_out, env_gzip);
+
+	command_destroy(&cmd);
 }
 
 static void
-compress_gzip(int fd_in, int fd_out, struct compress_params *params, const char *desc)
+compress_gzip(struct compress_params *params, int fd_in, int fd_out,
+              const char *desc)
 {
-	char combuf[6];
+	struct command cmd;
 
-	snprintf(combuf, sizeof(combuf), "-c%d", params->level);
-	fd_fd_filter(fd_in, fd_out, desc, env_gzip, GZIP, "-n", combuf, NULL);
+	command_compress_init(&cmd, GZIP, desc, params->level);
+	command_add_arg(&cmd, "-n");
+
+	fd_fd_filter(&cmd, fd_in, fd_out, env_gzip);
+
+	command_destroy(&cmd);
 }
 #endif
 
@@ -291,18 +360,22 @@ fixup_bzip2_params(struct compress_params *params)
 
 #ifdef WITH_LIBBZ2
 static void
-decompress_bzip2(int fd_in, int fd_out, const char *desc)
+decompress_bzip2(struct compress_params *params, int fd_in, int fd_out,
+                 const char *desc)
 {
-	char buffer[DPKG_BUFFER_SIZE];
+	char *buffer;
+	size_t bufsize = DPKG_BUFFER_SIZE;
 	BZFILE *bzfile = BZ2_bzdopen(fd_in, "r");
 
 	if (bzfile == NULL)
 		ohshit(_("%s: error binding input to bzip2 stream"), desc);
 
+	buffer = m_malloc(bufsize);
+
 	for (;;) {
 		int actualread, actualwrite;
 
-		actualread = BZ2_bzread(bzfile, buffer, sizeof(buffer));
+		actualread = BZ2_bzread(bzfile, buffer, bufsize);
 		if (actualread < 0) {
 			int bz_errnum = 0;
 			const char *errmsg = BZ2_bzerror(bzfile, &bz_errnum);
@@ -320,6 +393,8 @@ decompress_bzip2(int fd_in, int fd_out, const char *desc)
 			ohshite(_("%s: internal bzip2 write error"), desc);
 	}
 
+	free(buffer);
+
 	BZ2_bzclose(bzfile);
 
 	if (close(fd_out))
@@ -327,10 +402,12 @@ decompress_bzip2(int fd_in, int fd_out, const char *desc)
 }
 
 static void
-compress_bzip2(int fd_in, int fd_out, struct compress_params *params, const char *desc)
+compress_bzip2(struct compress_params *params, int fd_in, int fd_out,
+               const char *desc)
 {
-	char buffer[DPKG_BUFFER_SIZE];
+	char *buffer;
 	char combuf[6];
+	size_t bufsize = DPKG_BUFFER_SIZE;
 	int bz_errnum;
 	BZFILE *bzfile;
 
@@ -339,10 +416,12 @@ compress_bzip2(int fd_in, int fd_out, struct compress_params *params, const char
 	if (bzfile == NULL)
 		ohshit(_("%s: error binding output to bzip2 stream"), desc);
 
+	buffer = m_malloc(bufsize);
+
 	for (;;) {
 		int actualread, actualwrite;
 
-		actualread = fd_read(fd_in, buffer, sizeof(buffer));
+		actualread = fd_read(fd_in, buffer, bufsize);
 		if (actualread < 0)
 			ohshite(_("%s: internal bzip2 read error"), desc);
 		if (actualread == 0) /* EOF. */
@@ -358,6 +437,8 @@ compress_bzip2(int fd_in, int fd_out, struct compress_params *params, const char
 			       errmsg);
 		}
 	}
+
+	free(buffer);
 
 	BZ2_bzWriteClose(&bz_errnum, bzfile, 0, NULL, NULL);
 	if (bz_errnum != BZ_OK) {
@@ -379,18 +460,29 @@ compress_bzip2(int fd_in, int fd_out, struct compress_params *params, const char
 static const char *env_bzip2[] = { "BZIP", "BZIP2", NULL };
 
 static void
-decompress_bzip2(int fd_in, int fd_out, const char *desc)
+decompress_bzip2(struct compress_params *params, int fd_in, int fd_out,
+                 const char *desc)
 {
-	fd_fd_filter(fd_in, fd_out, desc, env_bzip2, BZIP2, "-dc", NULL);
+	struct command cmd;
+
+	command_decompress_init(&cmd, BZIP2, desc);
+
+	fd_fd_filter(&cmd, fd_in, fd_out, env_bzip2);
+
+	command_destroy(&cmd);
 }
 
 static void
-compress_bzip2(int fd_in, int fd_out, struct compress_params *params, const char *desc)
+compress_bzip2(struct compress_params *params, int fd_in, int fd_out,
+               const char *desc)
 {
-	char combuf[6];
+	struct command cmd;
 
-	snprintf(combuf, sizeof(combuf), "-c%d", params->level);
-	fd_fd_filter(fd_in, fd_out, desc, env_bzip2, BZIP2, combuf, NULL);
+	command_compress_init(&cmd, BZIP2, desc, params->level);
+
+	fd_fd_filter(&cmd, fd_in, fd_out, env_bzip2);
+
+	command_destroy(&cmd);
 }
 #endif
 
@@ -410,17 +502,23 @@ static const struct compressor compressor_bzip2 = {
 #define XZ		"xz"
 
 #ifdef WITH_LIBLZMA
-enum dpkg_stream_status {
-	DPKG_STREAM_INIT	= DPKG_BIT(1),
-	DPKG_STREAM_RUN		= DPKG_BIT(2),
-	DPKG_STREAM_COMPRESS	= DPKG_BIT(3),
-	DPKG_STREAM_DECOMPRESS	= DPKG_BIT(4),
-	DPKG_STREAM_FILTER	= DPKG_STREAM_COMPRESS | DPKG_STREAM_DECOMPRESS,
+struct io_lzma {
+	const char *desc;
+
+	struct compress_params *params;
+
+	enum dpkg_stream_filter filter;
+	enum dpkg_stream_action action;
+	enum dpkg_stream_status status;
+
+	void (*init)(struct io_lzma *io, lzma_stream *s);
+	void (*code)(struct io_lzma *io, lzma_stream *s);
+	void (*done)(struct io_lzma *io, lzma_stream *s);
 };
 
 /* XXX: liblzma does not expose error messages. */
 static const char *
-dpkg_lzma_strerror(lzma_ret code, enum dpkg_stream_status status)
+dpkg_lzma_strerror(struct io_lzma *io, lzma_ret code)
 {
 	const char *const impossible = _("internal error (bug)");
 
@@ -428,29 +526,33 @@ dpkg_lzma_strerror(lzma_ret code, enum dpkg_stream_status status)
 	case LZMA_MEM_ERROR:
 		return strerror(ENOMEM);
 	case LZMA_MEMLIMIT_ERROR:
-		if (status & DPKG_STREAM_RUN)
+		if (io->action == DPKG_STREAM_RUN)
 			return _("memory usage limit reached");
 		return impossible;
 	case LZMA_OPTIONS_ERROR:
-		if (status == (DPKG_STREAM_INIT | DPKG_STREAM_COMPRESS))
+		if (io->filter == DPKG_STREAM_COMPRESS &&
+		    io->action == DPKG_STREAM_INIT)
 			return _("unsupported compression preset");
-		if (status == (DPKG_STREAM_RUN | DPKG_STREAM_DECOMPRESS))
+		if (io->filter == DPKG_STREAM_DECOMPRESS &&
+		    io->action == DPKG_STREAM_RUN)
 			return _("unsupported options in file header");
 		return impossible;
 	case LZMA_DATA_ERROR:
-		if (status & DPKG_STREAM_RUN)
+		if (io->action == DPKG_STREAM_RUN)
 			return _("compressed data is corrupt");
 		return impossible;
 	case LZMA_BUF_ERROR:
-		if (status & DPKG_STREAM_RUN)
+		if (io->action == DPKG_STREAM_RUN)
 			return _("unexpected end of input");
 		return impossible;
 	case LZMA_FORMAT_ERROR:
-		if (status == (DPKG_STREAM_RUN | DPKG_STREAM_DECOMPRESS))
+		if (io->filter == DPKG_STREAM_DECOMPRESS &&
+		    io->action == DPKG_STREAM_RUN)
 			return _("file format not recognized");
 		return impossible;
 	case LZMA_UNSUPPORTED_CHECK:
-		if (status == (DPKG_STREAM_INIT | DPKG_STREAM_COMPRESS))
+		if (io->filter == DPKG_STREAM_COMPRESS &&
+		    io->action == DPKG_STREAM_INIT)
 			return _("unsupported type of integrity check");
 		return impossible;
 	default:
@@ -458,59 +560,53 @@ dpkg_lzma_strerror(lzma_ret code, enum dpkg_stream_status status)
 	}
 }
 
-struct io_lzma {
-	const char *desc;
-
-	struct compress_params *params;
-	enum dpkg_stream_status status;
-	lzma_action action;
-
-	void (*init)(struct io_lzma *io, lzma_stream *s);
-	int (*code)(struct io_lzma *io, lzma_stream *s);
-	void (*done)(struct io_lzma *io, lzma_stream *s);
-};
-
 static void
 filter_lzma(struct io_lzma *io, int fd_in, int fd_out)
 {
-	uint8_t buf_in[DPKG_BUFFER_SIZE];
-	uint8_t buf_out[DPKG_BUFFER_SIZE];
+	uint8_t *buf_in;
+	uint8_t *buf_out;
+	size_t buf_size = DPKG_BUFFER_SIZE;
 	lzma_stream s = LZMA_STREAM_INIT;
-	lzma_ret ret;
+
+	buf_in = m_malloc(buf_size);
+	buf_out = m_malloc(buf_size);
 
 	s.next_out = buf_out;
-	s.avail_out = sizeof(buf_out);
+	s.avail_out = buf_size;
 
-	io->action = LZMA_RUN;
-	io->status = DPKG_STREAM_INIT;
+	io->status = DPKG_STREAM_OK;
+	io->action = DPKG_STREAM_INIT;
 	io->init(io, &s);
-	io->status = (io->status & DPKG_STREAM_FILTER) | DPKG_STREAM_RUN;
+	io->action = DPKG_STREAM_RUN;
 
 	do {
 		ssize_t len;
 
-		if (s.avail_in == 0 && io->action != LZMA_FINISH) {
-			len = fd_read(fd_in, buf_in, sizeof(buf_in));
+		if (s.avail_in == 0 && io->action != DPKG_STREAM_FINISH) {
+			len = fd_read(fd_in, buf_in, buf_size);
 			if (len < 0)
 				ohshite(_("%s: lzma read error"), io->desc);
 			if (len == 0)
-				io->action = LZMA_FINISH;
+				io->action = DPKG_STREAM_FINISH;
 			s.next_in = buf_in;
 			s.avail_in = len;
 		}
 
-		ret = io->code(io, &s);
+		io->code(io, &s);
 
-		if (s.avail_out == 0 || ret == LZMA_STREAM_END) {
+		if (s.avail_out == 0 || io->status == DPKG_STREAM_END) {
 			len = fd_write(fd_out, buf_out, s.next_out - buf_out);
 			if (len < 0)
 				ohshite(_("%s: lzma write error"), io->desc);
 			s.next_out = buf_out;
-			s.avail_out = sizeof(buf_out);
+			s.avail_out = buf_size;
 		}
-	} while (ret != LZMA_STREAM_END);
+	} while (io->status != DPKG_STREAM_END);
 
 	io->done(io, &s);
+
+	free(buf_in);
+	free(buf_out);
 
 	if (close(fd_out))
 		ohshite(_("%s: lzma close error"), io->desc);
@@ -520,18 +616,73 @@ static void DPKG_ATTR_NORET
 filter_lzma_error(struct io_lzma *io, lzma_ret ret)
 {
 	ohshit(_("%s: lzma error: %s"), io->desc,
-	       dpkg_lzma_strerror(ret, io->status));
+	       dpkg_lzma_strerror(io, ret));
 }
+
+#ifdef HAVE_LZMA_MT_ENCODER
+static uint64_t
+filter_xz_get_memlimit(void)
+{
+	uint64_t mt_memlimit;
+
+	/* Ask the kernel what is currently available for us. If this fails
+	 * initialize the memory limit to half the physical RAM, or to 128 MiB
+	 * if we cannot infer the number. */
+	if (meminfo_get_available(&mt_memlimit) < 0) {
+		mt_memlimit = lzma_physmem() / 2;
+		if (mt_memlimit == 0)
+			mt_memlimit = 128 * 1024 * 1024;
+	}
+	/* Clamp the multi-threaded memory limit to half the addressable
+	 * memory on this architecture. */
+	if (mt_memlimit > INTPTR_MAX)
+		mt_memlimit = INTPTR_MAX;
+
+	return mt_memlimit;
+}
+
+static uint32_t
+filter_xz_get_cputhreads(struct compress_params *params)
+{
+	long threads_max;
+
+	threads_max = lzma_cputhreads();
+	if (threads_max == 0)
+		threads_max = 1;
+
+	if (params->threads_max >= 0)
+		return clamp(params->threads_max, 1, threads_max);
+
+	return threads_max;
+}
+#endif
 
 static void
 filter_unxz_init(struct io_lzma *io, lzma_stream *s)
 {
+#ifdef HAVE_LZMA_MT_DECODER
+	lzma_mt mt_options = {
+		.flags = 0,
+		.block_size = 0,
+		.timeout = 0,
+		.filters = NULL,
+	};
+#else
 	uint64_t memlimit = UINT64_MAX;
+#endif
 	lzma_ret ret;
 
-	io->status |= DPKG_STREAM_DECOMPRESS;
+	io->filter = DPKG_STREAM_DECOMPRESS;
 
+#ifdef HAVE_LZMA_MT_DECODER
+	mt_options.memlimit_stop = UINT64_MAX;
+	mt_options.memlimit_threading = filter_xz_get_memlimit();
+	mt_options.threads = filter_xz_get_cputhreads(io->params);
+
+	ret = lzma_stream_decoder_mt(s, &mt_options);
+#else
 	ret = lzma_stream_decoder(s, memlimit, 0);
+#endif
 	if (ret != LZMA_OK)
 		filter_lzma_error(io, ret);
 }
@@ -541,7 +692,7 @@ filter_xz_init(struct io_lzma *io, lzma_stream *s)
 {
 	uint32_t preset;
 	lzma_check check = LZMA_CHECK_CRC64;
-#ifdef HAVE_LZMA_MT
+#ifdef HAVE_LZMA_MT_ENCODER
 	uint64_t mt_memlimit;
 	lzma_mt mt_options = {
 		.flags = 0,
@@ -553,28 +704,16 @@ filter_xz_init(struct io_lzma *io, lzma_stream *s)
 #endif
 	lzma_ret ret;
 
-	io->status |= DPKG_STREAM_COMPRESS;
+	io->filter = DPKG_STREAM_COMPRESS;
 
 	preset = io->params->level;
 	if (io->params->strategy == COMPRESSOR_STRATEGY_EXTREME)
 		preset |= LZMA_PRESET_EXTREME;
 
-#ifdef HAVE_LZMA_MT
+#ifdef HAVE_LZMA_MT_ENCODER
 	mt_options.preset = preset;
-
-	/* Initialize the multi-threaded memory limit to half the physical
-	 * RAM, or to 128 MiB if we cannot infer the number. */
-	mt_memlimit = lzma_physmem() / 2;
-	if (mt_memlimit == 0)
-		mt_memlimit = 128 * 1024 * 1024;
-	/* Clamp the multi-threaded memory limit to half the addressable
-	 * memory on this architecture. */
-	if (mt_memlimit > INTPTR_MAX)
-		mt_memlimit = INTPTR_MAX;
-
-	mt_options.threads = lzma_cputhreads();
-	if (mt_options.threads == 0)
-		mt_options.threads = 1;
+	mt_memlimit = filter_xz_get_memlimit();
+	mt_options.threads = filter_xz_get_cputhreads(io->params);
 
 	/* Guess whether we have enough RAM to use the multi-threaded encoder,
 	 * and decrease them up to single-threaded to reduce memory usage. */
@@ -595,16 +734,25 @@ filter_xz_init(struct io_lzma *io, lzma_stream *s)
 		filter_lzma_error(io, ret);
 }
 
-static int
+static void
 filter_lzma_code(struct io_lzma *io, lzma_stream *s)
 {
 	lzma_ret ret;
+	lzma_action action;
 
-	ret = lzma_code(s, io->action);
-	if (ret != LZMA_OK && ret != LZMA_STREAM_END)
+	if (io->action == DPKG_STREAM_RUN)
+		action = LZMA_RUN;
+	else if (io->action == DPKG_STREAM_FINISH)
+		action = LZMA_FINISH;
+	else
+		internerr("unknown stream filter action %d\n", io->action);
+
+	ret = lzma_code(s, action);
+
+	if (ret == LZMA_STREAM_END)
+		io->status = DPKG_STREAM_END;
+	else if (ret != LZMA_OK)
 		filter_lzma_error(io, ret);
-
-	return ret;
 }
 
 static void
@@ -614,7 +762,8 @@ filter_lzma_done(struct io_lzma *io, lzma_stream *s)
 }
 
 static void
-decompress_xz(int fd_in, int fd_out, const char *desc)
+decompress_xz(struct compress_params *params, int fd_in, int fd_out,
+              const char *desc)
 {
 	struct io_lzma io;
 
@@ -622,12 +771,14 @@ decompress_xz(int fd_in, int fd_out, const char *desc)
 	io.code = filter_lzma_code;
 	io.done = filter_lzma_done;
 	io.desc = desc;
+	io.params = params;
 
 	filter_lzma(&io, fd_in, fd_out);
 }
 
 static void
-compress_xz(int fd_in, int fd_out, struct compress_params *params, const char *desc)
+compress_xz(struct compress_params *params, int fd_in, int fd_out,
+            const char *desc)
 {
 	struct io_lzma io;
 
@@ -643,24 +794,63 @@ compress_xz(int fd_in, int fd_out, struct compress_params *params, const char *d
 static const char *env_xz[] = { "XZ_DEFAULTS", "XZ_OPT", NULL };
 
 static void
-decompress_xz(int fd_in, int fd_out, const char *desc)
+decompress_xz(struct compress_params *params, int fd_in, int fd_out,
+              const char *desc)
 {
-	fd_fd_filter(fd_in, fd_out, desc, env_xz, XZ, "-dc", NULL);
+	struct command cmd;
+	char *threads_opt = NULL;
+
+	command_decompress_init(&cmd, XZ, desc);
+
+	if (params->threads_max > 0) {
+		threads_opt = str_fmt("-T%d", params->threads_max);
+		command_add_arg(&cmd, threads_opt);
+	}
+
+	fd_fd_filter(&cmd, fd_in, fd_out, env_xz);
+
+	command_destroy(&cmd);
+	free(threads_opt);
 }
 
 static void
-compress_xz(int fd_in, int fd_out, struct compress_params *params, const char *desc)
+compress_xz(struct compress_params *params, int fd_in, int fd_out,
+            const char *desc)
 {
-	char combuf[6];
-	const char *strategy;
+	struct command cmd;
+	char *threads_opt = NULL;
+
+	command_compress_init(&cmd, XZ, desc, params->level);
 
 	if (params->strategy == COMPRESSOR_STRATEGY_EXTREME)
-		strategy = "-e";
-	else
-		strategy = NULL;
+		command_add_arg(&cmd, "-e");
 
-	snprintf(combuf, sizeof(combuf), "-c%d", params->level);
-	fd_fd_filter(fd_in, fd_out, desc, env_xz, XZ, combuf, strategy, NULL);
+	if (params->threads_max > 0) {
+		/* Do not generate warnings when adjusting memory usage, nor
+		 * exit with non-zero due to those not emitted warnings. */
+		command_add_arg(&cmd, "--quiet");
+		command_add_arg(&cmd, "--no-warn");
+
+		/* Do not let xz fallback to single-threaded mode, to avoid
+		 * non-reproducible output. */
+		command_add_arg(&cmd, "--no-adjust");
+
+		/* The xz -T1 option selects a single-threaded mode which
+		 * generates different output than in multi-threaded mode.
+		 * To avoid the non-reproducible output we pass -T+1
+		 * (supported with xz >= 5.4.0) to request multi-threaded
+		 * mode with a single thread. */
+		if (params->threads_max == 1)
+			threads_opt = m_strdup("-T+1");
+		else
+			threads_opt = str_fmt("-T%d", params->threads_max);
+		command_add_arg(&cmd, threads_opt);
+	}
+
+	fd_fd_filter(&cmd, fd_in, fd_out, env_xz);
+
+	command_destroy(&cmd);
+	free(threads_opt);
 }
 #endif
 
@@ -684,7 +874,7 @@ filter_unlzma_init(struct io_lzma *io, lzma_stream *s)
 	uint64_t memlimit = UINT64_MAX;
 	lzma_ret ret;
 
-	io->status |= DPKG_STREAM_DECOMPRESS;
+	io->filter = DPKG_STREAM_DECOMPRESS;
 
 	ret = lzma_alone_decoder(s, memlimit);
 	if (ret != LZMA_OK)
@@ -698,7 +888,7 @@ filter_lzma_init(struct io_lzma *io, lzma_stream *s)
 	lzma_options_lzma options;
 	lzma_ret ret;
 
-	io->status |= DPKG_STREAM_COMPRESS;
+	io->filter = DPKG_STREAM_COMPRESS;
 
 	preset = io->params->level;
 	if (io->params->strategy == COMPRESSOR_STRATEGY_EXTREME)
@@ -712,7 +902,8 @@ filter_lzma_init(struct io_lzma *io, lzma_stream *s)
 }
 
 static void
-decompress_lzma(int fd_in, int fd_out, const char *desc)
+decompress_lzma(struct compress_params *params, int fd_in, int fd_out,
+                const char *desc)
 {
 	struct io_lzma io;
 
@@ -720,12 +911,14 @@ decompress_lzma(int fd_in, int fd_out, const char *desc)
 	io.code = filter_lzma_code;
 	io.done = filter_lzma_done;
 	io.desc = desc;
+	io.params = params;
 
 	filter_lzma(&io, fd_in, fd_out);
 }
 
 static void
-compress_lzma(int fd_in, int fd_out, struct compress_params *params, const char *desc)
+compress_lzma(struct compress_params *params, int fd_in, int fd_out,
+              const char *desc)
 {
 	struct io_lzma io;
 
@@ -739,18 +932,31 @@ compress_lzma(int fd_in, int fd_out, struct compress_params *params, const char 
 }
 #else
 static void
-decompress_lzma(int fd_in, int fd_out, const char *desc)
+decompress_lzma(struct compress_params *params, int fd_in, int fd_out,
+                const char *desc)
 {
-	fd_fd_filter(fd_in, fd_out, desc, env_xz, XZ, "-dc", "--format=lzma", NULL);
+	struct command cmd;
+
+	command_decompress_init(&cmd, XZ, desc);
+	command_add_arg(&cmd, "--format=lzma");
+
+	fd_fd_filter(&cmd, fd_in, fd_out, env_xz);
+
+	command_destroy(&cmd);
 }
 
 static void
-compress_lzma(int fd_in, int fd_out, struct compress_params *params, const char *desc)
+compress_lzma(struct compress_params *params, int fd_in, int fd_out,
+              const char *desc)
 {
-	char combuf[6];
+	struct command cmd;
 
-	snprintf(combuf, sizeof(combuf), "-c%d", params->level);
-	fd_fd_filter(fd_in, fd_out, desc, env_xz, XZ, combuf, "--format=lzma", NULL);
+	command_compress_init(&cmd, XZ, desc, params->level);
+	command_add_arg(&cmd, "--format=lzma");
+
+	fd_fd_filter(&cmd, fd_in, fd_out, env_xz);
+
+	command_destroy(&cmd);
 }
 #endif
 
@@ -764,6 +970,330 @@ static const struct compressor compressor_lzma = {
 };
 
 /*
+ * ZStandard compressor.
+ */
+
+#define ZSTD		"zstd"
+
+#ifdef WITH_LIBZSTD
+struct io_zstd_stream {
+	enum dpkg_stream_filter filter;
+	enum dpkg_stream_action action;
+	enum dpkg_stream_status status;
+
+	union {
+		ZSTD_CCtx *c;
+		ZSTD_DCtx *d;
+	} ctx;
+
+	const uint8_t *next_in;
+	size_t avail_in;
+	uint8_t *next_out;
+	size_t avail_out;
+};
+
+struct io_zstd {
+	const char *desc;
+
+	struct compress_params *params;
+
+	void (*init)(struct io_zstd *io, struct io_zstd_stream *s);
+	void (*code)(struct io_zstd *io, struct io_zstd_stream *s);
+	void (*done)(struct io_zstd *io, struct io_zstd_stream *s);
+};
+
+static void DPKG_ATTR_NORET
+filter_zstd_error(struct io_zstd *io, size_t ret)
+{
+	ohshit(_("%s: zstd error: %s"), io->desc, ZSTD_getErrorName(ret));
+}
+
+static uint32_t
+filter_zstd_get_cputhreads(struct compress_params *params)
+{
+	ZSTD_bounds workers;
+	long threads_max = 1;
+
+	/* The shared library has not been built with multi-threading. */
+	workers = ZSTD_cParam_getBounds(ZSTD_c_nbWorkers);
+	if (workers.upperBound == 0)
+		return 1;
+
+#ifdef _SC_NPROCESSORS_ONLN
+	threads_max = sysconf(_SC_NPROCESSORS_ONLN);
+	if (threads_max < 0)
+		return 1;
+#endif
+
+	if (params->threads_max >= 0)
+		return clamp(params->threads_max, 1, threads_max);
+
+	return threads_max;
+}
+
+static size_t
+filter_zstd_get_buf_in_size(struct io_zstd_stream *s)
+{
+	if (s->filter == DPKG_STREAM_DECOMPRESS)
+		return ZSTD_DStreamInSize();
+	else
+		return ZSTD_CStreamInSize();
+}
+
+static size_t
+filter_zstd_get_buf_out_size(struct io_zstd_stream *s)
+{
+	if (s->filter == DPKG_STREAM_DECOMPRESS)
+		return ZSTD_DStreamOutSize();
+	else
+		return ZSTD_CStreamOutSize();
+}
+
+static void
+filter_unzstd_init(struct io_zstd *io, struct io_zstd_stream *s)
+{
+	s->filter = DPKG_STREAM_DECOMPRESS;
+	s->action = DPKG_STREAM_RUN;
+	s->status = DPKG_STREAM_OK;
+
+	s->ctx.d = ZSTD_createDCtx();
+	if (s->ctx.d == NULL)
+		ohshit(_("%s: cannot create zstd decompression context"),
+		       io->desc);
+}
+
+static void
+filter_unzstd_code(struct io_zstd *io, struct io_zstd_stream *s)
+{
+	ZSTD_inBuffer buf_in = { s->next_in, s->avail_in, 0 };
+	ZSTD_outBuffer buf_out = { s->next_out, s->avail_out, 0 };
+	size_t ret;
+
+	ret = ZSTD_decompressStream(s->ctx.d, &buf_out, &buf_in);
+	if (ZSTD_isError(ret))
+		filter_zstd_error(io, ret);
+
+	s->next_in += buf_in.pos;
+	s->avail_in -= buf_in.pos;
+	s->next_out += buf_out.pos;
+	s->avail_out -= buf_out.pos;
+
+	if (ret == 0)
+		s->status = DPKG_STREAM_END;
+}
+
+static void
+filter_unzstd_done(struct io_zstd *io, struct io_zstd_stream *s)
+{
+	ZSTD_freeDCtx(s->ctx.d);
+}
+
+static void
+filter_zstd_init(struct io_zstd *io, struct io_zstd_stream *s)
+{
+	int clevel = io->params->level;
+	uint32_t nthreads;
+	size_t ret;
+
+	s->filter = DPKG_STREAM_COMPRESS;
+	s->action = DPKG_STREAM_RUN;
+	s->status = DPKG_STREAM_OK;
+
+	s->ctx.c = ZSTD_createCCtx();
+	if (s->ctx.c == NULL)
+		ohshit(_("%s: cannot create zstd compression context"),
+		       io->desc);
+
+	ret = ZSTD_CCtx_setParameter(s->ctx.c, ZSTD_c_compressionLevel, clevel);
+	if (ZSTD_isError(ret))
+		filter_zstd_error(io, ret);
+	ret = ZSTD_CCtx_setParameter(s->ctx.c, ZSTD_c_checksumFlag, 1);
+	if (ZSTD_isError(ret))
+		filter_zstd_error(io, ret);
+
+	nthreads = filter_zstd_get_cputhreads(io->params);
+	if (nthreads > 1)
+		ZSTD_CCtx_setParameter(s->ctx.c, ZSTD_c_nbWorkers, nthreads);
+}
+
+static void
+filter_zstd_code(struct io_zstd *io, struct io_zstd_stream *s)
+{
+	ZSTD_inBuffer buf_in = { s->next_in, s->avail_in, 0 };
+	ZSTD_outBuffer buf_out = { s->next_out, s->avail_out, 0 };
+	ZSTD_EndDirective action;
+	size_t ret;
+
+	if (s->action == DPKG_STREAM_FINISH)
+		action = ZSTD_e_end;
+	else
+		action = ZSTD_e_continue;
+
+	ret = ZSTD_compressStream2(s->ctx.c, &buf_out, &buf_in, action);
+	if (ZSTD_isError(ret))
+		filter_zstd_error(io, ret);
+
+	s->next_in += buf_in.pos;
+	s->avail_in -= buf_in.pos;
+	s->next_out += buf_out.pos;
+	s->avail_out -= buf_out.pos;
+
+	if (s->action == DPKG_STREAM_FINISH && ret == 0)
+		s->status = DPKG_STREAM_END;
+}
+
+static void
+filter_zstd_done(struct io_zstd *io, struct io_zstd_stream *s)
+{
+	ZSTD_freeCCtx(s->ctx.c);
+}
+
+static void
+filter_zstd(struct io_zstd *io, int fd_in, int fd_out)
+{
+	ssize_t buf_in_size;
+	ssize_t buf_out_size;
+	uint8_t *buf_in;
+	uint8_t *buf_out;
+	struct io_zstd_stream s = {
+		.action = DPKG_STREAM_INIT,
+	};
+
+	io->init(io, &s);
+
+	buf_in_size = filter_zstd_get_buf_in_size(&s);
+	buf_in = m_malloc(buf_in_size);
+	buf_out_size = filter_zstd_get_buf_out_size(&s);
+	buf_out = m_malloc(buf_out_size);
+
+	s.next_out = buf_out;
+	s.avail_out = buf_out_size;
+
+	do {
+		ssize_t len;
+
+		if (s.avail_in == 0 && s.action != DPKG_STREAM_FINISH) {
+			len = fd_read(fd_in, buf_in, buf_in_size);
+			if (len < 0)
+				ohshite(_("%s: zstd read error"), io->desc);
+			if (len < buf_in_size)
+				s.action = DPKG_STREAM_FINISH;
+			s.next_in = buf_in;
+			s.avail_in = len;
+		}
+
+		io->code(io, &s);
+
+		if (s.avail_out == 0 || s.status == DPKG_STREAM_END) {
+			len = fd_write(fd_out, buf_out, s.next_out - buf_out);
+			if (len < 0)
+				ohshite(_("%s: zstd write error"), io->desc);
+			s.next_out = buf_out;
+			s.avail_out = buf_out_size;
+		}
+	} while (s.status != DPKG_STREAM_END);
+
+	io->done(io, &s);
+
+	free(buf_in);
+	free(buf_out);
+
+	if (close(fd_out))
+		ohshite(_("%s: zstd close error"), io->desc);
+}
+
+static void
+decompress_zstd(struct compress_params *params, int fd_in, int fd_out,
+                const char *desc)
+{
+	struct io_zstd io;
+
+	io.init = filter_unzstd_init;
+	io.code = filter_unzstd_code;
+	io.done = filter_unzstd_done;
+	io.desc = desc;
+	io.params = params;
+
+	filter_zstd(&io, fd_in, fd_out);
+}
+
+static void
+compress_zstd(struct compress_params *params, int fd_in, int fd_out,
+              const char *desc)
+{
+	struct io_zstd io;
+
+	io.init = filter_zstd_init;
+	io.code = filter_zstd_code;
+	io.done = filter_zstd_done;
+	io.desc = desc;
+	io.params = params;
+
+	filter_zstd(&io, fd_in, fd_out);
+}
+#else
+static const char *env_zstd[] = {
+	"ZSTD_CLEVEL",
+	"ZSTD_NBTHREADS",
+	NULL,
+};
+
+static void
+decompress_zstd(struct compress_params *params, int fd_in, int fd_out,
+                const char *desc)
+{
+	struct command cmd;
+	char *threads_opt = NULL;
+
+	command_decompress_init(&cmd, ZSTD, desc);
+	command_add_arg(&cmd, "-q");
+
+	if (params->threads_max > 0) {
+		threads_opt = str_fmt("-T%d", params->threads_max);
+		command_add_arg(&cmd, threads_opt);
+	}
+
+	fd_fd_filter(&cmd, fd_in, fd_out, env_zstd);
+
+	command_destroy(&cmd);
+	free(threads_opt);
+}
+
+static void
+compress_zstd(struct compress_params *params, int fd_in, int fd_out,
+              const char *desc)
+{
+	struct command cmd;
+	char *threads_opt = NULL;
+
+	command_compress_init(&cmd, ZSTD, desc, params->level);
+	command_add_arg(&cmd, "-q");
+
+	if (params->level > 19)
+		command_add_arg(&cmd, "--ultra");
+
+	if (params->threads_max > 0) {
+		threads_opt = str_fmt("-T%d", params->threads_max);
+		command_add_arg(&cmd, threads_opt);
+	}
+
+	fd_fd_filter(&cmd, fd_in, fd_out, env_zstd);
+
+	command_destroy(&cmd);
+	free(threads_opt);
+}
+#endif
+
+static const struct compressor compressor_zstd = {
+	.name = "zstd",
+	.extension = ".zst",
+	.default_level = ZSTD_CLEVEL_DEFAULT,
+	.fixup_params = fixup_none_params,
+	.compress = compress_zstd,
+	.decompress = decompress_zstd,
+};
+
+/*
  * Generic compressor filter.
  */
 
@@ -771,6 +1301,7 @@ static const struct compressor *compressor_array[] = {
 	[COMPRESSOR_TYPE_NONE] = &compressor_none,
 	[COMPRESSOR_TYPE_GZIP] = &compressor_gzip,
 	[COMPRESSOR_TYPE_XZ] = &compressor_xz,
+	[COMPRESSOR_TYPE_ZSTD] = &compressor_zstd,
 	[COMPRESSOR_TYPE_BZIP2] = &compressor_bzip2,
 	[COMPRESSOR_TYPE_LZMA] = &compressor_lzma,
 };
@@ -855,6 +1386,15 @@ compressor_check_params(struct compress_params *params, struct dpkg_error *err)
 {
 	compressor_fixup_params(params);
 
+	if ((params->type == COMPRESSOR_TYPE_ZSTD &&
+	     params->level > DPKG_ZSTD_MAX_LEVEL) ||
+	    (params->type != COMPRESSOR_TYPE_ZSTD &&
+	     params->level > 9)) {
+		dpkg_put_error(err, _("invalid compression level %d"),
+		               params->level);
+		return false;
+	}
+
 	if (params->strategy == COMPRESSOR_STRATEGY_NONE)
 		return true;
 
@@ -874,7 +1414,7 @@ compressor_check_params(struct compress_params *params, struct dpkg_error *err)
 }
 
 void
-decompress_filter(enum compressor_type type, int fd_in, int fd_out,
+decompress_filter(struct compress_params *params, int fd_in, int fd_out,
                   const char *desc_fmt, ...)
 {
 	va_list args;
@@ -884,7 +1424,7 @@ decompress_filter(enum compressor_type type, int fd_in, int fd_out,
 	varbuf_vprintf(&desc, desc_fmt, args);
 	va_end(args);
 
-	compressor(type)->decompress(fd_in, fd_out, desc.buf);
+	compressor(params->type)->decompress(params, fd_in, fd_out, desc.buf);
 
 	varbuf_destroy(&desc);
 }
@@ -900,7 +1440,7 @@ compress_filter(struct compress_params *params, int fd_in, int fd_out,
 	varbuf_vprintf(&desc, desc_fmt, args);
 	va_end(args);
 
-	compressor(params->type)->compress(fd_in, fd_out, params, desc.buf);
+	compressor(params->type)->compress(params, fd_in, fd_out, desc.buf);
 
 	varbuf_destroy(&desc);
 }

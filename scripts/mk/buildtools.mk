@@ -30,32 +30,32 @@ dpkg_datadir = $(srcdir)/mk
 include $(dpkg_datadir)/architecture.mk
 
 # We set the TOOL_FOR_BUILD variables to the specified value, and the TOOL
-# variables (for the host) to the their triplet-prefixed form iff they are
+# variables (for the host) to their triplet-prefixed form iff they are
 # not defined or contain the make built-in defaults. On native builds if
 # TOOL is defined and TOOL_FOR_BUILD is not, we fallback to use TOOL.
 define dpkg_buildtool_setvar
-ifeq (,$(findstring $(3),$(DEB_BUILD_OPTIONS)))
-ifeq ($(origin $(1)),default)
-$(1) = $(DEB_HOST_GNU_TYPE)-$(2)
-endif
-$(1) ?= $(DEB_HOST_GNU_TYPE)-$(2)
+  ifeq (,$(findstring $(3),$(DEB_BUILD_OPTIONS)))
+    ifeq ($(origin $(1)),default)
+      $(1) = $(DEB_HOST_GNU_TYPE)-$(2)
+    else
+      $(1) ?= $(DEB_HOST_GNU_TYPE)-$(2)
+    endif
 
-# On native build fallback to use TOOL if that's defined.
-ifeq ($(DEB_BUILD_GNU_TYPE),$(DEB_HOST_GNU_TYPE))
-ifdef $(1)
-$(1)_FOR_BUILD ?= $$($(1))
-endif
-endif
-$(1)_FOR_BUILD ?= $(DEB_BUILD_GNU_TYPE)-$(2)
-else
-$(1) = :
-$(1)_FOR_BUILD = :
-endif
+    # On native build fallback to use TOOL if that's defined.
+    ifeq ($(DEB_BUILD_GNU_TYPE),$(DEB_HOST_GNU_TYPE))
+      $(1)_FOR_BUILD ?= $$($(1))
+    else
+      $(1)_FOR_BUILD ?= $(DEB_BUILD_GNU_TYPE)-$(2)
+    endif
+  else
+    $(1) = :
+    $(1)_FOR_BUILD = :
+  endif
 
-ifdef DPKG_EXPORT_BUILDTOOLS
-export $(1)
-export $(1)_FOR_BUILD
-endif
+  ifdef DPKG_EXPORT_BUILDTOOLS
+    export $(1)
+    export $(1)_FOR_BUILD
+  endif
 endef
 
 $(eval $(call dpkg_buildtool_setvar,AS,as))
@@ -65,8 +65,8 @@ $(eval $(call dpkg_buildtool_setvar,CXX,g++))
 $(eval $(call dpkg_buildtool_setvar,OBJC,gcc))
 $(eval $(call dpkg_buildtool_setvar,OBJCXX,g++))
 $(eval $(call dpkg_buildtool_setvar,GCJ,gcj))
-$(eval $(call dpkg_buildtool_setvar,F77,f77))
-$(eval $(call dpkg_buildtool_setvar,FC,f77))
+$(eval $(call dpkg_buildtool_setvar,F77,gfortran))
+$(eval $(call dpkg_buildtool_setvar,FC,gfortran))
 $(eval $(call dpkg_buildtool_setvar,LD,ld))
 $(eval $(call dpkg_buildtool_setvar,STRIP,strip,nostrip))
 $(eval $(call dpkg_buildtool_setvar,OBJCOPY,objcopy))

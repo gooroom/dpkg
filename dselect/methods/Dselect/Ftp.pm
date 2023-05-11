@@ -32,10 +32,19 @@ our @EXPORT = qw(
 
 use Exporter qw(import);
 use Carp;
-use Net::FTP;
-use Data::Dumper;
 
-my %CONFIG;
+eval q{
+    use Net::FTP;
+    use Data::Dumper;
+
+    use Dpkg::File;
+};
+if ($@) {
+    warn "Missing Dpkg modules required by the FTP access method.\n\n";
+    exit 1;
+}
+
+our %CONFIG;
 
 sub nb {
   my $nb = shift;
@@ -46,19 +55,19 @@ sub nb {
   } else {
     return sprintf('%.2fb', $nb);
   }
-
 }
 
 sub read_config {
   my $vars = shift;
   my ($code, $conf);
 
-  local($/);
-  open(my $vars_fh, '<', $vars)
-    or die "couldn't open '$vars': $!\n" .
-           "Try to relaunch the 'Access' step in dselect, thanks.\n";
-  $code = <$vars_fh>;
-  close $vars_fh;
+  eval {
+    $code = file_slurp($vars);
+  };
+  if ($@) {
+    warn "$@\n";
+    die "Try to relaunch the 'Access' step in dselect, thanks.\n";
+  }
 
   my $VAR1; ## no critic (Variables::ProhibitUnusedVariables)
   $conf = eval $code;
@@ -81,15 +90,12 @@ sub store_config {
   # Check that config is completed
   return if not $CONFIG{done};
 
-  open(my $vars_fh, '>', $vars)
-    or die "couldn't open $vars in write mode: $!\n";
-  print { $vars_fh } Dumper(\%CONFIG);
-  close $vars_fh;
+  file_dump($vars, Dumper(\%CONFIG));
 }
 
 sub view_mirrors {
   print <<'MIRRORS';
-Please see <http://ftp.debian.org/debian/README.mirrors.txt> for a current
+Please see <https://www.debian.org/mirror/list> for a current
 list of Debian mirror sites.
 MIRRORS
 }
@@ -247,7 +253,7 @@ sub do_connect {
 	$ftp = Net::FTP->new($remotehost, Passive => $opts{passive});
 	if(!$ftp || !$ftp->ok) {
 	  print "Failed to connect\n";
-	  $exit=1;
+	  $exit = 1;
 	}
 	if (!$exit) {
 #    $ftp->debug(1);
@@ -268,11 +274,11 @@ sub do_connect {
 		    $rpass = $opts{password};
 	    }
 	    if(!$ftp->login($remoteuser, $rpass))
-	    { print $ftp->message() . "\n"; $exit=1; }
+	    { print $ftp->message() . "\n"; $exit = 1; }
 	}
 	if (!$exit) {
 	    print "Setting transfer mode to binary...\n";
-	    if(!$ftp->binary()) { print $ftp->message . "\n"; $exit=1; }
+	    if(!$ftp->binary()) { print $ftp->message . "\n"; $exit = 1; }
 	}
 	if (!$exit) {
 	    print "Cd to '$opts{ftpdir}'...\n";
@@ -303,18 +309,20 @@ sub do_connect {
 # assume server supports MDTM - will be adjusted if needed
 my $has_mdtm = 1;
 
-my %months = ('Jan', 0,
-	      'Feb', 1,
-	      'Mar', 2,
-	      'Apr', 3,
-	      'May', 4,
-	      'Jun', 5,
-	      'Jul', 6,
-	      'Aug', 7,
-	      'Sep', 8,
-	      'Oct', 9,
-	      'Nov', 10,
-	      'Dec', 11);
+my %months = (
+    Jan => 0,
+    Feb => 1,
+    Mar => 2,
+    Apr => 3,
+    May => 4,
+    Jun => 5,
+    Jul => 6,
+    Aug => 7,
+    Sep => 8,
+    Oct => 9,
+    Nov => 10,
+    Dec => 11,
+);
 
 my $ls_l_re = qr<
     ([^ ]+\ *){5}                       # Perms, Links, User, Group, Size
@@ -358,7 +366,6 @@ sub do_mdtm {
 
 	# get the date components from the output of 'ls -l'
 	if ($files[0] =~ $ls_l_re) {
-
             my($month_name, $day, $year_or_time, $month, $hours, $minutes,
 	       $year);
 

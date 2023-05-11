@@ -22,12 +22,9 @@ B<debian/rules>
 
 =head1 BESCHREIBUNG
 
-Diese Datei enthält die notwendigen Anweisungen, um das Binärpaket aus dem
-Quellpaket zu bauen.
+Diese Datei enthält die notwendigen Anweisungen, um das Binärpaket aus dem Quellpaket zu bauen.
 
-Die Datei I<debian/rules> ist eine ausführbare Make-Steuerdatei, die mit
-einem Shebang, der normalerweise auf „#!/usr/bin/make -f“ gesetzt ist,
-beginnt.
+Die Datei I<debian/rules> ist eine ausführbare Make-Steuerdatei, die mit einem Shebang, der normalerweise auf „#!/usr/bin/make -f“ gesetzt ist, beginnt.
 
 Sie muss die folgenden Make-Ziele unterstützen:
 
@@ -35,63 +32,42 @@ Sie muss die folgenden Make-Ziele unterstützen:
 
 =item B<clean>
 
-Bereinigt den Quellbaum, indem alle Änderungen durch irgendeines der Build-
-und Binärziele rückgängig gemacht werden. Dieses Ziel wird mit
-Root-Privilegien aufgerufen.
+Bereinigt den Quellbaum, indem alle Änderungen durch irgendeines der Build- und Binärziele rückgängig gemacht werden. Dieses Ziel wird mit Root-Privilegien aufgerufen.
 
 =item B<build-indep>
 
-Baut architekturunabhängige Dateien, die benötigt werden, um irgendein
-architekturunabhängiges Binärpaket zu bauen. Falls keine
-architekturunabhängigen Binärpakete erstellt werden, muss das Ziel weiterhin
-existieren, darf aber nichts durchführen. Dieses Ziel darf keine
-Root-Privilegien benötigen.
+Baut architekturunabhängige Dateien, die benötigt werden, um irgendein architekturunabhängiges Binärpaket zu bauen. Falls keine architekturunabhängigen Binärpakete erstellt werden, muss das Ziel weiterhin existieren, darf aber nichts durchführen. Dieses Ziel darf keine Root-Privilegien benötigen.
 
 =item B<build-arch>
 
-Baut architekturabhängige Dateien, die benötigt werden, um irgendein
-architekturabhängiges Binärpaket zu bauen. Falls keine architekturabhängigen
-Binärpakete erstellt werden, muss das Ziel weiterhin existieren, darf aber
-nichts durchführen. Dieses Ziel darf keine Root-Privilegien benötigen.
+Baut architekturabhängige Dateien, die benötigt werden, um irgendein architekturabhängiges Binärpaket zu bauen. Falls keine architekturabhängigen Binärpakete erstellt werden, muss das Ziel weiterhin existieren, darf aber nichts durchführen. Dieses Ziel darf keine Root-Privilegien benötigen.
 
 =item B<build>
 
-Baut architekturabhängige und -unabhängige Dateien, entweder durch eine
-Abhängigkeit (mindestens transitiv) von B<build-indep> und/oder
-B<build-arch> oder indem die Aktionen dieser Ziele direkt eingefügt
-werden. Dieses Ziel darf keine Root-Privilegien benötigen.
+Baut architekturabhängige und -unabhängige Dateien, entweder durch eine Abhängigkeit (mindestens transitiv) von B<build-indep> und/oder B<build-arch> oder indem die Aktionen dieser Ziele direkt eingefügt werden. Dieses Ziel darf keine Root-Privilegien benötigen.
 
 =item B<binary-indep>
 
-Baut architekturunabhängige Binärpakete. Dieses Ziel muss (mindestens
-transitiv) von  B<build-indep> oder B<build> abhängen. Dieses Ziel wird mit
-Root-Privilegien aufgerufen.
+Baut architekturunabhängige Binärpakete. Dieses Ziel muss (mindestens transitiv) von  B<build-indep> oder B<build> abhängen. Dieses Ziel wird mit Root-Privilegien aufgerufen.
 
 =item B<binary-arch>
 
-Baut architekturabhängige Binärpakete. Dieses Ziel muss (mindestens
-transitiv) von  B<build-arch> oder B<build> abhängen. Dieses Ziel wird mit
-Root-Privilegien aufgerufen.
+Baut architekturabhängige Binärpakete. Dieses Ziel muss (mindestens transitiv) von  B<build-arch> oder B<build> abhängen. Dieses Ziel wird mit Root-Privilegien aufgerufen.
 
 =item B<binary>
 
-Baut architekturunabhängige und -abhängige Binärpakete, entweder durch eine
-Abhängigkeit (mindestens transitiv) von B<binary-indep> und/oder
-B<binary-arch> oder indem die Aktionen dieser Ziele direkt eingefügt
-werden. Dieses Ziel wird mit Root-Privilegien aufgerufen.
+Baut architekturunabhängige und -abhängige Binärpakete, entweder durch eine Abhängigkeit (mindestens transitiv) von B<binary-indep> und/oder B<binary-arch> oder indem die Aktionen dieser Ziele direkt eingefügt werden. Dieses Ziel wird mit Root-Privilegien aufgerufen.
 
 =back
 
 =head1 SIEHE AUCH
 
-B<dpkg-architecture>(1), B<dpkg-vendor>(1), B<dpkg-buildflags>(1),
-B<dpkg-parsechangelog>(1), B<dpkg-shlibdeps>(1), B<dpkg-gencontrol>(1),
-B<dpkg-deb>(1), B<dpkg-distaddfile>(1).
+B<dpkg-architecture>(1), B<dpkg-vendor>(1), B<dpkg-buildflags>(1), B<dpkg-parsechangelog>(1), B<dpkg-shlibdeps>(1), B<dpkg-gencontrol>(1), B<dpkg-deb>(1), B<dpkg-distaddfile>(1).
 
 
 =head1 ÜBERSETZUNG
 
-Die deutsche Übersetzung wurde 2004, 2006-2020 von Helge Kreutzmann
+Die deutsche Übersetzung wurde 2004, 2006-2023 von Helge Kreutzmann
 <debian@helgefjell.de>, 2007 von Florian Rehnisch <eixman@gmx.de> und
 2008 von Sven Joachim <svenjoac@gmx.de>
 angefertigt. Diese Übersetzung ist Freie Dokumentation; lesen Sie die

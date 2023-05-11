@@ -22,10 +22,7 @@ B<DEBIAN/postinst>
 
 =head1 BESCHREIBUNG
 
-Ein Paket kann eine Reihe von Nachinstallationsaktionen mittels
-Betreuerskripten durchführen, indem es eine ausführbare Datei I<postinst> in
-seinem Steuerarchiv (d.h. I<DEBIAN/postinst> während der Paketerstellung)
-hinzunimmt.
+Ein Paket kann eine Reihe von Nachinstallationsaktionen mittels Betreuerskripten durchführen, indem es eine ausführbare Datei I<postinst> in seinem Steuerarchiv (d.h. I<DEBIAN/postinst> während der Paketerstellung) hinzunimmt.
 
 Das Skript kann in den folgenden Weisen aufgerufen werden:
 
@@ -37,27 +34,25 @@ Nachdem das Paket installiert wurde.
 
 =item I<postinst> B<triggered> "I<Trigger-Name …>"
 
-Nachdem das Paket getriggert wurde. Die Liste der durch Leerzeichen
-getrennten I<Trigger-Name>n wird als zweites Argument übergeben.
+Nachdem das Paket getriggert wurde. Die Liste der durch Leerzeichen getrennten I<Trigger-Name>n wird als zweites Argument übergeben.
 
 =item I<old-postinst> B<abort-upgrade> I<neue_Version>
 
-Falls I<prerm> während eines Upgrades oder eines fehlgeschlagenen Upgrades
-fehlschlägt.
+Falls I<prerm> während B<upgrade> oder B<failed-upgrade> fehlschlägt.
 
 =item I<old-postinst> B<abort-remove>
 
-Falls I<prerm> während des Entfernens fehlschlägt.
+Falls I<prerm> während B<remove> fehlschlägt.
 
-=item I<postinst> B<abort-deconfigure in-favour> I<neues_Paket neue_Version>
+=item I<postinst> B<abort-deconfigure> B<in-favour> I<neues_Paket> I<neue_Version>
 
-=item S< >[ B<removing> I<altes_Paket alte_Version> ]
+=item S< >[ B<removing> I<altes_Paket> I<alte_Version> ]
 
-Falls I<prerm> während der Dekonfiguration eines Paketes fehlschlägt.
+Falls I<prerm> während B<deconfigure in-favour> eines Paketes fehlschlägt.
 
-=item I<postinst> B<abort-remove in-favour> I<neues_Paket neue_Version>
+=item I<postinst> B<abort-remove> B<in-favour> I<neues_Paket> I<neue_Version>
 
-Falls I<prerm> während einer Ersetzung aufgrund eines Konflikts fehlschlägt.
+Falls I<prerm> während B<remove in-favour> für eine Ersetzung aufgrund eines Konflikts fehlschlägt.
 
 =back
 
@@ -68,7 +63,7 @@ B<dpkg>(1).
 
 =head1 ÜBERSETZUNG
 
-Die deutsche Übersetzung wurde 2004, 2006-2020 von Helge Kreutzmann
+Die deutsche Übersetzung wurde 2004, 2006-2023 von Helge Kreutzmann
 <debian@helgefjell.de>, 2007 von Florian Rehnisch <eixman@gmx.de> und
 2008 von Sven Joachim <svenjoac@gmx.de>
 angefertigt. Diese Übersetzung ist Freie Dokumentation; lesen Sie die

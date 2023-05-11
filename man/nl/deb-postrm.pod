@@ -22,10 +22,7 @@ B<DEBIAN/postrm>
 
 =head1 BESCHRIJVING
 
-Een pakket kan verschillende post-verwijderingsacties uitvoeren via scripts
-van de pakketonderhouder door in zijn control-archief een uitvoerbaar
-bestand I<postrm> op te nemen (d.w.z. I<DEBIAN/postrm> bij het creëren van
-het pakket).
+Een pakket kan verschillende post-verwijderingsacties uitvoeren via scripts van de pakketonderhouder door in zijn control-archief een uitvoerbaar bestand I<postrm> op te nemen (d.w.z. I<DEBIAN/postrm> bij het creëren van het pakket).
 
 Het script kan op de volgende manieren geactiveerd worden:
 
@@ -47,21 +44,27 @@ Nadat het pakket opgewaardeerd was.
 
 Indien de bovenvermelde B<upgrade>-opdracht mislukt.
 
+De optie I<nieuwe-versie> wordt pas meegegeven sinds dpkg 1.18.5.
+
 =item I<postrm> B<disappear> I<overschrijvend-pakket> I<overschrijvende-versie>
 
 Nadat alle bestanden van het pakket vervangen werden.
 
 =item I<new-postrm> B<abort-install>
 
-Idien I<preinst> mislukt tijdens het installeren.
+Indien I<preinst> mislukt tijdens B<install>.
 
-=item I<new-postrm> B<abort-install> I<oude-versie nieuwe-versie>
+=item I<new-postrm> B<abort-install> I<oude-versie> I<nieuwe-versie>
 
-Indien I<preinst> mislukt tijdens de upgrade van een verwijderd pakket.
+Indien I<preinst> mislukt tijdens B<install> voor een upgrade van een verwijderd pakket.
 
-=item I<new-postrm> B<abort-upgrade> I<oude-versie nieuwe-versie>
+De optie I<nieuwe-versie> wordt pas meegegeven sinds dpkg 1.18.5.
 
-Indien I<preinst> mislukt tijdens de upgrade.
+=item I<new-postrm> B<abort-upgrade> I<oude-versie> I<nieuwe-versie>
+
+Indien I<preinst> mislukt tijdens B<upgrade>.
+
+De optie I<nieuwe-versie> wordt pas meegegeven sinds dpkg 1.18.5.
 
 =back
 

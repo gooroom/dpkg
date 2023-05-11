@@ -2,9 +2,6 @@
 
 SUBDIRS = methods po
 
-localedir = $(datadir)/locale
-pkgconfdir = $(sysconfdir)/@PACKAGE@
-
 AM_CPPFLAGS = \
 	-DLOCALEDIR=\"$(localedir)\" \
 	-DADMINDIR=\"$(admindir)\" \
@@ -13,14 +10,16 @@ AM_CPPFLAGS = \
 	-idirafter $(top_srcdir)/lib/compat \
 	-iquote $(builddir) \
 	-I$(top_builddir) \
-	-I$(top_srcdir)/lib
+	-I$(top_srcdir)/lib \
+	# EOL
 AM_CXXFLAGS = \
 	-fno-rtti \
 	-fno-exceptions \
-	$(nil)
+	# EOL
 if HAVE_LINKER_AS_NEEDED
 AM_LDFLAGS = \
-	-Wl,--as-needed
+	-Wl,--as-needed \
+	# EOL
 endif
 
 
@@ -48,12 +47,15 @@ dselect_SOURCES = \
 	pkgkeys.cc \
 	pkglist.cc pkglist.h \
 	pkgsublist.cc \
-	pkgtop.cc
+	pkgtop.cc \
+	# EOL
 
 dselect_LDADD = \
 	$(CURSES_LIBS) \
 	../lib/dpkg/libdpkg.la \
-	$(LIBINTL)
+	$(LIBINTL) \
+	../lib/compat/libcompat.la \
+	# EOL
 
 
 EXTRA_DIST = keyoverride mkcurkeys.pl

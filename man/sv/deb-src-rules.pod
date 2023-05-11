@@ -22,11 +22,9 @@ B<debian/rules>
 
 =head1 BESKRIVNING
 
-Filen innehåller de instruktioner som är nödvändiga för att bygga
-binärpaketen från källkodspaketet.
+Filen innehåller de instruktioner som är nödvändiga för att bygga binärpaketen från källkodspaketet.
 
-Filen I<debian/rules> är en körbar Make-fil, med en ”shebang” som normalt är
-satt till "#!/usr/bin/make -f".
+Filen I<debian/rules> är en körbar Make-fil, med en ”shebang” som normalt är satt till "#!/usr/bin/make -f".
 
 Den måste stöda följande make-mål:
 
@@ -34,56 +32,37 @@ Den måste stöda följande make-mål:
 
 =item B<clean>
 
-Städar källkodsträdet, genom att ogöra ändringar utförda av något av bygg-
-och binärmålen. Det här målet kommer anropas med root-behörighet.
+Städar källkodsträdet, genom att ogöra ändringar utförda av något av bygg- och binärmålen. Det här målet kommer anropas med root-behörighet.
 
 =item B<build-indep>
 
-Bygg arkitekturoberoende filer som krävs för att bygga något av de
-arkitekturoberoende paketen. Målet måste fortfarande finnas även om det inte
-ska skapas några arkitekturoberoende paket, men inte göra något. Målet måste
-inte kräva root-behörighet.
+Bygg arkitekturoberoende filer som krävs för att bygga något av de arkitekturoberoende paketen. Målet måste fortfarande finnas även om det inte ska skapas några arkitekturoberoende paket, men inte göra något. Målet måste inte kräva root-behörighet.
 
 =item B<build-arch>
 
-Bygg arkitekturberoende filer som krävs för att bygga något av de
-arkitekturberoende paketen. Målet måste fortfarande finnas även om det inte
-ska skapas några arkitekturberoende paket, men inte göra något. Målet måste
-inte kräva root-behörighet.
+Bygg arkitekturberoende filer som krävs för att bygga något av de arkitekturberoende paketen. Målet måste fortfarande finnas även om det inte ska skapas några arkitekturberoende paket, men inte göra något. Målet måste inte kräva root-behörighet.
 
 =item B<build>
 
-Bygg arkitekturoberoende och -beroende filer, antingen genom att bero (åt
-minstone transitivt) på B<build-indep> och/eller B<build-arch> eller genom
-att innehålla det de målen skulle göra. Målet måste inte kräva
-root-behörighet.
+Bygg arkitekturoberoende och -beroende filer, antingen genom att bero (åt minstone transitivt) på B<build-indep> och/eller B<build-arch> eller genom att innehålla det de målen skulle göra. Målet måste inte kräva root-behörighet.
 
 =item B<binary-indep>
 
-Bygg arkitekturoberoende binärpaket. Målet måste bero (åt minstone
-transitivt) på antingen B<build-indep> eller B<build>. Målet kommer anropas
-med root-behörighet.
+Bygg arkitekturoberoende binärpaket. Målet måste bero (åt minstone transitivt) på antingen B<build-indep> eller B<build>. Målet kommer anropas med root-behörighet.
 
 =item B<binary-arch>
 
-Bygg arkitekturberoende binärpaket. Målet måste bero (åt minstone
-transitivt) på antingen B<build-arch> eller B<build>. Målet kommer anropas
-med root-behörighet.
+Bygg arkitekturberoende binärpaket. Målet måste bero (åt minstone transitivt) på antingen B<build-arch> eller B<build>. Målet kommer anropas med root-behörighet.
 
 =item B<binary>
 
-Bygg arkitekturoberoende och -beroende binärpaket, antingen genom att bero
-(åt minstone transitivt) på B<binary-indep> och/eller B<binary-arch> eller
-genom att innehålla det de målen skulle göra. Målet kommer anropas med
-root-behörighet.
+Bygg arkitekturoberoende och -beroende binärpaket, antingen genom att bero (åt minstone transitivt) på B<binary-indep> och/eller B<binary-arch> eller genom att innehålla det de målen skulle göra. Målet kommer anropas med root-behörighet.
 
 =back
 
 =head1 SE ÄVEN
 
-B<dpkg-architecture>(1), B<dpkg-vendor>(1), B<dpkg-buildflags>(1),
-B<dpkg-parsechangelog>(1), B<dpkg-shlibdeps>(1), B<dpkg-gencontrol>(1),
-B<dpkg-deb>(1), B<dpkg-distaddfile>(1).
+B<dpkg-architecture>(1), B<dpkg-vendor>(1), B<dpkg-buildflags>(1), B<dpkg-parsechangelog>(1), B<dpkg-shlibdeps>(1), B<dpkg-gencontrol>(1), B<dpkg-deb>(1), B<dpkg-distaddfile>(1).
 
 
 =head1 ÖVERSÄTTNING

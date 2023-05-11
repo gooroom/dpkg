@@ -22,22 +22,11 @@ B<dpkg-architecture> [I<flagga>...] [I<åtgärd>]
 
 =head1 BESKRIVNING
 
-B<dpkg-architecture> innehåller en funktion för att bestämma och ställa in
-bygg- och värdarkitekturerna för att bygga paket.
+B<dpkg-architecture> innehåller en funktion för att bestämma och ställa in bygg- och värdarkitekturerna för att bygga paket.
 
-Byggarkitekturen bestäms alltid av antingen variabeln B<DEB_BUILD_ARCH> om
-den är satt (och B<--force> inte anges) eller genom ett externt anrop till
-B<dpkg>(1) och kan inte väljas från kommandoraden.
+Byggarkitekturen bestäms alltid av antingen variabeln B<DEB_BUILD_ARCH> om den är satt (och B<--force> inte anges) eller genom ett externt anrop till B<dpkg>(1) och kan inte väljas från kommandoraden.
 
-Du kan ange värdarkitektur genom att ange en av, eller båda, flaggorna
-B<--host-arch> och B<--host-type>, annars används variabeln B<DEB_HOST_ARCH>
-om den är satt (och B<--force> inte anges). Förvalet bestäms av ett externt
-anrop till B<gcc>(1), eller är detsamma som byggarkitekturen varken B<CC>
-eller gcc är tillgängliga. Det räcker att ange en av B<--host-arch> och
-B<-host-type>, värdet på den andra kommer ställas in till ett fungerande
-förval. Det är faktiskt oftast bättre att bara ange den ena eftersom
-B<dpkg-architecture> kommer varna dig om ditt val inte överensstämmer med
-förvalet.
+Du kan ange värdarkitektur genom att ange en av, eller båda, flaggorna B<--host-arch> och B<--host-type>, annars används variabeln B<DEB_HOST_ARCH> om den är satt (och B<--force> inte anges). Förvalet bestäms av ett externt anrop till B<gcc>(1), eller är detsamma som byggarkitekturen varken B<CC> eller gcc är tillgängliga. Det räcker att ange en av B<--host-arch> och B<-host-type>, värdet på den andra kommer ställas in till ett fungerande förval. Det är faktiskt oftast bättre att bara ange den ena eftersom B<dpkg-architecture> kommer varna dig om ditt val inte överensstämmer med förvalet.
 
 =head1 KOMMANDON
 
@@ -45,24 +34,15 @@ förvalet.
 
 =item B<-l>, B<--list>
 
-Skriv miljövariabler, en per rad, på formatet I<VARIABEL=värde>. Detta är
-förvald åtgärd.
+Skriv miljövariabler, en per rad, på formatet I<VARIABEL=värde>. Detta är förvald åtgärd.
 
 =item B<-e>, B<--equal> I<arkitektur>
 
-Kontrollera arkitektur för likhet (sedan dpkg 1.13.13). Det jämför den
-aktuella eller angivna Debian-värdarkitekturen mot I<arkitektur>, för att se
-om de är lika. Åtgärden expanderar inte jokertecken i
-arkitekturer. Kommandot avslutar med status 0 om det är en träff, 1 om det
-inte är en träff.
+Kontrollera arkitektur för likhet (sedan dpkg 1.13.13). Det jämför den aktuella eller angivna Debian-värdarkitekturen mot I<arkitektur>, för att se om de är lika. Åtgärden expanderar inte jokertecken i arkitekturer. Kommandot avslutar med status 0 om det är en träff, 1 om det inte är en träff.
 
 =item B<-i>, B<--is> I<arkitektur-jokertecken>
 
-Kontrollera arkitekturens identitet (sedan dpkg 1.13.13). Det jämför den
-aktuella eller angivna Debian-värdarkitekturen mot I<arkitektur-jokertecken>
-efter att ha expanderat det som ett arkitektur-jokertecken, för att se om de
-är lika. Kommandot avslutar med status 0 om det är en träff, 1 om det inte
-är en träff.
+Kontrollera arkitekturens identitet (sedan dpkg 1.13.13). Det jämför den aktuella eller angivna Debian-värdarkitekturen mot I<arkitektur-jokertecken> efter att ha expanderat det som ett arkitektur-jokertecken, för att se om de är lika. Kommandot avslutar med status 0 om det är en träff, 1 om det inte är en träff.
 
 =item B<-q>, B<--query> I<variabelnamn>
 
@@ -70,24 +50,19 @@ Skriv värdet på en enkel variabel.
 
 =item B<-s>, B<--print-set>
 
-Visar ett exportkommando. Detta kan användas för att sätta miljövariabler
-med POSIX-skalet eller make B<eval>, beroende på utdataformatet.
+Visar ett exportkommando. Detta kan användas för att sätta miljövariabler med POSIX-skalet eller make B<eval>, beroende på utdataformatet.
 
 =item B<-u>, B<--print-unset>
 
-Visar ett kommando liknande B<--print-set> men för att ta bort värdet för
-alla variabler.
+Visar ett kommando liknande B<--print-set> men för att ta bort värdet för alla variabler.
 
 =item B<-c>, B<--command> I<kommandosträng>
 
-Exekvera en I<kommandosträng> i en miljö som har alla variabler satta till
-det bestämda värdet.
+Exekvera en I<kommandosträng> i en miljö som har alla variabler satta till det bestämda värdet.
 
 =item B<-L>, B<--list-known>
 
-Visar en lista över giltiga arkitekturnamn. Möjligen begränsad av en eller
-flera av träffvalen B<--match-wildcard>, B<--match-bits> eller
-B<--match-endian> (sedan dpkg 1.17.14).
+Visar en lista över giltiga arkitekturnamn. Möjligen begränsad av en eller flera av träffvalen B<--match-wildcard>, B<--match-bits> eller B<--match-endian> (sedan dpkg 1.17.14).
 
 =item B<-?>, B<--help>
 
@@ -121,32 +96,23 @@ Sätt mål-GNU-systemtypen (sedan dpkg 1.17.14).
 
 =item B<-W>, B<--match-wildcard> I<arkitektur-jokertecken>
 
-Begränsa arkitekturerna som visas med B<--list-known> till en som motsvarar
-det angivna arkitektur-jokertecknet (sedan dpkg 1.17.14).
+Begränsa arkitekturerna som visas med B<--list-known> till en som motsvarar det angivna arkitektur-jokertecknet (sedan dpkg 1.17.14).
 
 =item B<-B>, B<--match-bits> I<arkitektur-bitar>
 
-Begränsa arkitekturerna som visas med B<--list-known> till en med angivet
-antal CPU-bitar (sedan dpkg 1.17.14). Antingen B<32> eller B<64>.
+Begränsa arkitekturerna som visas med B<--list-known> till en med angivet antal CPU-bitar (sedan dpkg 1.17.14). Antingen B<32> eller B<64>.
 
 =item B<-E>, B<--match-endian> I<architecture-endian>
 
-Begränsa arkitekturerna som visas med B<--list-known> till en som har
-angiven endian (sedan dpkg 1.17.14). Antingen B<little> (liten endian) eller
-B<big> (stor endian).
+Begränsa arkitekturerna som visas med B<--list-known> till en som har angiven endian (sedan dpkg 1.17.14). Antingen B<little> (liten endian) eller B<big> (stor endian).
 
 =item B<--print-format> I<format>
 
-Väljer utdataformatet för B<--print-set> och B<--print-unset> (sedan dpkg
-1.20.6), till antingen B<shell> (förval) eller B<make>.
+Väljer utdataformatet för B<--print-set> och B<--print-unset> (sedan dpkg 1.20.6), till antingen B<shell> (förval) eller B<make>.
 
 =item B<-f>, B<--force>
 
-Värden som sätts av befintliga miljövariabler med samma namn som de som
-används av skriptet används (t.ex av B<dpkg-architecture>), såvida inte
-denna tvingande flagga anges. Det gör det möjligt för användaren att
-överstyra ett värde även om anropet till B<dpkg-architecture> är begravt
-djupt inuti ett annat skript (till exempel B<dpkg-buildpackage>(1)).
+Värden som sätts av befintliga miljövariabler med samma namn som de som används av skriptet används (t.ex av B<dpkg-architecture>), såvida inte denna tvingande flagga anges. Det gör det möjligt för användaren att överstyra ett värde även om anropet till B<dpkg-architecture> är begravt djupt inuti ett annat skript (till exempel B<dpkg-buildpackage>(1)).
 
 =back
 
@@ -164,31 +130,19 @@ Maskinen paketet byggs för.
 
 =item målmaskin
 
-Maskinen kompilatorn bygger för. Endast nödvändigt för att bygga en
-korsverktygskedja, en som byggs på byggarkitekturen och körs på
-målarkitekturen, och för att bygga kod för målarkitekturen.
+Maskinen kompilatorn bygger för, eller emulatorn kör kod för. Endast nödvändigt för att bygga en korsverktygskedja (eller emulator), en som byggs på byggarkitekturen och körs på målarkitekturen, och för att bygga (eller köra under emulering) kod för målarkitekturen.
 
 =item Debianarkitektur
 
-Debianarkitektursträngen, vilken anger binärträdet i FTP-arkivet. Exempel:
-i386, sparc, hurd-i386.
+Debianarkitektursträngen, vilken anger binärträdet i FTP-arkivet. Exempel: i386, sparc, hurd-i386.
 
 =item Debianarkitektur-tupel
 
-En Debianarkitektur-tupel är den fullt kvalificerade arkitekturen med alla
-dess komponenter detaljerat redogjort för. Den skiljer sig från
-Debianarkitekturen i det att åtminstone I<cpu>-komponenten inte innehåller
-I<abi>. Den nuvarande tupeln har formen
-I<abi>-I<libc>-I<os>-I<cpu>. Exempel: base-gnu-linux-amd64,
-eabihf-musl-linux-arm.
+En Debianarkitektur-tupel är den fullt kvalificerade arkitekturen med alla dess komponenter detaljerat redogjort för. Den skiljer sig från Debianarkitekturen i det att åtminstone I<cpu>-komponenten inte innehåller I<abi>. Den nuvarande tupeln har formen I<abi>-I<libc>-I<os>-I<cpu>. Exempel: base-gnu-linux-amd64, eabihf-musl-linux-arm.
 
 =item Debianarkitektursökmönster
 
-Ett Debianarkitektursökmönster är en speciell arkitektursträng som matchar
-alla äkta arkitekturer som finns i den. Den genella formen är en
-Debianarkitektur-tupel med fyra eller färre element, och där åtminstone ett
-av dem är B<any>. Saknade element i tupeln läggs till i början implicit som
-B<any>, och följande par är därmet ekvivalenta:
+Ett Debianarkitektursökmönster är en speciell arkitektursträng som matchar alla äkta arkitekturer som finns i den. Den genella formen är en Debianarkitektur-tupel med fyra eller färre element, och där åtminstone ett av dem är B<any>. Saknade element i tupeln läggs till i början implicit som B<any>, och följande par är därmet ekvivalenta:
 
 =over 
 
@@ -204,26 +158,17 @@ Exempel: linux-any, any-i386, hurd-any, eabi-any-any-arm, musl-any-any.
 
 =item GNU-systemtyp
 
-En arkitekturspecificeringssträng som består av två delar, avdelade med
-bindestreck: processor och system. Exempel: i586-linux-gnu, sparc-linux-gnu,
-i386-gnu, x86_64-netbsd.
+En arkitekturspecificeringssträng som består av två delar, avdelade med bindestreck: processor och system. Exempel: i586-linux-gnu, sparc-linux-gnu, i386-gnu, x86_64-netbsd.
 
 =item multiark-triplett
 
-Den förtydligade GNU-systemtypen, använd i filsystemssökväg. Tripletten
-förändras inte när baslinje-ISA:en uppdateras, vilket innebär att de
-resulterande sökvägarna är stabila över tid. De enda skillnaderna mot
-GNU-systemtypen är förnärvarande att CPU-delen för i386-baserade system
-alltid är i386. Exempel: i386-linux-gnu, x86_64-linux-gnu. Exempel på
-sökvägar: /lib/powerpc64le-linux-gnu/, /usr/lib/i386-kfreebsd-gnu/.
+Den förtydligade GNU-systemtypen, använd i filsystemssökväg. Tripletten förändras inte när baslinje-ISA:en uppdateras, vilket innebär att de resulterande sökvägarna är stabila över tid. De enda skillnaderna mot GNU-systemtypen är förnärvarande att CPU-delen för i386-baserade system alltid är i386. Exempel: i386-linux-gnu, x86_64-linux-gnu. Exempel på sökvägar: /lib/powerpc64le-linux-gnu/, /usr/lib/i386-kfreebsd-gnu/.
 
 =back
 
 =head1 VARIABLER
 
-Följande variabler läses från miljön (med mindre B<--force> har angivits)
-och sätts av B<dpkg-architecture> (se stycket B<TERMINOLOGI> för en
-beskrivning av hur namngivningen är uppbyggd):
+Följande variabler läses från miljön (med mindre B<--force> har angivits) och sätts av B<dpkg-architecture> (se stycket B<TERMINOLOGI> för en beskrivning av hur namngivningen är uppbyggd):
 
 =over 
 
@@ -269,8 +214,7 @@ GNU-systemtypen för byggmaskinen.
 
 =item B<DEB_BUILD_MULTIARCH>
 
-Den förtydligade GNU-systemtypen för byggmaskinen, används för sökvägar i
-filsystemet.
+Den förtydligade GNU-systemtypen för byggmaskinen, används för sökvägar i filsystemet.
 
 =item B<DEB_HOST_ARCH>
 
@@ -314,8 +258,7 @@ GNU-systemtypen för värdmaskinen.
 
 =item B<DEB_HOST_MULTIARCH>
 
-Den förtydligade GNU-systemtypen för värdmaskinen, används för sökvägar i
-filsystemet (sedan dpkg 1.16.0).
+Den förtydligade GNU-systemtypen för värdmaskinen, används för sökvägar i filsystemet (sedan dpkg 1.16.0).
 
 =item B<DEB_TARGET_ARCH>
 
@@ -359,8 +302,7 @@ GNU-systemnamnet för målmaskinen (sedan dpkg 1.17.14).
 
 =item B<DEB_TARGET_MULTIARCH>
 
-Den förtydligade GNU-systemtypen för målmaskinen, används för sökvägar i
-filsystemet (sedan dpkg 1.17.14).
+Den förtydligade GNU-systemtypen för målmaskinen, används för sökvägar i filsystemet (sedan dpkg 1.17.14).
 
 =back
 
@@ -368,33 +310,25 @@ filsystemet (sedan dpkg 1.17.14).
 
 =head2 Arkitekturtabeller
 
-Alla dessa filer måste finnas för att B<dpkg-architecture> ska
-fungera. Deras placering kan överstyras vid körning med miljövariabeln
-B<DPKG_DATADIR>. Tabellerna innehåller ett pseudo-fält med format-B<Version>
-på första raden för att ange format, så att tolkar kan kontrollera om de
-förstår det, såsom "# Version=1.0".
+Alla dessa filer måste finnas för att B<dpkg-architecture> ska fungera. Deras placering kan överstyras vid körning med miljövariabeln B<DPKG_DATADIR>. Tabellerna innehåller ett pseudo-fält med format-B<Version> på första raden för att ange format, så att tolkar kan kontrollera om de förstår det, såsom "# Version=1.0".
 
 =over 
 
 =item I<%PKGDATADIR%/cputable>
 
-Tabell över kända processornamn och deras motsvarande
-GNU-namn. Formatversion 1.0 (sedan dpkg 1.13.2).
+Tabell över kända processornamn och deras motsvarande GNU-namn. Formatversion 1.0 (sedan dpkg 1.13.2).
 
 =item I<%PKGDATADIR%/ostable>
 
-Tabell över kända operativsystemsnamn och deras motsvarande
-GNU-namn. Formatversion 2.0 (sedan dpkg 1.18.11).
+Tabell över kända operativsystemsnamn och deras motsvarande GNU-namn. Formatversion 2.0 (sedan dpkg 1.18.11).
 
 =item I<%PKGDATADIR%/tupletable>
 
-Mappning mellan Debianarkitektur-tuplar och
-Debianarkitekturnamn. Formatversion 1.0 (sedan dpkg 1.18.11).
+Mappning mellan Debianarkitektur-tuplar och Debianarkitekturnamn. Formatversion 1.0 (sedan dpkg 1.18.11).
 
 =item I<%PKGDATADIR%/abitable>
 
-Tabell över Debianarkitektur-ABI-attributöverstyrningar. Formatversion 2.0
-(sedan dpkg 1.18.11).
+Tabell över Debianarkitektur-ABI-attributöverstyrningar. Formatversion 2.0 (sedan dpkg 1.18.11).
 
 =back
 
@@ -404,15 +338,13 @@ Tabell över Debianarkitektur-ABI-attributöverstyrningar. Formatversion 2.0
 
 =item I<%PKGDATADIR%/architecture.mk>
 
-Makefile-utklipp som sätter alla variabler B<dpkg-architecture> skriver
-(sedan dpkg 1.16.1):
+Makefile-utklipp som sätter alla variabler B<dpkg-architecture> skriver (sedan dpkg 1.16.1):
 
 =back
 
 =head1 EXEMPEL
 
-B<dpkg-architecture> godtar flaggan B<-a> och sänder den vidare till
-B<dpkg-architecture>. Andra exempel:
+B<dpkg-architecture> godtar flaggan B<-a> och sänder den vidare till B<dpkg-architecture>. Andra exempel:
 
 =over 
 
@@ -422,8 +354,7 @@ B<dpkg-architecture>. Andra exempel:
 
 =back
 
-Kontrollera om aktuell eller angiven värdarkitektur är identisk till en
-arkitektur:
+Kontrollera om aktuell eller angiven värdarkitektur är identisk till en arkitektur:
 
 =over 
 
@@ -445,12 +376,7 @@ dpkg-architecture -ai386 -ilinux-any
 
 =head2 Använda i debian/rules
 
-Miljövariablerna som sätts av B<dpkg-architecture> sänds till
-I<debian/rules> som make-variabler (se dokumentationen för make). Du bör
-dock inte bero på dem eftersom detta förhindrar manuella anrop till
-skriptet. Du bör istället alltid initiera dem med B<dpkg-architecture> med
-B<-q>-flaggan. Här är några exempel, vilka även visar hur du kan förbättra
-stödet för korskompilering i ditt paket:
+Miljövariablerna som sätts av B<dpkg-architecture> sänds till I<debian/rules> som make-variabler (se dokumentationen för make). Du bör dock inte bero på dem eftersom detta förhindrar manuella anrop till skriptet. Du bör istället alltid initiera dem med B<dpkg-architecture> med B<-q>-flaggan. Här är några exempel, vilka även visar hur du kan förbättra stödet för korskompilering i ditt paket:
 
 Hämta GNU-systemtypen och vidaresänd den till ./configure:
 
@@ -482,11 +408,9 @@ Gör något endast för en specifik arkitektur:
 
 =back
 
-eller, om du bara vill testa på processor- eller OS-typ, använd variablerna
-B<DEB_HOST_ARCH_CPU> eller B<DEB_HOST_ARCH_OS>.
+eller, om du bara vill testa på processor- eller OS-typ, använd variablerna B<DEB_HOST_ARCH_CPU> eller B<DEB_HOST_ARCH_OS>.
 
-Observera att du även kan bero på att ett externt Makefile-utklipp sätter
-alla variabler B<dpkg-architecture> kan tillhandahålla:
+Observera att du även kan bero på att ett externt Makefile-utklipp sätter alla variabler B<dpkg-architecture> kan tillhandahålla:
 
 =over 
 
@@ -498,8 +422,7 @@ include %PKGDATADIR%/architecture.mk
 
 =back
 
-Oavsett bör du aldrig använda B<dpkg --print-architecture> för att hämta
-arkitekturinformation när paketet byggs.
+Oavsett bör du aldrig använda B<dpkg --print-architecture> för att hämta arkitekturinformation när paketet byggs.
 
 =head1 MILJÖVARIABLER
 
@@ -507,26 +430,21 @@ arkitekturinformation när paketet byggs.
 
 =item B<DPKG_DATADIR>
 
-Om satt, används som datakatalog för B<dpkg>, där arkitekturtabellerna
-ligger (sedan dpkg 1.14.17). Förval är ”%PKGDATADIR%”.
+Om satt, används som datakatalog för B<dpkg>, där arkitekturtabellerna ligger (sedan dpkg 1.14.17). Förval är ”%PKGDATADIR%”.
 
 =item B<DPKG_COLORS>
 
-Väljer färgläge (sedan dpkg 1.18.5). För närvarande godtas följande värden:
-B<auto> (förval), B<always> och B<never>.
+Väljer färgläge (sedan dpkg 1.18.5). För närvarande godtas följande värden: B<auto> (förval), B<always> och B<never>.
 
 =item B<DPKG_NLS>
 
-Om satt, används för att bestämma om lokalt språkstöd ska aktiveras, även
-känt som internationaliseringsstöd (eller i18n) (sedan dpkg
-1.19.0). Tillåtna värden är: B<0> och B<1> (förval).
+Om satt, används för att bestämma om lokalt språkstöd ska aktiveras, även känt som internationaliseringsstöd (eller i18n) (sedan dpkg 1.19.0). Tillåtna värden är: B<0> och B<1> (förval).
 
 =back
 
 =head1 ANTECKNINGAR
 
-De långa kommando- och flaggnamnen är endast tillgängliga sedan dpkg
-1.17.17.
+De långa kommando- och flaggnamnen är endast tillgängliga sedan dpkg 1.17.17.
 
 =head1 SE ÄVEN
 

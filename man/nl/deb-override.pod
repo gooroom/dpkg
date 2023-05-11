@@ -22,15 +22,9 @@ B<override>
 
 =head1 BESCHRIJVING
 
-Terwijl de meeste informatie over een pakket in het bestand control gevonden
-kan worden, wordt sommige informatie centraal beheerd door de
-distributie-tsaren in plaats van door de onderhouder om een zekere globale
-consistentie te bieden. Deze informatie is te vinden in het bestand
-override.
+Terwijl de meeste informatie over een pakket in het bestand control gevonden kan worden, wordt sommige informatie centraal beheerd door de distributie-tsaren in plaats van door de onderhouder om een zekere globale consistentie te bieden. Deze informatie is te vinden in het bestand override.
 
-Het override-bestand heeft een eenvoudige indeling waarbij de elementen door
-witruimte van elkaar gescheiden worden. Commentaar is toegestaan (aangegeven
-met een B<#>).
+Het override-bestand heeft een eenvoudige indeling waarbij de elementen door witruimte van elkaar gescheiden worden. Commentaar is toegestaan (aangegeven met een B<#>).
 
 =over 
 
@@ -38,22 +32,13 @@ I<pakket> I<prioriteit> I<sectie> [I<onderhouder-info>]
 
 =back
 
-I<pakket> is de naam van het pakket. Items in het override-bestand voor
-pakketten die niet te vinden zijn in de boomstructuur van binaire pakketten,
-worden genegeerd.
+I<pakket> is de naam van het pakket. Items in het override-bestand voor pakketten die niet te vinden zijn in de boomstructuur van binaire pakketten, worden genegeerd.
 
-I<prioriteit> en I<sectie> komen overeen met de respectieve controlevelden
-uit het .deb-bestand. Welke waarden mogelijk zijn, is specifiek voor het
-archief van elke distributie.
+I<prioriteit> en I<sectie> komen overeen met de respectieve controlevelden uit het .deb-bestand. Welke waarden mogelijk zijn, is specifiek voor het archief van elke distributie.
 
-[I<onderhouder-info>], als het vermeld wordt, kan ofwel de naam van een
-onderhouder zijn voor een onvoorwaardelijke vervanging, of anders
-I<oude-onderhouder> B<=E<gt>> I<nieuwe-onderhouder> om een aflossing door te
-voeren.
+[I<onderhouder-info>], als het vermeld wordt, kan ofwel de naam van een onderhouder zijn voor een onvoorwaardelijke vervanging, of anders I<oude-onderhouder> B<=E<gt>> I<nieuwe-onderhouder> om een aflossing door te voeren.
 
-De override-bestanden die gebruikt worden om de officiële Packages-lijsten
-te maken kunnen op elke Debian spiegelserver gevonden worden in de map
-I<indices>.
+De override-bestanden die gebruikt worden om de officiële Packages-lijsten te maken kunnen op elke Debian spiegelserver gevonden worden in de map I<indices>.
 
 =head1 ZIE OOK
 

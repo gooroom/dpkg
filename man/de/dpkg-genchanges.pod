@@ -22,9 +22,7 @@ B<dpkg-genchanges> [I<Option> …]
 
 =head1 BESCHREIBUNG
 
-B<dpkg-genchanges> liest Informationen aus einem entpackten und gebauten
-Debian-Quellcodebaum und aus den darin erzeugten Dateien und erzeugt eine
-Debian-Steuerdatei für das Hochladen (die B<.changes>-Datei).
+B<dpkg-genchanges> liest Informationen aus einem entpackten und gebauten Debian-Quellcodebaum und aus den darin erzeugten Dateien und erzeugt eine Debian-Steuerdatei für das Hochladen (die B<.changes>-Datei).
 
 =head1 OPTIONEN
 
@@ -32,8 +30,7 @@ Debian-Steuerdatei für das Hochladen (die B<.changes>-Datei).
 
 =item B<--build=>I<Typ>
 
-Gibt den Bau-I<Typ> aus einer Kommata-getrennten Liste von Komponenten an
-(seit Dpkg 1.18.5).
+Gibt den Bau-I<Typ> aus einer Kommata-getrennten Liste von Komponenten an (seit Dpkg 1.18.5).
 
 Die erlaubten Werte sind:
 
@@ -53,13 +50,11 @@ Hochladen des architekturunabhängigen Binärpakets.
 
 =item B<binary>
 
-Hochladen der architekturspezifischen und -unabhängigen Binärpakete. Dies
-ist ein Alias für B<any,all>.
+Hochladen der architekturspezifischen und -unabhängigen Binärpakete. Dies ist ein Alias für B<any,all>.
 
 =item B<full>
 
-Alles hochladen. Dies ist ein Alias für B<source,any,all> und identisch zum
-Standardfall, wenn keine Bauoption festgelegt ist.
+Alles hochladen. Dies ist ein Alias für B<source,any,all> und identisch zum Standardfall, wenn keine Bauoption festgelegt ist.
 
 =back
 
@@ -89,18 +84,13 @@ Standardfall, wenn keine Bauoption festgelegt ist.
 
 =back
 
-Die B<-s>I<x>-Optionen steuern, ob das Original-Quellarchiv dem Upload
-hinzugefügt wird, falls die Quellen erzeugt werden (d.h. B<-b> oder B<-B>
-nicht verwendet wurden).
+Die B<-s>I<x>-Optionen steuern, ob das Original-Quellarchiv dem Upload hinzugefügt wird, falls die Quellen erzeugt werden (d.h. B<-b> oder B<-B> nicht verwendet wurden).
 
 =over 
 
 =item B<-si>
 
-Standardmäßig, oder falls angegeben, werden die Originalquellen nur
-hinzugefügt, falls sich die Versionsnummer der Originalautoren (die Version
-ohne Epoche und ohne die Debian-Revision) von der Versionsnummer der
-Originalautoren in dem letzten Changelog-Eintrag unterscheidet.
+Standardmäßig, oder falls angegeben, werden die Originalquellen nur hinzugefügt, falls sich die Versionsnummer der Originalautoren (die Version ohne Epoche und ohne die Debian-Revision) von der Versionsnummer der Originalautoren in dem letzten Changelog-Eintrag unterscheidet.
 
 =item B<-sa>
 
@@ -112,41 +102,27 @@ Erzwingt den Ausschluss der Originalquellen und fügt nur den Diff hinzu.
 
 =item B<-v>I<Version>
 
-Dies führt dazu, dass Changelog-Informationen von allen Versionen, die
-strikt neuer als I<Version> sind, verwendet werden.
+Dies führt dazu, dass Changelog-Informationen von allen Versionen, die strikt neuer als I<Version> sind, verwendet werden.
 
 =item B<-C>I<Änderungsbeschreibung>
 
-Liest die Beschreibung der Änderungen aus der Datei
-I<Änderungsbeschreibung>, anstatt die Informationen aus der Changelog-Datei
-des Quellbaums zu verwenden.
+Liest die Beschreibung der Änderungen aus der Datei I<Änderungsbeschreibung>, anstatt die Informationen aus der Changelog-Datei des Quellbaums zu verwenden.
 
 =item B<-m>I<Betreueradresse>
 
-Verwendet I<Betreueradresse> als Namen und E-Mail-Adresse des Betreuers
-dieses Paketes, anstatt die Informationen aus der B<control>-Datei des
-Quellbaums zu verwenden.
+Verwendet I<Betreueradresse> als Namen und E-Mail-Adresse des Betreuers dieses Paketes, anstatt die Informationen aus der B<control>-Datei des Quellbaums zu verwenden.
 
 =item B<-e>I<Betreueradresse>
 
-Verwendet I<Betreueradresse> als Namen und E-Mail-Adresse des Betreuers für
-diesen Upload, anstatt die Informationen aus dem Changelog des Quellbaums zu
-verwenden.
+Verwendet I<Betreueradresse> als Namen und E-Mail-Adresse des Betreuers für diesen Upload, anstatt die Informationen aus dem Changelog des Quellbaums zu verwenden.
 
 =item B<-V>I<Name>B<=>I<Wert>
 
-Setzt eine Ausgabeersetzungsvariable. Lesen Sie B<deb-substvars>(5) für eine
-Besprechung der Ausgabeersetzung.
+Setzt eine Ausgabeersetzungsvariable. Lesen Sie B<deb-substvars>(5) für eine Besprechung der Ausgabeersetzung.
 
 =item B<-T>I<Substvars-Datei>
 
-Liest die Ersetzungsvariablen aus I<Substvars-Datei>; standardmäßig
-B<debian/substvars>. Bei den ausgegebenen Feldern erfolgt keine
-Variablenersetzung, außer den Inhalten, die von jedem Feld B<Description>
-des Binärpakets entnommen werden (seit Dpkg 1.19.0), die besondere Variable
-I<Format> wird allerdings das Feld mit dem gleichen Namen
-überschreiben. Diese Option kann mehrfach verwandt werden, um
-Ersetzungsvariablen aus mehreren Dateien einzulesen (seit Dpkg 1.15.6).
+Liest die Ersetzungsvariablen aus I<Substvars-Datei>; standardmäßig B<debian/substvars>. Bei den ausgegebenen Feldern erfolgt keine Variablenersetzung, außer den Inhalten, die von jedem Feld B<Description> des Binärpakets entnommen werden (seit Dpkg 1.19.0), die besondere Variable I<Format> wird allerdings das Feld mit dem gleichen Namen überschreiben. Diese Option kann mehrfach verwandt werden, um Ersetzungsvariablen aus mehreren Dateien einzulesen (seit Dpkg 1.15.6).
 
 =item B<-D>I<Feld>B<=>I<Wert>
 
@@ -158,41 +134,31 @@ Entfernt ein Ausgabesteuerdateifeld.
 
 =item B<-c>I<Steuerdatei>
 
-Gibt die Haupt-B<control>-Datei an, aus der Informationen gelesen werden
-sollen. Standardmäßig B<debian/control>.
+Gibt die Haupt-B<control>-Datei an, aus der Informationen gelesen werden sollen. Standardmäßig B<debian/control>.
 
 =item B<-l>I<Changelog-Datei>
 
-Gibt die Changelog-Datei an, aus der Informationen gelesen werden
-sollen. Standardmäßig B<debian/changelog>.
+Gibt die Changelog-Datei an, aus der Informationen gelesen werden sollen. Standardmäßig B<debian/changelog>.
 
 =item B<-f>I<Dateienlist-Datei>
 
-Liest die Liste der hochzuladenden Dateien von hier, statt B<debian/files>
-zu verwenden.
+Liest die Liste der hochzuladenden Dateien von hier, statt B<debian/files> zu verwenden.
 
 =item B<-F>I<Changelog-Format>
 
-Spezifiziert das Format des Changelogs. Lesen Sie B<dpkg-parsechangelog>(1)
-für Informationen über alternative Formate.
+Spezifiziert das Format des Changelogs. Lesen Sie B<dpkg-parsechangelog>(1) für Informationen über alternative Formate.
 
 =item B<-u>I<Hochladedateiverzeichnis>
 
-Sucht nach Dateien, die hochgeladen werden sollen, in
-I<Hochladedateiverzeichnis> statt in B<..> (B<dpkg-genchanges> muss diese
-Dateien finden, so dass es ihre Größen und Prüfsummen in die
-B<.changes>-Datei aufnehmen kann.
+Sucht nach Dateien, die hochgeladen werden sollen, in I<Hochladedateiverzeichnis> statt in B<..> (B<dpkg-genchanges> muss diese Dateien finden, so dass es ihre Größen und Prüfsummen in die B<.changes>-Datei aufnehmen kann.
 
 =item B<-q>
 
-Normalerweise schreibt B<dpkg-genchanges> informative Meldungen auf die
-Standard-Fehlerausgabe, beispielsweise wie viele Quelldateien des Pakets
-hochgeladen werden. B<-q> unterdrückt diese Meldungen.
+Normalerweise schreibt B<dpkg-genchanges> informative Meldungen auf die Standard-Fehlerausgabe, beispielsweise wie viele Quelldateien des Pakets hochgeladen werden. B<-q> unterdrückt diese Meldungen.
 
 =item B<-O>[I<Dateiname>]
 
-Gibt die changes-Datei auf der Standardausgabe (Vorgabe) oder in
-I<Dateiname>, falls angegeben, aus (seit Dpkg 1.18.5).
+Gibt die changes-Datei auf der Standardausgabe (Vorgabe) oder in I<Dateiname>, falls angegeben, aus (seit Dpkg 1.18.5).
 
 =item B<-?>, B<--help>
 
@@ -210,15 +176,11 @@ Gibt die Version aus und beendet das Programm.
 
 =item B<DPKG_COLORS>
 
-Setzt den Farbmodus (seit Dpkg 1.18.5). Die derzeit unterstützten Werte
-sind: B<auto> (Vorgabe), B<always> und B<never>.
+Setzt den Farbmodus (seit Dpkg 1.18.5). Die derzeit unterstützten Werte sind: B<auto> (Vorgabe), B<always> und B<never>.
 
 =item B<DPKG_NLS>
 
-Falls dies gesetzt ist, wird es zur Entscheidung, ob Native Language
-Support, auch als Unterstützung für Internationalisierung (oder i18n)
-bekannt, aktiviert wird (seit Dpkg 1.19.0). Die akzeptierten Werte sind:
-B<0> und B<1> (Vorgabe).
+Falls dies gesetzt ist, wird es zur Entscheidung, ob Native Language Support, auch als Unterstützung für Internationalisierung (oder i18n) bekannt, aktiviert wird (seit Dpkg 1.19.0). Die akzeptierten Werte sind: B<0> und B<1> (Vorgabe).
 
 =back
 
@@ -228,21 +190,18 @@ B<0> und B<1> (Vorgabe).
 
 =item B<debian/files>
 
-Die Liste der erstellten Dateien, die Teil der zum Hochladen vorbereiteten
-Dateien sind. B<dpkg-genchanges> liest hier die Daten, wenn es die Datei
-B<.changes> erstellt.
+Die Liste der erstellten Dateien, die Teil der zum Hochladen vorbereiteten Dateien sind. B<dpkg-genchanges> liest hier die Daten, wenn es die Datei B<.changes> erstellt.
 
 =back
 
 =head1 SIEHE AUCH
 
-B<deb-substvars>(5), B<deb-src-control>(5), B<deb-src-files>(5),
-B<deb-changelog>(5), B<deb-changes>(5).
+B<deb-substvars>(5), B<deb-src-control>(5), B<deb-src-files>(5), B<deb-changelog>(5), B<deb-changes>(5).
 
 
 =head1 ÜBERSETZUNG
 
-Die deutsche Übersetzung wurde 2004, 2006-2020 von Helge Kreutzmann
+Die deutsche Übersetzung wurde 2004, 2006-2023 von Helge Kreutzmann
 <debian@helgefjell.de>, 2007 von Florian Rehnisch <eixman@gmx.de> und
 2008 von Sven Joachim <svenjoac@gmx.de>
 angefertigt. Diese Übersetzung ist Freie Dokumentation; lesen Sie die

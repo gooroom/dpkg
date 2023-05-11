@@ -24,18 +24,11 @@ B<dpkg-trigger> [I<option>...] I<commande>
 
 =head1 DESCRIPTION
 
-B<dpkg-trigger> est un outil pour activer explicitement les actions
-différées et pour vérifier leur gestion dans le fonctionnement de B<dpkg>.
+B<dpkg-trigger> est un outil pour activer explicitement les actions différées et pour vérifier leur gestion dans le fonctionnement de B<dpkg>.
 
-Utilisable par les scripts du responsable dans certaines situations
-complexes où un fichier d'actions différées S<(« triggers »)> ou la directive
-B<activate> du fichier de contrôle des actions différées ne sont pas
-suffisants. Peut également être utilisé pour des essais ou par les
-administrateurs système (noter que les actions différées ne seront alors pas
-exécutées par B<dpkg-trigger>).
+Utilisable par les scripts du responsable dans certaines situations complexes où un fichier d'actions différées S<(« triggers »)> ou la directive B<activate> du fichier de contrôle des actions différées ne sont pas suffisants. Peut également être utilisé pour des essais ou par les administrateurs système (noter que les actions différées ne seront alors pas exécutées par B<dpkg-trigger>).
 
-Les syntaxes non reconnues pour le nom des actions différées constituent une
-erreur pour B<dpkg-trigger>.
+Les syntaxes non reconnues pour le nom des actions différées constituent une erreur pour B<dpkg-trigger>.
 
 =head1 COMMANDES
 
@@ -43,19 +36,15 @@ erreur pour B<dpkg-trigger>.
 
 =item B<--check-supported>
 
-Vérifie si B<dpkg> sait gérer les actions différées (généralement appelées
-depuis un script de post-installation). Retourne en sortie B<0> si c'est le
-cas, ou B<1> avec un message d'erreur sur stderr si ce n'est pas le
-cas. Toutefois, en règle générale, il est préférable de simplement activer
-l'action différée désirée à l'aide de B<dpkg-trigger>.
+Vérifie si B<dpkg> sait gérer les actions différées (généralement appelées depuis un script de post-installation). Retourne en sortie B<0> si c'est le cas, ou B<1> avec un message d'erreur sur stderr si ce n'est pas le cas. Toutefois, en règle générale, il est préférable de simplement activer l'action différée désirée à l'aide de B<dpkg-trigger>.
 
 =item B<-?>, B<--help>
 
-Affiche un message d'aide puis quitte.
+Afficher un message d'aide puis quitter.
 
 =item B<--version>
 
-Affiche le numéro de version puis quitte.
+Afficher le numéro de version puis quitter.
 
 =back
 
@@ -65,29 +54,23 @@ Affiche le numéro de version puis quitte.
 
 =item B<--admindir>=I<répertoire>
 
-Change l'endroit où se trouve la base de données de B<dpkg>. Par défaut,
-c'est I<%ADMINDIR%>.
+Change l'endroit où se trouve la base de données de B<dpkg>. Par défaut, c'est I<%ADMINDIR%> si B<DPKG_ADMINDIR> n'a pas été défini.
+
+=item B<--root=>I<répertoire>
+
+Définit le répertoire root à B<directory>, ce qui définit le répertoire d'administration à S<« I<répertoire>B<%ADMINDIR%> »> (depuis S<dpkg 1.21.0).>
 
 =item B<--by-package=>I<paquet>
 
-Indique le paquet qui sera marqué en attente de l'exécution de l'action
-différée (normalement défini par la variable d'environnement
-B<DPKG_MAINTSCRIPT_PACKAGE> dans les scripts du responsable, qui nomme le
-paquet auquel le script appartient, et qui constitue la valeur par défaut).
+Indique le paquet qui sera marqué en attente de l'exécution de l'action différée (normalement défini par la variable d'environnement B<DPKG_MAINTSCRIPT_PACKAGE> dans les scripts du responsable, qui nomme le paquet auquel le script appartient, et qui constitue la valeur par défaut).
 
 =item B<--no-await>
 
-This option arranges that the calling package I<T> (if any) need not await
-the processing of this trigger; the interested package(s) I<I>, will not be
-added to I<T>'s trigger processing awaited list and I<T>'s status is
-unchanged.  I<T> may be considered installed even though I<I> may not yet
-have processed the trigger.
+Cette option fait en sorte que le paquet appelant I<T> (s'il existe) n'a pas besoin d'attendre l'exécution de cette action différée ; I<I>, le(s) paquet(s) associé(s) à l'action différée, ne sera pas ajouté à liste des paquets dont le traitement des actions différées est attendu par I<T> et l'état de I<T> reste inchangé. I<T> peut être considéré installé même si les actions différées de I<I> n'ont pas encore été exécutées.
 
 =item B<--await>
 
-Cette option a l'effet inverse de B<--no-await> (depuis S<dpkg 1.17.21).> Si le
-paquet intéressé a déclaré une directive S<«noawait »,> cette option ne sera
-pas effective. C'est actuellement le comportement par défaut.
+Cette option a l'effet inverse de B<--no-await> (depuis S<dpkg 1.17.21).> Si le paquet intéressé a déclaré une directive S<«noawait »,> cette option ne sera pas effective. C'est actuellement le comportement par défaut.
 
 =item B<--no-act>
 
@@ -101,8 +84,7 @@ Teste uniquement, n'apporte aucun changement.
 
 =item B<0>
 
-L'action demandée s'est correctement déroulée. Ou bien une commande de
-vérification ou de déclaration renvoie S<« true ».>
+L'action demandée s'est correctement déroulée. Ou bien une commande de vérification ou de déclaration renvoie S<« true ».>
 
 =item B<1>
 
@@ -110,9 +92,7 @@ Une commande de vérification ou de déclaration renvoie S<« false ».>
 
 =item B<2>
 
-Erreur fatale ou irrécupérable due à l'utilisation d'une ligne de commande
-non valable, ou interactions avec le système, telles que des accès à la base
-de données, des allocations de S<mémoire, etc.>
+Erreur fatale ou irrécupérable due à l'utilisation d'une ligne de commande non valable, ou interactions avec le système, telles que des accès à la base de données, des allocations de mémoire, etc.
 
 =back
 
@@ -120,22 +100,27 @@ de données, des allocations de S<mémoire, etc.>
 
 =over 
 
+=item B<DPKG_ROOT>
+
+Si cette variable est positionnée et que l'options B<--root> n'est pas précisées, ce répertoire sera utilisé comme répertoire racine du système de fichiers (depuis S<dpkg 1.21.0).>
+
 =item B<DPKG_ADMINDIR>
 
-Si cette variable est positionnée et que l'option B<--admindir> n'est pas
-précisée, ce répertoire sera utilisé comme répertoire de données pour
-B<dpkg>.
+Si cette variable est positionnée et que l'option B<--admindir> n'est pas précisée, ce répertoire sera utilisé comme répertoire de données pour B<dpkg>.
+
+=item B<DPKG_DEBUG>
+
+Définit le masque de débogage (depuis S<dpkg 1.21.10)> à partir d'une valeur octale. Actuellement, les drapeaux acceptés sont décrits dans l'option B<dpkg --debug>, mais ces drapeaux n'auront pas tous un effet sur ce programme.
 
 =item B<DPKG_COLORS>
 
-Définit le mode de couleur (depuis S<dpkg 1.18.5).> Les valeurs actuellement
-acceptées sont B<auto> (par défaut), B<always> et B<never>.
+Définit le mode de couleur (depuis S<dpkg 1.18.5).> Les valeurs actuellement acceptées sont B<auto> (par défaut), B<always> et B<never>.
 
 =back
 
 =head1 VOIR AUSSI
 
-B<dpkg>(1), B<deb-triggers>(5), B<%PKGDOCDIR%/triggers.txt.gz>.
+B<dpkg>(1), B<deb-triggers>(5), B<%PKGDOCDIR%/spec/triggers.txt>.
 
 
 =head1 TRADUCTION

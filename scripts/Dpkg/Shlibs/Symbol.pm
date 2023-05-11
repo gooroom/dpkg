@@ -31,7 +31,10 @@ use Dpkg::Version;
 use Dpkg::Shlibs::Cppfilt;
 
 # Supported alias types in the order of matching preference
-use constant ALIAS_TYPES => qw(c++ symver);
+use constant ALIAS_TYPES => qw(
+    c++
+    symver
+);
 
 # Needed by the deprecated key, which is a correct use.
 no if $Dpkg::Version::VERSION ge '1.02',
@@ -166,6 +169,10 @@ sub initialize {
 	# Each symbol is matched against its version rather than full
 	# name@version string.
 	$type = (defined $type) ? 'generic' : 'alias-symver';
+        if ($self->get_symbolname() =~ /@/) {
+            warning(g_('symver tag with versioned symbol will not match: %s'),
+                    $self->get_symbolspec(1));
+        }
 	if ($self->get_symbolname() eq 'Base') {
 	    error(g_("you can't use symver tag to catch unversioned symbols: %s"),
 	          $self->get_symbolspec(1));

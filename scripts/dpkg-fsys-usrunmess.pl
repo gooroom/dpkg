@@ -22,10 +22,11 @@ use warnings;
 use feature qw(state);
 
 our ($PROGNAME) = $0 =~ m{(?:.*/)?([^/]*)};
-our $PROGVERSION = '1.20.x';
+our $PROGVERSION = '1.21.x';
 our $ADMINDIR = '/var/lib/dpkg/';
 
 use POSIX;
+use File::Temp qw(tempdir);
 use File::Find;
 use Getopt::Long qw(:config posix_default bundling_values no_ignorecase);
 
@@ -39,12 +40,14 @@ if ($@) {
 
 my $opt_noact = length $ENV{DPKG_USRUNMESS_NOACT} ? 1 : 0;
 my $opt_prompt = 0;
+my $opt_prevent = -1;
 
 my @options_spec = (
     'help|?' => sub { usage(); exit 0; },
     'version' => sub { version(); exit 0; },
     'dry-run|no-act|n' => \$opt_noact,
     'prompt|p' => \$opt_prompt,
+    'prevention!' => \$opt_prevent,
 );
 
 {
@@ -87,6 +90,53 @@ system(qw(dpkg --audit)) == 0
 debug('checking whether dpkg has been interrupted');
 if (glob "$ADMINDIR/updates/*") {
     fatal('dpkg is in an inconsistent state, please fix that');
+}
+
+$opt_prevent = prompt('Generate and install a regression prevention package')
+    if $opt_prevent < 0;
+
+if ($opt_prevent) {
+    debug('building regression prevention measures');
+    my $tmpdir = tempdir(CLEANUP => 1, TMPDIR => 1);
+    my $pkgdir = "$tmpdir/pkg";
+    my $pkgfile = "$tmpdir/dpkg-fsys-usrunmess.deb";
+
+    mkdir "$pkgdir" or fatal('cannot create temporary package directory');
+    mkdir "$pkgdir/DEBIAN" or fatal('cannot create temporary directory');
+    open my $ctrl_fh, '>', "$pkgdir/DEBIAN/control"
+        or fatal('cannot create temporary control file');
+    print { $ctrl_fh } <<"CTRL";
+Package: dpkg-fsys-usrunmess
+Version: $PROGVERSION
+Architecture: all
+Protected: yes
+Multi-Arch: foreign
+Section: admin
+Priority: optional
+Maintainer: Dpkg Developers <debian-dpkg\@lists.debian.org>
+Installed-Size: 5
+Conflicts: usrmerge
+Provides: usrmerge (= 25)
+Replaces: usrmerge
+Description: prevention measure to avoid unsuspected filesystem breakage
+ This package will prevent automatic migration of the filesystem to the
+ broken merge-/usr-via-aliased-dirs via the usrmerge package.
+ .
+ This package was generated and installed by the dpkg-fsys-usrunmess(8)
+ program.
+
+CTRL
+    close $ctrl_fh or fatal('cannot write temporary control file');
+
+    system(('dpkg-deb', '-b', $pkgdir, $pkgfile)) == 0
+        or fatal('cannot create prevention package');
+
+    if (not $opt_noact) {
+        system(('dpkg', '-GBi', $pkgfile)) == 0
+            or fatal('cannot install prevention package');
+    }
+} else {
+    print "Will not generate and install a regression prevention package.\n";
 }
 
 my $aliased_regex = '^(' . join('|', @aliased_dirs) . ')/';
@@ -240,11 +290,7 @@ foreach my $pathname (sort keys %aliased_pathnames) {
 #
 
 if ($opt_prompt) {
-    print "Shadow hierarchy created at '$sroot', ready to proceed (y/N)? ";
-    my $reply = <STDIN>;
-    chomp $reply;
-
-    if ($reply ne 'y' and $reply ne 'yes') {
+    if (!prompt("Shadow hierarchy created at '$sroot', ready to proceed")) {
         print "Aborting migration, shadow hierarchy left in place.\n";
         exit 0;
     }
@@ -470,7 +516,7 @@ sub debug
 {
     my $msg = shift;
 
-    print { \*STDERR } "D: $msg\n";
+    print { *STDERR } "D: $msg\n";
 }
 
 sub warning
@@ -542,6 +588,18 @@ sub add_pathname
     }
 }
 
+sub prompt
+{
+    my $query = shift;
+
+    print "$query (y/N)? ";
+    my $reply = <STDIN>;
+    chomp $reply;
+
+    return 0 if $reply ne 'y' and $reply ne 'yes';
+    return 1;
+}
+
 sub version()
 {
     printf "Debian %s version %s.\n", $PROGNAME, $PROGVERSION;
@@ -553,11 +611,13 @@ sub usage
 'Usage: %s [<option>...]'
     . "\n\n" .
 'Options:
-  -p, --prompt      prompt before the point of no return.
-  -n, --no-act      just check and create the new structure, no switch.
-      --dry-run     ditto.
-  -?, --help        show this help message.
-      --version     show the version.'
+  -p, --prompt         prompt before the point of no return.
+      --prevention     enable regression prevention package installation.
+      --no-prevention  disable regression prevention package installation.
+  -n, --no-act         just check and create the new structure, no switch.
+      --dry-run        ditto.
+  -?, --help           show this help message.
+      --version        show the version.'
     . "\n", $PROGNAME;
 }
 

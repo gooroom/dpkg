@@ -3,7 +3,8 @@
 SUBDIRS = mk po
 
 sbin_SCRIPTS = \
-	dpkg-fsys-usrunmess
+	dpkg-fsys-usrunmess \
+	# EOL
 
 bin_SCRIPTS = \
 	dpkg-architecture \
@@ -15,16 +16,15 @@ bin_SCRIPTS = \
 	dpkg-genchanges \
 	dpkg-gencontrol \
 	dpkg-gensymbols \
-	dpkg-maintscript-helper \
 	dpkg-mergechangelogs \
 	dpkg-name \
 	dpkg-parsechangelog \
-	dpkg-realpath \
 	dpkg-scanpackages \
 	dpkg-scansources \
 	dpkg-shlibdeps \
 	dpkg-source \
-	dpkg-vendor
+	dpkg-vendor \
+	# EOL
 
 EXTRA_DIST = \
 	dpkg-architecture.pl \
@@ -37,37 +37,38 @@ EXTRA_DIST = \
 	dpkg-genchanges.pl \
 	dpkg-gencontrol.pl \
 	dpkg-gensymbols.pl \
-	dpkg-maintscript-helper.sh \
 	dpkg-mergechangelogs.pl \
 	dpkg-name.pl \
 	dpkg-parsechangelog.pl \
-	dpkg-realpath.sh \
 	dpkg-scanpackages.pl \
 	dpkg-scansources.pl \
 	dpkg-shlibdeps.pl \
 	dpkg-source.pl \
 	dpkg-vendor.pl \
 	$(test_scripts) \
-	$(test_data)
+	$(test_data) \
+	# EOL
 
-nobase_dist_pkgdata_DATA = \
-	sh/dpkg-error.sh \
+dist_zshcompletions_DATA = \
+	completion/zsh/_dpkg-parsechangelog \
 	# EOL
 
 CLEANFILES = \
 	$(test_data_objects) \
 	$(sbin_SCRIPTS) \
-	$(bin_SCRIPTS)
+	$(bin_SCRIPTS) \
+	# EOL
 
 perllibdir = $(PERL_LIBDIR)
 nobase_dist_perllib_DATA = \
 	Dpkg/Arch.pm \
+	Dpkg/BuildEnv.pm \
 	Dpkg/BuildFlags.pm \
+	Dpkg/BuildInfo.pm \
 	Dpkg/BuildOptions.pm \
 	Dpkg/BuildProfiles.pm \
-	Dpkg/Build/Env.pm \
+	Dpkg/BuildTypes.pm \
 	Dpkg/Build/Info.pm \
-	Dpkg/Build/Types.pm \
 	Dpkg/Changelog.pm \
 	Dpkg/Changelog/Debian.pm \
 	Dpkg/Changelog/Entry.pm \
@@ -106,6 +107,12 @@ nobase_dist_perllib_DATA = \
 	Dpkg/IPC.pm \
 	Dpkg/Lock.pm \
 	Dpkg/OpenPGP.pm \
+	Dpkg/OpenPGP/Backend.pm \
+	Dpkg/OpenPGP/Backend/GnuPG.pm \
+	Dpkg/OpenPGP/Backend/SOP.pm \
+	Dpkg/OpenPGP/Backend/Sequoia.pm \
+	Dpkg/OpenPGP/ErrorCodes.pm \
+	Dpkg/OpenPGP/KeyHandle.pm \
 	Dpkg/Package.pm \
 	Dpkg/Path.pm \
 	Dpkg/Shlibs.pm \
@@ -132,45 +139,24 @@ nobase_dist_perllib_DATA = \
 	Dpkg/Vendor.pm \
 	Dpkg/Vendor/Debian.pm \
 	Dpkg/Vendor/Default.pm \
+	Dpkg/Vendor/Devuan.pm \
 	Dpkg/Vendor/Ubuntu.pm \
 	Dpkg/Version.pm \
-	Dpkg.pm
+	Dpkg.pm \
+	# EOL
 
 EXTRA_DIST += \
 	Test/Dpkg.pm \
-	$(nil)
+	# EOL
 
 # Keep it even if empty to have man3dir correctly set
 man3_MANS =
 
 man_perl_section = 3perl
 
-do_perl_subst = $(AM_V_GEN) sed \
-	-e "s:^\#![[:space:]]*/usr/bin/perl:\#!$(PERL):" \
-	-e "s:our \$$CONFDIR = .*;:our \$$CONFDIR = '$(pkgconfdir)';:" \
-	-e "s:our \$$ADMINDIR = .*;:our \$$ADMINDIR = '$(admindir)';:" \
-	-e "s:our \$$LIBDIR = .*;:our \$$LIBDIR = '$(pkglibexecdir)';:" \
-	-e "s:our \$$DATADIR = .*;:our \$$DATADIR = '$(pkgdatadir)';:" \
-	-e "s:our \$$PROGMAKE = .*;:our \$$PROGMAKE = '$(MAKE)';:" \
-	-e "s:our \$$PROGTAR = .*;:our \$$PROGTAR = '$(TAR)';:" \
-	-e "s:our \$$PROGPATCH = .*;:our \$$PROGPATCH = '$(PATCH)';:" \
-	-e "s:our \$$PROGVERSION = .*;:our \$$PROGVERSION = '$(PACKAGE_VERSION)';:"
+SUFFIXES =
 
-do_shell_subst = $(AM_V_GEN) sed \
-	-e "s:^PKGDATADIR_DEFAULT=.*$$:PKGDATADIR_DEFAULT='$(pkgdatadir)':" \
-	-e "s:^version=['\"][^'\"]*[\"']:version=\"$(PACKAGE_VERSION)\":"
-
-SUFFIXES = .pl .sh
-
-.pl:
-	@test -d `dirname $@` || $(MKDIR_P) `dirname $@`
-	$(do_perl_subst) <$< >$@
-	$(AM_V_at) chmod +x $@
-
-.sh:
-	@test -d `dirname $@` || $(MKDIR_P) `dirname $@`
-	$(do_shell_subst) <$< >$@
-	$(AM_V_at) chmod +x $@
+include $(top_srcdir)/build-aux/subst.am
 
 install-data-local:
 if BUILD_POD_DOC
@@ -179,7 +165,7 @@ if BUILD_POD_DOC
 # Remove empty manual pages (perl modules not documented)
 	$(MKDIR_P) $(DESTDIR)$(man3dir)
 	for module in $(nobase_dist_perllib_DATA); do \
-	  name=`echo $$module | sed -e 's|/|::|g' -e 's/\.pm$$//'`; \
+	  name=`echo $$module | $(SED) -e 's|/|::|g' -e 's/\.pm$$//'`; \
 	  $(POD2MAN) --utf8 --center=libdpkg-perl --release=$(VERSION) \
 	    --name="$$name" --section=$(man_perl_section) $(srcdir)/$$module \
 	    >$(DESTDIR)$(man3dir)/$$name.$(man_perl_section); \
@@ -188,18 +174,17 @@ if BUILD_POD_DOC
 	done
 endif
 
-# Ideally we'd use 'sed -i', but unfortunately that's not portable.
+# Ideally we'd use '$(SED) -i', but unfortunately that's not portable.
 install-data-hook:
-	mv $(DESTDIR)$(perllibdir)/Dpkg.pm \
-	   $(DESTDIR)$(perllibdir)/Dpkg.pm.tmp
-	$(do_perl_subst) <$(DESTDIR)$(perllibdir)/Dpkg.pm.tmp \
-	                 >$(DESTDIR)$(perllibdir)/Dpkg.pm
-	rm -f $(DESTDIR)$(perllibdir)/Dpkg.pm.tmp
+	$(do_perl_subst) <$(DESTDIR)$(perllibdir)/Dpkg.pm \
+	                 >$(DESTDIR)$(perllibdir)/Dpkg.pm.new
+	mv $(DESTDIR)$(perllibdir)/Dpkg.pm.new \
+	   $(DESTDIR)$(perllibdir)/Dpkg.pm
 
 uninstall-local:
 if BUILD_POD_DOC
 	for module in $(nobase_dist_perllib_DATA); do \
-	  rm -f $(DESTDIR)$(man3dir)/`echo $$module | sed -e 's|/|::|g' -e 's/\.pm$$/.$(man_perl_section)/'`; \
+	  rm -f $(DESTDIR)$(man3dir)/`echo $$module | $(SED) -e 's|/|::|g' -e 's/\.pm$$/.$(man_perl_section)/'`; \
 	done
 endif
 
@@ -219,7 +204,8 @@ TEST_ENV_VARS = \
 	DPKG_PROGPATCH=$(PATCH) \
 	DPKG_PROGMAKE=$(MAKE) \
 	DPKG_DATADIR=$(top_srcdir)/data \
-	DPKG_ORIGINS_DIR=$(srcdir)/t/origins
+	DPKG_ORIGINS_DIR=$(srcdir)/t/origins \
+	# EOL
 TEST_COVERAGE = $(PERL_COVERAGE)
 
 test_tmpdir = t.tmp
@@ -230,13 +216,13 @@ test_scripts = \
 	t/Dpkg_Package.t \
 	t/Dpkg_Shlibs_Cppfilt.t \
 	t/Dpkg_Shlibs.t \
+	t/Dpkg_BuildEnv.t \
 	t/Dpkg_BuildFlags.t \
 	t/Dpkg_BuildFlags_Ubuntu.t \
+	t/Dpkg_BuildInfo.t \
 	t/Dpkg_BuildOptions.t \
 	t/Dpkg_BuildProfiles.t \
-	t/Dpkg_Build_Env.t \
-	t/Dpkg_Build_Info.t \
-	t/Dpkg_Build_Types.t \
+	t/Dpkg_BuildTypes.t \
 	t/Dpkg_Checksums.t \
 	t/Dpkg_ErrorHandling.t \
 	t/Dpkg_Exit.t \
@@ -249,6 +235,7 @@ test_scripts = \
 	t/Dpkg_Path.t \
 	t/Dpkg_Vars.t \
 	t/Dpkg_Interface_Storable.t \
+	t/Dpkg_OpenPGP_KeyHandle.t \
 	t/Dpkg_OpenPGP.t \
 	t/Dpkg_Vendor.t \
 	t/Dpkg_Changelog.t \
@@ -267,59 +254,13 @@ test_scripts = \
 	t/Dpkg_Source_Archive.t \
 	t/Dpkg_Source_Package.t \
 	t/Dpkg_Dist_Files.t \
-	t/dpkg_realpath.t \
 	t/dpkg_source.t \
 	t/dpkg_buildpackage.t \
 	t/merge_changelogs.t \
 	t/mk.t \
-	$(nil)
+	# EOL
 
 test_data = \
-	t/Dpkg_OpenPGP/package_1.0.orig.tar \
-	t/Dpkg_OpenPGP/package_1.0.orig.tar.asc \
-	t/Dpkg_OpenPGP/package_1.0.orig.tar.sig \
-	t/Dpkg_Shlibs/symbols.internal \
-	t/Dpkg_Shlibs/symbols.internal-allow \
-	t/Dpkg_Shlibs/symbols.internal-allow-groups \
-	t/Dpkg_Shlibs/symbols.internal-filter \
-	t/Dpkg_Shlibs/symbols.fake-1 \
-	t/Dpkg_Shlibs/symbols.fake-2 \
-	t/Dpkg_Shlibs/symbols.fake-3 \
-	t/Dpkg_Shlibs/symbols.include-1 \
-	t/Dpkg_Shlibs/symbols.include-2 \
-	t/Dpkg_Shlibs/symbols.include-3 \
-	t/Dpkg_Shlibs/basictags.symbols \
-	t/Dpkg_Shlibs/basictags.c \
-	t/Dpkg_Shlibs/patterns.symbols \
-	t/Dpkg_Shlibs/patterns.cpp \
-	t/Dpkg_Shlibs/patterns.map \
-	t/Dpkg_Shlibs/ld.so.conf \
-	t/Dpkg_Shlibs/ld.so.conf_2 \
-	t/Dpkg_Shlibs/ld.so.conf.d/normal.conf \
-	t/Dpkg_Shlibs/ld.so.conf.d/inf_recurse.conf \
-	t/Dpkg_Shlibs/ld.so.conf.d/recursive.conf \
-	t/Dpkg_Shlibs/objdump.space \
-	t/Dpkg_Shlibs/objdump.spacesyms \
-	t/Dpkg_Shlibs/objdump.basictags-amd64 \
-	t/Dpkg_Shlibs/objdump.basictags-i386 \
-	t/Dpkg_Shlibs/objdump.basictags-mips \
-	t/Dpkg_Shlibs/objdump.internal \
-	t/Dpkg_Shlibs/objdump.patterns \
-	t/Dpkg_Shlibs/objdump.glib-ia64 \
-	t/Dpkg_Shlibs/objdump.libc6-2.3 \
-	t/Dpkg_Shlibs/objdump.libc6-2.6 \
-	t/Dpkg_Shlibs/objdump.dbd-pg \
-	t/Dpkg_Shlibs/objdump.ls \
-	t/Dpkg_Shlibs/spacesyms.map \
-	t/Dpkg_Shlibs/spacesyms-c-gen.pl \
-	t/Dpkg_Shlibs/spacesyms-o-map.pl \
-	t/Dpkg_Source_Patch/c-style.patch \
-	t/Dpkg_Source_Patch/ghost-hunk.patch \
-	t/Dpkg_Source_Patch/indent-header.patch \
-	t/Dpkg_Source_Patch/index-+++.patch \
-	t/Dpkg_Source_Patch/index-alone.patch \
-	t/Dpkg_Source_Patch/index-inert.patch \
-	t/Dpkg_Source_Patch/partial.patch \
 	t/Dpkg_Changelog/countme \
 	t/Dpkg_Changelog/date-format \
 	t/Dpkg_Changelog/fields \
@@ -328,28 +269,84 @@ test_data = \
 	t/Dpkg_Changelog/shadow \
 	t/Dpkg_Changelog/stop-modeline \
 	t/Dpkg_Changelog/unreleased \
-	t/Dpkg_Checksums/empty \
 	t/Dpkg_Checksums/data-1 \
 	t/Dpkg_Checksums/data-2 \
+	t/Dpkg_Checksums/empty \
 	t/Dpkg_Conf/config-mixed \
-	t/Dpkg_Control/control-1 \
-	t/Dpkg_Control/bogus-unsigned.dsc \
 	t/Dpkg_Control/bogus-armor-double.dsc \
 	t/Dpkg_Control/bogus-armor-formfeed.dsc \
-	t/Dpkg_Control/bogus-armor-no-sig.dsc \
-	t/Dpkg_Control/bogus-armor-trail.dsc \
 	t/Dpkg_Control/bogus-armor-inline.dsc \
 	t/Dpkg_Control/bogus-armor-nested.dsc \
+	t/Dpkg_Control/bogus-armor-no-sig.dsc \
 	t/Dpkg_Control/bogus-armor-spaces.dsc \
+	t/Dpkg_Control/bogus-armor-trail.dsc \
+	t/Dpkg_Control/bogus-unsigned.dsc \
+	t/Dpkg_Control/control-1 \
 	t/Dpkg_Control_Tests/tests-missing-fields \
 	t/Dpkg_Control_Tests/tests-plain-text \
 	t/Dpkg_Control_Tests/tests-valid \
-	t/Dpkg_Source_Quilt/parse/debian/patches/series \
-	t/Dpkg_Substvars/substvars1 \
-	t/Dpkg_Substvars/substvars2 \
 	t/Dpkg_Dist_Files/files-byhand \
 	t/Dpkg_Dist_Files/files-fragment-a \
 	t/Dpkg_Dist_Files/files-fragment-b \
+	t/Dpkg_File/append-me \
+	t/Dpkg_File/dump-partial \
+	t/Dpkg_File/slurp-me \
+	t/Dpkg_OpenPGP/dpkg-test-pub.asc \
+	t/Dpkg_OpenPGP/dpkg-test-sec.asc \
+	t/Dpkg_OpenPGP/sign-file \
+	t/Dpkg_OpenPGP/sign-file-inline.asc \
+	t/Dpkg_OpenPGP/sign-file-inline.sig \
+	t/Dpkg_OpenPGP/sign-file.asc \
+	t/Dpkg_OpenPGP/sign-file.sig \
+	t/Dpkg_Shlibs/basictags.c \
+	t/Dpkg_Shlibs/basictags.symbols \
+	t/Dpkg_Shlibs/ld.so.conf \
+	t/Dpkg_Shlibs/ld.so.conf.d/inf_recurse.conf \
+	t/Dpkg_Shlibs/ld.so.conf.d/normal.conf \
+	t/Dpkg_Shlibs/ld.so.conf.d/recursive.conf \
+	t/Dpkg_Shlibs/ld.so.conf_2 \
+	t/Dpkg_Shlibs/objdump.basictags-amd64 \
+	t/Dpkg_Shlibs/objdump.basictags-i386 \
+	t/Dpkg_Shlibs/objdump.basictags-mips \
+	t/Dpkg_Shlibs/objdump.dbd-pg \
+	t/Dpkg_Shlibs/objdump.glib-ia64 \
+	t/Dpkg_Shlibs/objdump.internal \
+	t/Dpkg_Shlibs/objdump.libc6-2.3 \
+	t/Dpkg_Shlibs/objdump.libc6-2.6 \
+	t/Dpkg_Shlibs/objdump.ls \
+	t/Dpkg_Shlibs/objdump.patterns \
+	t/Dpkg_Shlibs/objdump.space \
+	t/Dpkg_Shlibs/objdump.spacesyms \
+	t/Dpkg_Shlibs/patterns.cpp \
+	t/Dpkg_Shlibs/patterns.map \
+	t/Dpkg_Shlibs/patterns.symbols \
+	t/Dpkg_Shlibs/spacesyms-c-gen.pl \
+	t/Dpkg_Shlibs/spacesyms-o-map.pl \
+	t/Dpkg_Shlibs/spacesyms.map \
+	t/Dpkg_Shlibs/symbols.fake-1 \
+	t/Dpkg_Shlibs/symbols.fake-2 \
+	t/Dpkg_Shlibs/symbols.fake-3 \
+	t/Dpkg_Shlibs/symbols.include-1 \
+	t/Dpkg_Shlibs/symbols.include-2 \
+	t/Dpkg_Shlibs/symbols.include-3 \
+	t/Dpkg_Shlibs/symbols.internal \
+	t/Dpkg_Shlibs/symbols.internal-allow \
+	t/Dpkg_Shlibs/symbols.internal-allow-groups \
+	t/Dpkg_Shlibs/symbols.internal-filter \
+	t/Dpkg_Source_Patch/c-style.patch \
+	t/Dpkg_Source_Patch/ghost-hunk.patch \
+	t/Dpkg_Source_Patch/indent-header.patch \
+	t/Dpkg_Source_Patch/index-+++.patch \
+	t/Dpkg_Source_Patch/index-alone.patch \
+	t/Dpkg_Source_Patch/index-inert.patch \
+	t/Dpkg_Source_Patch/partial.patch \
+	t/Dpkg_Source_Quilt/parse/debian/patches/series \
+	t/Dpkg_Source_Package/package_1.0.orig.tar \
+	t/Dpkg_Source_Package/package_1.0.orig.tar.asc \
+	t/Dpkg_Source_Package/package_1.0.orig.tar.sig \
+	t/Dpkg_Substvars/substvars1 \
+	t/Dpkg_Substvars/substvars2 \
+	t/dpkg_buildpackage/dpkgdb/status \
 	t/dpkg_buildpackage/test-source_0.dsc \
 	t/dpkg_buildpackage/test-source_0_all.changes \
 	t/dpkg_buildpackage/test-source_0_any.changes \
@@ -360,7 +357,6 @@ test_data = \
 	t/dpkg_source/testsuite_1.dsc \
 	t/dpkg_source/testsuite_2.dsc \
 	t/dpkg_source/testsuite_3.dsc \
-	t/merge_changelogs/ch-old \
 	t/merge_changelogs/ch-a \
 	t/merge_changelogs/ch-b \
 	t/merge_changelogs/ch-badver-a \
@@ -371,11 +367,17 @@ test_data = \
 	t/merge_changelogs/ch-merged-basic \
 	t/merge_changelogs/ch-merged-pr \
 	t/merge_changelogs/ch-merged-pr-basic \
-	t/mk/debian/changelog \
+	t/merge_changelogs/ch-old \
+	t/merge_changelogs/ch-unreleased-a \
+	t/merge_changelogs/ch-unreleased-b \
+	t/merge_changelogs/ch-unreleased-merged \
+	t/merge_changelogs/ch-unreleased-merged-basic \
+	t/merge_changelogs/ch-unreleased-old \
 	t/mk/architecture.mk \
 	t/mk/buildflags.mk \
 	t/mk/buildopts.mk \
 	t/mk/buildtools.mk \
+	t/mk/debian/changelog \
 	t/mk/pkg-info.mk \
 	t/mk/vendor-v0.mk \
 	t/mk/vendor-v1.mk \
@@ -383,9 +385,11 @@ test_data = \
 	t/mock-bin/dpkg \
 	t/mock-bin/gcc \
 	t/origins/debian \
+	t/origins/devuan \
 	t/origins/default \
 	t/origins/gnewsense \
-	t/origins/ubuntu
+	t/origins/ubuntu \
+	# EOL
 
 test_data_objects = \
 	t/Dpkg_Shlibs/libobjdump.basictags-amd64.so \
@@ -393,7 +397,7 @@ test_data_objects = \
 	t/Dpkg_Shlibs/libobjdump.basictags-mips.so \
 	t/Dpkg_Shlibs/libobjdump.patterns.so \
 	t/Dpkg_Shlibs/libobjdump.spacesyms.so \
-	$(nil)
+	# EOL
 
 $(srcdir)/t/Dpkg_Shlibs/libobjdump.basictags-amd64.so: $(srcdir)/t/Dpkg_Shlibs/basictags.c
 	$(CC) $(CFLAGS) -shared -fPIC -Wl,-soname -Wl,libbasictags.so.1 $< \
@@ -440,7 +444,9 @@ refresh-test-data: $(test_data_objects)
 	  >$(srcdir)/t/Dpkg_Shlibs/objdump.spacesyms
 	$(OBJDUMP) `which ls` >$(srcdir)/t/Dpkg_Shlibs/objdump.ls
 
-include $(top_srcdir)/check.am
+include $(top_srcdir)/build-aux/tap.am
 
-clean-local: check-clean coverage-clean
+check-local: tap-check
+
+clean-local: tap-clean coverage-clean
 	rm -fr man

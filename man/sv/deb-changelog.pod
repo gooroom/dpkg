@@ -22,14 +22,9 @@ B<debian/changelog>
 
 =head1 BESKRIVNING
 
-Ändringar i den paketerade versionen av ett projekt förklaras i
-ändringsloggfilen I<debian/changelog>. Däribland anges ändringar i
-källkodspaket jämfört med uppströmsversionen, såväl som andra ändringar och
-uppdateringar av paketet.
+Ändringar i den paketerade versionen av ett projekt förklaras i ändringsloggfilen I<debian/changelog>. Däribland anges ändringar i källkodspaket jämfört med uppströmsversionen, såväl som andra ändringar och uppdateringar av paketet.
 
-Formatet på <debian/changelog> gör det möjligt för paketbyggverktyg att
-upptäcka vilken version av paketet som byggs och finna ytterligare
-utgivningsspecifik information.
+Formatet på <debian/changelog> gör det möjligt för paketbyggverktyg att upptäcka vilken version av paketet som byggs och finna ytterligare utgivningsspecifik information.
 
 Formatet är ett antal poster såsom denna:
 
@@ -43,55 +38,37 @@ Z<>
           [valfri(a) blankrad(er), tas bort]
   -- I<ansvarig-namn> <I<epost-adress>>  I<datum>
 
-I<paket> och I<version> är källkodspaketets namn och
-versionsnummer. I<version> avdelas av parentes U+0028 ”B<(>” och U+0029
-”B<)>”.
+I<paket> och I<version> är källkodspaketets namn och versionsnummer. I<version> avdelas av parentes U+0028 ”B<(>” och U+0029 ”B<)>”.
 
-I<distributioner> anger en eller flera blankstegsavdelade distributioner där
-den här versionen ska installeras efter insändning; värdet kopieras till
-fältet B<Distribution> i I<.changes>-filen. I<distributions> måste avslutas
-av ett semikolon (U+003B ”B<;>”).
+I<distributioner> anger en eller flera blankstegsavdelade distributioner där den här versionen ska installeras efter insändning; värdet kopieras till fältet B<Distribution> i I<.changes>-filen. I<distributions> måste avslutas av ett semikolon (U+003B ”B<;>”).
 
-I<metadata> anger noll eller flera kommaseparerade poster på formen
-I<nyckelord>=I<värde>. Varje nyckelord innehåller endast minustecken och
-skiftlägesokänsliga alfanumeriska tecken, eftersom de måste kunna motsvara
-B<deb822>(5)-fältnamn. De enda I<nyckelord> som stöds av B<dpkg> för
-närvarande är B<urgency> och B<binary-only>. Värdet på B<urgency> används
-för fältet B<Urgency> i I<.changes>-filen vid insändning. B<binary-only> med
-värder B<yes> används för att ange att ändringsposten är för en insändning
-bestående av enbart binärer från någon annan än den paketansvarige
-(”binary-only non-maintainer upload”, en automatisk ombyggd binär där den
-enda ändringen är ändringsloggposten).
+I<metadata> anger noll eller flera kommaseparerade poster på formen I<nyckelord>=I<värde>. Varje nyckelord innehåller endast minustecken och skiftlägesokänsliga alfanumeriska tecken, eftersom de måste kunna motsvara B<deb822>(5)-fältnamn. De enda I<nyckelord> som stöds av B<dpkg> för närvarande är B<urgency> och B<binary-only>. Värdet på B<urgency> används för fältet B<Urgency> i I<.changes>-filen vid insändning. B<binary-only> med värder B<yes> används för att ange att ändringsposten är för en insändning bestående av enbart binärer från någon annan än den paketansvarige (”binary-only non-maintainer upload”, en automatisk ombyggd binär där den enda ändringen är ändringsloggposten).
 
-Ändringsdetaljerna kan faktiskt vara valfri serie av rader som börjar med
-minst två blanksteg (U+0020 B<SPACE>), men sedvanligen inleds varje ändring
-med en asterisk och ett avdelande blanksteg och fortsättningsrader har ett
-indrag så att de står i linje med början på texten över. Tomrader kan
-användas för att avdela grupper av ändringar här, om så önskas.
+Ändringsdetaljerna kan faktiskt vara valfri serie av rader som börjar med minst två blanksteg (U+0020 B<SPACE>), men sedvanligen inleds varje ändring med en asterisk och ett avdelande blanksteg och fortsättningsrader har ett indrag så att de står i linje med början på texten över. Tomrader kan användas för att avdela grupper av ändringar här, om så önskas.
 
-Om insändningen rättar fel beskrivna i distributionens felhanteringssystem,
-kan de stängas automatiskt när paketet tas in i distributionensarkivet genom
-att ta med strängen:
+Om insändningen rättar fel beskrivna i distributionens felhanteringssystem, kan de stängas automatiskt när paketet tas in i distributionensarkivet genom att ta med strängen:
 
 =over 
 
-B<Closes: Bug#>I<nnnnn>
+B<Closes: #>I<nnnnn>
 
 =back
 
-i ändringsdetaljerna (det exakta reguljära uttrycket i Perlformat är
-B</closes:\s*(?:bug)?\#?\s?\d+(?:,\s*(?:bug)?\#?\s?\d+)*/i>). Denna
-information vidareförs via fältet B<Closes> i I<.changes>-filen.
+i ändringsdetaljerna, där B<#>I<nnnnn> är felrapportsnumret. Exakt Perl-reguljärt uttryck är:
 
-Det namn och e-postadress för den ansvarige som används i ändringsloggen bör
-vara information om den person som förberedde denna utgåva av paketet. Det
-är B<inte> nödvändigtvis samma som insändaren eller den vanlige
-paketansvarige. Informationen kopieras till fältet B<Changed-By> i
-I<.changes>-filen, och kan senare användas för att sända en bekräftelse när
-det insända paketet har installerats i distributionsarkivet.
+=over 
 
-I<datum> har följande format (kompatibelt med och med samma betydelse som
-RFC2822 and RFC5322, eller det ”date -R” skapar):
+B</closes:\s*(?:bug)?\#?\s?\d+(?:,\s*(?:bug)?\#?\s?\d+)*/i>
+
+=back
+
+Det vill säga, strängen bör bestå av ordet B<closes:> följt av en kommaavdelad lista med felrapportsnummer. Felrapporterna kan föregås av ordet B<bug> och/eller tecknet B<#>, som i C<Closes: 42, bug#43, #44, bug 45>. Ordet B<closes:> och B<bug> är inte skiftlägeskänsliga. Listan med relrapportsnummer kan fortsätta över flera rader.
+
+Informationen vidareförs via fältet B<Closes> i I<.changes>-filen. Där, beroende på vilken arkivhanteringsprogramvra som används, alla listade felrapporter kan stängas automatiskt.
+
+Det namn och e-postadress för den ansvarige som används i ändringsloggen bör vara information om den person som förberedde denna utgåva av paketet. Det är B<inte> nödvändigtvis samma som insändaren eller den vanlige paketansvarige. Informationen kopieras till fältet B<Changed-By> i I<.changes>-filen, och kan senare användas för att sända en bekräftelse när det insända paketet har installerats i distributionsarkivet.
+
+I<datum> har följande format (kompatibelt med och med samma betydelse som RFC2822 and RFC5322, eller det ”date -R” skapar):
 
 =over 
 
@@ -109,13 +86,11 @@ där:
 
 =item I<dd>
 
-Är dag i månaden (B<01>-B<31>) med en eller två siffror, där den inledande
-nollan är valfri, men vanligtvis inte utesluts.
+Är dag i månaden (B<01>-B<31>) med en eller två siffror, där den inledande nollan är valfri, men vanligtvis inte utesluts.
 
 =item I<månad>
 
-Är en av: B<Jan>, B<Feb>, B<Mar>, B<Apr>, B<May>, B<Jun>, B<Jul>, B<Aug>,
-B<Sep>, B<Oct>, B<Nov>, B<Dec>.
+Är en av: B<Jan>, B<Feb>, B<Mar>, B<Apr>, B<May>, B<Jun>, B<Jul>, B<Aug>, B<Sep>, B<Oct>, B<Nov>, B<Dec>.
 
 =item I<åååå>
 
@@ -135,29 +110,15 @@ B<Sep>, B<Oct>, B<Nov>, B<Dec>.
 
 =item [B<+->]I<zzzz>
 
-Är skillnaden i tidszon från Koordinerad universell tid (UTC). ”B<+>” anger
-att tiden är framför (dvs. öster om) UTC och ”B<->” anger att tiden er bakom
-(dvs. väster om) UTC. De första två siffrorna anger skillnaden mot UTC i
-timmar och de två sista siffrorna anger antalet ytterligare minuter som
-skiljer mot UTC. De två sista siffrorna måste vara i intervallet
-B<00>-B<59>.
+Är skillnaden i tidszon från Koordinerad universell tid (UTC). ”B<+>” anger att tiden är framför (dvs. öster om) UTC och ”B<->” anger att tiden er bakom (dvs. väster om) UTC. De första två siffrorna anger skillnaden mot UTC i timmar och de två sista siffrorna anger antalet ytterligare minuter som skiljer mot UTC. De två sista siffrorna måste vara i intervallet B<00>-B<59>.
 
 =back
 
-Den första ”titel”-raden med paketnamnet måste börja i
-vänstermarginalen. ”Släpraden” med ansvarige och datum måste inledas med
-exakt ett blanktecken (U+0020 B<SPACE>). Informationen om ansvarige och
-datumet måste åtskiljas av exakt två blanksteg (U+0020 B<SPACE>). Varje del
-av I<datum> kan avdelas av ett eller flera blanksteg (U+0020 B<SPACE>),
-bortsett från efter komma där det kan avdelas av noll eller flera blanksteg
-(U+0020 B<SPACE>).
+Den första ”titel”-raden med paketnamnet måste börja i vänstermarginalen. ”Släpraden” med ansvarige och datum måste inledas med exakt ett blanktecken (U+0020 B<SPACE>). Informationen om ansvarige och datumet måste åtskiljas av exakt två blanksteg (U+0020 B<SPACE>). Varje del av I<datum> kan avdelas av ett eller flera blanksteg (U+0020 B<SPACE>), bortsett från efter komma där det kan avdelas av noll eller flera blanksteg (U+0020 B<SPACE>).
 
-Rader som i sin helhet (dvs., inga inledande blanksteg) består av
-kommentarer på formen B<#> eller B</* */> eller RCS-nyckelord.
+Rader som i sin helhet (dvs., inga inledande blanksteg) består av kommentarer på formen B<#> eller B</* */> eller RCS-nyckelord.
 
-Vim-lägesrader eller Emacs-lokala variabler, och antika ändringsloggar med
-andra format på slutet av filen bör godtas och behållas i utdata, men deras
-innehåll kan annars ignoreras och tolkningen kan avbrytas när de upptäcks.
+Vim-lägesrader eller Emacs-lokala variabler, och antika ändringsloggar med andra format på slutet av filen bör godtas och behållas i utdata, men deras innehåll kan annars ignoreras och tolkningen kan avbrytas när de upptäcks.
 
 Hela ändringsloggen måste vara kodad i UTF-8.
 
@@ -189,8 +150,7 @@ Hela ändringsloggen måste vara kodad i UTF-8.
 
 =head1 SE ÄVEN
 
-B<deb822>(5), B<deb-version>(7), B<deb-changes>(5),
-B<dpkg-parsechangelog>(1).
+B<deb822>(5), B<deb-version>(7), B<deb-changes>(5), B<dpkg-parsechangelog>(1).
 
 
 =head1 ÖVERSÄTTNING

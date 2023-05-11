@@ -123,15 +123,15 @@ compat_symbol (libc, _obstack_compat, _obstack, GLIBC_2_0);
 
 # define CALL_CHUNKFUN(h, size) \
   (((h) -> use_extra_arg) \
-   ? (*(h)->chunkfun) ((h)->extra_arg, (size)) \
-   : (*(struct _obstack_chunk *(*) (long)) (h)->chunkfun) ((size)))
+   ? (*(h)->chunkfun.arg2) ((h)->extra_arg, (size)) \
+   : (*(h)->chunkfun.arg1) ((size)))
 
 # define CALL_FREEFUN(h, old_chunk) \
   do { \
     if ((h) -> use_extra_arg) \
-      (*(h)->freefun) ((h)->extra_arg, (old_chunk)); \
+      (*(h)->freefun.arg2) ((h)->extra_arg, (old_chunk)); \
     else \
-      (*(void (*) (void *)) (h)->freefun) ((old_chunk)); \
+      (*(h)->freefun.arg1) ((old_chunk)); \
   } while (0)
 
 
@@ -145,11 +145,11 @@ compat_symbol (libc, _obstack_compat, _obstack, GLIBC_2_0);
 
 int
 _obstack_begin (struct obstack *h,
-		int size, int alignment,
-		void *(*chunkfun) (long),
+		size_t size, size_t alignment,
+		void *(*chunkfun) (size_t),
 		void (*freefun) (void *))
 {
-  register struct _obstack_chunk *chunk; /* points to new chunk */
+  struct _obstack_chunk *chunk; /* points to new chunk */
 
   if (alignment == 0)
     alignment = DEFAULT_ALIGNMENT;
@@ -170,8 +170,8 @@ _obstack_begin (struct obstack *h,
       size = 4096 - extra;
     }
 
-  h->chunkfun = (struct _obstack_chunk * (*)(void *, long)) chunkfun;
-  h->freefun = (void (*) (void *, struct _obstack_chunk *)) freefun;
+  h->chunkfun.arg1 = chunkfun;
+  h->freefun.arg1 = freefun;
   h->chunk_size = size;
   h->alignment_mask = alignment - 1;
   h->use_extra_arg = 0;
@@ -191,12 +191,12 @@ _obstack_begin (struct obstack *h,
 }
 
 int
-_obstack_begin_1 (struct obstack *h, int size, int alignment,
-		  void *(*chunkfun) (void *, long),
+_obstack_begin_1 (struct obstack *h, size_t size, size_t alignment,
+		  void *(*chunkfun) (void *, size_t),
 		  void (*freefun) (void *, void *),
 		  void *arg)
 {
-  register struct _obstack_chunk *chunk; /* points to new chunk */
+  struct _obstack_chunk *chunk; /* points to new chunk */
 
   if (alignment == 0)
     alignment = DEFAULT_ALIGNMENT;
@@ -217,8 +217,8 @@ _obstack_begin_1 (struct obstack *h, int size, int alignment,
       size = 4096 - extra;
     }
 
-  h->chunkfun = (struct _obstack_chunk * (*)(void *,long)) chunkfun;
-  h->freefun = (void (*) (void *, struct _obstack_chunk *)) freefun;
+  h->chunkfun.arg2 = chunkfun;
+  h->freefun.arg2 = freefun;
   h->chunk_size = size;
   h->alignment_mask = alignment - 1;
   h->extra_arg = arg;
@@ -245,14 +245,12 @@ _obstack_begin_1 (struct obstack *h, int size, int alignment,
    to the beginning of the new one.  */
 
 void
-_obstack_newchunk (struct obstack *h, int length)
+_obstack_newchunk (struct obstack *h, size_t length)
 {
-  register struct _obstack_chunk *old_chunk = h->chunk;
-  register struct _obstack_chunk *new_chunk;
-  register long	new_size;
-  register long obj_size = h->next_free - h->object_base;
-  register long i;
-  long already;
+  struct _obstack_chunk *old_chunk = h->chunk;
+  struct _obstack_chunk *new_chunk;
+  size_t new_size;
+  size_t obj_size = h->next_free - h->object_base;
   char *object_base;
 
   /* Compute size for new chunk.  */
@@ -272,25 +270,8 @@ _obstack_newchunk (struct obstack *h, int length)
   object_base =
     __PTR_ALIGN ((char *) new_chunk, new_chunk->contents, h->alignment_mask);
 
-  /* Move the existing object to the new chunk.
-     Word at a time is fast and is safe if the object
-     is sufficiently aligned.  */
-  if (h->alignment_mask + 1 >= DEFAULT_ALIGNMENT)
-    {
-      for (i = obj_size / sizeof (COPYING_UNIT) - 1;
-	   i >= 0; i--)
-	((COPYING_UNIT *)object_base)[i]
-	  = ((COPYING_UNIT *)h->object_base)[i];
-      /* We used to copy the odd few remaining bytes as one extra COPYING_UNIT,
-	 but that can cross a page boundary on a machine
-	 which does not do strict alignment for COPYING_UNITS.  */
-      already = obj_size / sizeof (COPYING_UNIT) * sizeof (COPYING_UNIT);
-    }
-  else
-    already = 0;
-  /* Copy remaining bytes one by one.  */
-  for (i = already; i < obj_size; i++)
-    object_base[i] = h->object_base[i];
+  /* Move the existing object to the new chunk.  */
+  memcpy(object_base, h->object_base, obj_size);
 
   /* If the object just copied was the only data in OLD_CHUNK,
      free that chunk and remove it from the chain.
@@ -324,8 +305,8 @@ int _obstack_allocated_p (struct obstack *h, void *obj);
 int
 _obstack_allocated_p (struct obstack *h, void *obj)
 {
-  register struct _obstack_chunk *lp;	/* below addr of any objects in this chunk */
-  register struct _obstack_chunk *plp;	/* point to previous chunk if any */
+  struct _obstack_chunk *lp;	/* below addr of any objects in this chunk */
+  struct _obstack_chunk *plp;	/* point to previous chunk if any */
 
   lp = (h)->chunk;
   /* We use >= rather than > since the object cannot be exactly at
@@ -347,8 +328,8 @@ _obstack_allocated_p (struct obstack *h, void *obj)
 void
 __obstack_free (struct obstack *h, void *obj)
 {
-  register struct _obstack_chunk *lp;	/* below addr of any objects in this chunk */
-  register struct _obstack_chunk *plp;	/* point to previous chunk if any */
+  struct _obstack_chunk *lp;	/* below addr of any objects in this chunk */
+  struct _obstack_chunk *plp;	/* point to previous chunk if any */
 
   lp = h->chunk;
   /* We use >= because there cannot be an object at the beginning of a chunk.
@@ -380,11 +361,11 @@ __obstack_free (struct obstack *h, void *obj)
 strong_alias (obstack_free, _obstack_free)
 # endif
 
-int
+size_t
 _obstack_memory_used (struct obstack *h)
 {
-  register struct _obstack_chunk* lp;
-  register int nbytes = 0;
+  struct _obstack_chunk* lp;
+  size_t nbytes = 0;
 
   for (lp = h->chunk; lp != 0; lp = lp->prev)
     {

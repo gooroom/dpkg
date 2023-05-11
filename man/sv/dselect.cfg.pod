@@ -18,11 +18,7 @@ dselect.cfg - inställningsfil för dselect
 
 =head1 BESKRIVNING
 
-Filen innehåller förvalda inställningar för dselect. Varje rad består av en
-ensam flagga som är exakt densamma som en normal kommandoradsflagga för
-dselect, förutom de inledande bindestrecken vilka inte används
-här. Citattecken runt flaggvärden tas bort. Kommentarer är tillåtna genom
-att inleda en rad med nummertecken (”B<#>”).
+Filen innehåller förvalda inställningar för dselect. Varje rad består av en ensam flagga som är exakt densamma som en normal kommandoradsflagga för dselect, förutom de inledande bindestrecken vilka inte används här. Citattecken runt flaggvärden tas bort. Kommentarer är tillåtna genom att inleda en rad med nummertecken (”B<#>”).
 
 =head1 FILER
 
