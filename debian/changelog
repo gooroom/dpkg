@@ -1,3 +1,11 @@
+dpkg (1.20.12+grm3u2) bullseye; urgency=medium
+
+  [ jongkyung.woo ]
+  * [cf9219e2] Rebuild on 1.20.12
+  * [daba3daa] [glibc] fixed dpkg so that signature value is written before ld is used
+
+ -- Gooroom Autobuilder <jenkins@gooroom.kr>  Tue, 05 Mar 2024 14:49:23 +0900
+
 dpkg (1.20.12+grm3u1) bullseye; urgency=medium
 
   [ Jenkins User ]
