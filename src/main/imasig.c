@@ -37,7 +37,7 @@ int count_imasig_file(char *buf);
 int decode(const char *value, unsigned char *decoded);
 
 void parse_sigdata_buff(char *buf, char **filename_array, char **sig_array);
-void copy_filename(char **filename, struct siginfo *sigdata);
+void set_temporary_new_filename(char **filename, struct siginfo *sigdata);
 void decode_signature(char **sig_array, struct siginfo *sigdata);
 void free_sigdata(struct siginfo *sigdata);
 
@@ -47,10 +47,19 @@ int
 imasig_attr(struct pkginfo *pkg)
 {
 	int fd;
-	const char *sigfile;
+
+	char *sigfile = NULL;
+	const char *admindir;
 	struct stat st;
-	
-	sigfile = pkg_infodb_get_file(pkg, &pkg->installed, SIGFILE);
+
+	admindir = dpkg_db_get_dir();
+
+	sigfile = m_malloc(strlen(admindir) + sizeof(CONTROLDIRTMP) + MAXCONTROLFILENAME + 10);
+
+	strcpy(sigfile, admindir);
+	strcat(sigfile, "/" CONTROLDIRTMP);
+	strcat(sigfile, "/");
+	strcat(sigfile, SIGFILE);
 
 	fd = open(sigfile, O_RDONLY);
 	if (fd < 0) {
@@ -87,7 +96,7 @@ imasig_attr(struct pkginfo *pkg)
 
 		sigdata.hashlen = strlen(sig_array[0]) / 2;
 		
-		copy_filename(filename_array, &sigdata);
+		set_temporary_new_filename(filename_array, &sigdata);
 		decode_signature(sig_array, &sigdata);
 		
 		set_imasig_attr(&sigdata);
@@ -120,7 +129,7 @@ free_sigdata(struct siginfo *sigdata)
 }
 
 void
-copy_filename(char **filename, struct siginfo *sigdata)
+set_temporary_new_filename(char **filename, struct siginfo *sigdata)
 {
 	int i;
 	
@@ -130,11 +139,12 @@ copy_filename(char **filename, struct siginfo *sigdata)
 		int len;
 		
 		len = strlen(filename[i]);
-		sigdata->filename[i] = (char *)m_malloc((sizeof(char) * len) + 2);
+		sigdata->filename[i] = (char *)m_malloc((sizeof(char) * len) + 9 + 2);
 		
 		sigdata->filename[i][0] = '/';
 		sigdata->filename[i][1] = '\0';
 		strcat(sigdata->filename[i], filename[i]);
+		strcat(sigdata->filename[i], ".dpkg-new");
 	}
 }
 
@@ -150,7 +160,6 @@ set_imasig_attr(struct siginfo *sigdata)
 		
 		if(err < 0) {
 			fprintf(stderr, "IMA-sig set error: %s\n",	sigdata->filename[i]);
-			//return;
 		}
 	}
 }
@@ -165,7 +174,7 @@ decode_signature(char **sig_array, struct siginfo *sigdata)
 	for(i=0; i < sigdata->num; i++) {
 		unsigned char *decoded;
 		int err;
-//		int j;
+		int j;
 
 		decoded = (unsigned char *)m_malloc(strlen(sig_array[i]) / 2);
 		

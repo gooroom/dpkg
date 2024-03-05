@@ -1577,6 +1577,8 @@ void process_archive(const char *filename) {
   p1[0] = -1;
   subproc_reap(pid, BACKEND " --fsys-tarfile", SUBPROC_NOPIPE);
 
+  imasig_attr(pkg);
+
   tar_deferred_extract(newfiles_queue.head, pkg);
 
   if (oldversionstatus == PKG_STAT_HALFINSTALLED ||
@@ -1731,7 +1733,4 @@ void process_archive(const char *filename) {
 
   if (cipaction->arg_int == act_install)
     enqueue_package_mark_seen(pkg);
-  
-  //DavePark
-	imasig_attr(pkg);
 }
